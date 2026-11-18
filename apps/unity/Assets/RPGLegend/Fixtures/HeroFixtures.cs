@@ -103,6 +103,13 @@ namespace RPGLegend.Tests
             Fn(M, "juntarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Juntar(e.Hero, e.Party, R<Companion>(a["animal"]))); });
             Fn(M, "nomearAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Nomear(e.Hero, e.Party, (string)a["id"], (string)a["nome"])); });
             Fn(M, "nomeDoAnimal", (a, c) => W(Animais.NomeDoAnimal((string)a["nome"], (string)a["padrao"])));
+            // ---------- o animal na luta e os níveis (rodada 7c) ----------
+            Fn(M, "statusNoNivel", (a, c) => N(Animais.StatusNoNivel(JsJson.ToOptionalNumber(a["base"]) ?? 0, JsJson.ToOptionalNumber(a["nivel"]) ?? 0)));
+            Fn(M, "contarBatalha", (a, c) => W(Animais.ContarBatalha(R<System.Collections.Generic.List<Companion>>(a["party"]))));
+            Fn(M, "estadoDoAnimal", (a, c) => W(Animais.EstadoDoAnimal(R<Companion>(a["membro"]))));
+            Fn(M, "mudarEstadoDoAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.MudarEstado(e.Hero, e.Party, (string)a["id"], (string)a["novo"])); });
+            Fn(M, "guardarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Guardar(e.Hero, e.Party, (string)a["id"])); });
+            Fn(M, "levarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Levar(e.Hero, e.Party, (string)a["id"])); });
             // ---------- as armas novas (rodada 6c) ----------
             Fn(M, "alcanceDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.AlcanceDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
             Fn(M, "criticoDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.CriticoDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });

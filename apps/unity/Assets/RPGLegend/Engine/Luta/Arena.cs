@@ -344,6 +344,8 @@ namespace RPGLegend.Engine
         /// <summary>O chapéu do espadachim voando, e a espera dele (rodada 6c).</summary>
         public ChapeuNaSala Chapeu;
         public double? RecargaDoChapeu;
+        /// <summary>O meio da área que os animais no estratégico guardam (rodada 7c), em unidades da sala: só nesta luta.</summary>
+        public PontoNaSala Guarda;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -424,6 +426,8 @@ namespace RPGLegend.Engine
         public bool? Chapeu;
         /// <summary>O Caçador (rodada 7b): ofereceu a comida a este monstro (no PC, o botão direito nele; no celular, segurar o dedo nele).</summary>
         public double? Alimentar;
+        /// <summary>O Caçador (rodada 7c): marcou a área que os animais no estratégico guardam (no PC, o botão direito no chão; no celular, segurar o dedo no chão).</summary>
+        public PontoNaSala Guardar;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -593,7 +597,7 @@ namespace RPGLegend.Engine
                 if (equipe[indice].Hp <= 0) continue;
                 var c = new CompanheiroNaArena { Indice = indice, Tempo = D.CadenciaDoCompanheiro / 2 + indice * 10 };
                 // O lacaio do Necromante entra ao lado do herói (rodada 4b).
-                if (equipe[indice].Invocado == true)
+                if (equipe[indice].Invocado == true || equipe[indice].Animal != null)
                 {
                     var lugar = LugarAoLado(heroiNaSala.X, heroiNaSala.Y, comCorpo++, formato, paredes);
                     c.X = lugar.X;
@@ -682,6 +686,7 @@ namespace RPGLegend.Engine
             if (l.Fim != null) return FecharPasso(l);
             if (entrada.Mirar != null) Mirar(l, entrada.Mirar.Value);
             if (Js.Truthy(entrada.MirarAliado)) MirarAliado(l, entrada.MirarAliado);
+            if (entrada.Guardar != null) MarcarGuarda(l, entrada.Guardar);
             // O fantasma anda, mas não age.
             if (l.Arena.Dupla?.Fantasma == true) l.Arena.Evento = null;
             else if (l.Arena.Evento != null) SeguirEvento(l, entrada);
@@ -782,6 +787,7 @@ namespace RPGLegend.Engine
                 Escuridao = arena.Escuridao?.Clone(),
                 Chapeu = arena.Chapeu?.Clone(),
                 RecargaDoChapeu = arena.RecargaDoChapeu,
+                Guarda = arena.Guarda != null ? new PontoNaSala { X = arena.Guarda.X, Y = arena.Guarda.Y } : null,
             };
             if (arena.Cristais != null)
             {
@@ -3054,8 +3060,12 @@ namespace RPGLegend.Engine
         private static PartyMemberHit GolpeNoMembro(Companion membro, CombatMonsterView monstro, double forca, RngFn rng)
         {
             var golpe = MonsterHit.HitPartyMember(membro, monstro, forca, rng);
-            if (membro.Invocado != true || Invocacao.EstadoDoLacaio(membro) != "ofensivo") return golpe;
-            double dano = Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * Invocacao.Necromante.ResistenciaNoOfensivo / 100));
+            // O animal do Caçador no ofensivo (rodada 7c) leva 20% a menos; o lacaio, 10%.
+            double resistencia = membro.Animal != null
+                ? (Animais.EstadoDoAnimal(membro) == "ofensivo" ? Animais.NaLuta.ResistenciaNoOfensivo : 0)
+                : (membro.Invocado == true && Invocacao.EstadoDoLacaio(membro) == "ofensivo" ? Invocacao.Necromante.ResistenciaNoOfensivo : 0);
+            if (resistencia == 0) return golpe;
+            double dano = Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100));
             var ferido = membro.Clone();
             ferido.Hp = Js.Max(0, membro.Hp - dano);
             return new PartyMemberHit { Member = ferido, Damage = dano, Defeated = ferido.Hp <= 0 };
@@ -3076,8 +3086,9 @@ namespace RPGLegend.Engine
         /// <summary>TS: alvoDoLacaio — na retaguarda, o mais perto entre os que estão perto do dono; no ofensivo, o mais perto na sala.</summary>
         private static double? AlvoDoLacaio(Luta l, CompanheiroNaArena c, Companion membro)
         {
-            bool retaguarda = Invocacao.EstadoDoLacaio(membro) == "retaguarda";
-            double doDono = Invocacao.Necromante.Retaguarda * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            string estadoDele = EstadoNaArena(l, membro);
+            bool retaguarda = estadoDele == "retaguarda";
+            double doDono = (membro.Animal != null ? Animais.NaLuta.Retaguarda : Invocacao.Necromante.Retaguarda) * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
             var heroi = l.Arena.Heroi;
             double? melhor = null;
             double menor = 0;
@@ -3086,6 +3097,8 @@ namespace RPGLegend.Engine
                 if (m.Fase == "caido") continue;
                 var lugar = LugarDe(l, m.Indice);
                 if (retaguarda && (lugar.X - heroi.X) * (lugar.X - heroi.X) + (lugar.Y - heroi.Y) * (lugar.Y - heroi.Y) > doDono * doDono) continue;
+                // O estratégico (o animal do Caçador, rodada 7c) só vai em quem entra na área dele.
+                if (estadoDele == "estrategico" && !NaGuarda(l, lugar.X, lugar.Y)) continue;
                 double distancia = (lugar.X - c.X.Value) * (lugar.X - c.X.Value) + (lugar.Y - c.Y.Value) * (lugar.Y - c.Y.Value);
                 if (melhor == null || distancia < menor)
                 {
@@ -3114,12 +3127,15 @@ namespace RPGLegend.Engine
         {
             if (c.Tempo > 0) c.Tempo -= 1;
             var alvo = AlvoDoLacaio(l, c, membro);
+            bool estrategico = EstadoNaArena(l, membro) == "estrategico";
             if (alvo == null)
             {
-                var heroi = l.Arena.Heroi;
+                // Sem alvo: volta pra perto do dono (o estratégico, pro meio da área dele).
+                double casaX = estrategico && l.Arena.Guarda != null ? l.Arena.Guarda.X : l.Arena.Heroi.X;
+                double casaY = estrategico && l.Arena.Guarda != null ? l.Arena.Guarda.Y : l.Arena.Heroi.Y;
                 double perto = RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
-                double hx = heroi.X - c.X.Value, hy = heroi.Y - c.Y.Value;
-                if (hx * hx + hy * hy > perto * perto) AndarLacaio(l, c, heroi.X, heroi.Y);
+                double hx = casaX - c.X.Value, hy = casaY - c.Y.Value;
+                if (hx * hx + hy * hy > perto * perto) AndarLacaio(l, c, casaX, casaY);
                 return;
             }
             var lugar = LugarDe(l, alvo.Value);
@@ -3137,9 +3153,10 @@ namespace RPGLegend.Engine
             var resultado = acao.Outcome;
             var depois = acao.Monster;
             double dano = resultado.Kind == PartyOutcomeKinds.Miss ? 0 : (resultado.Amount ?? 0);
-            if (resultado.Kind != PartyOutcomeKinds.Miss && resultado.Kind != PartyOutcomeKinds.HealedHero && Invocacao.EstadoDoLacaio(membro) == "retaguarda")
+            if (resultado.Kind != PartyOutcomeKinds.Miss && resultado.Kind != PartyOutcomeKinds.HealedHero && EstadoNaArena(l, membro) == "retaguarda")
             {
-                double extra = Math.Truncate(dano * Invocacao.Necromante.DanoNaRetaguarda / 100);
+                // Na retaguarda o lacaio bate 10% mais forte; o animal do Caçador, 20% (rodada 7c).
+                double extra = Math.Truncate(dano * (membro.Animal != null ? Animais.NaLuta.DanoNaRetaguarda : Invocacao.Necromante.DanoNaRetaguarda) / 100);
                 dano += extra;
                 depois = depois.Clone();
                 depois.Hp = acao.Monster.Hp - extra;
@@ -3155,6 +3172,53 @@ namespace RPGLegend.Engine
             if (resultado.Kind == PartyOutcomeKinds.HealedHero) return;
             Contar(l, NumeroNoMonstro(ferida, alvo.Value, "-" + Js.NumberToString(dano), "dano"));
             if (ferida.Caiu) Abater(l, alvo.Value, Monsters.View(depois));
+            // O estratégico pega todos os outros dentro da área, com o mesmo dano (rodada 7c).
+            if (estrategico)
+            {
+                for (int i = 0; i < l.Arena.Monstros.Count; i++)
+                {
+                    if (l.Fim != null) return;
+                    var m = l.Arena.Monstros[i];
+                    if (m.Indice == alvo.Value || m.Fase == "caido") continue;
+                    var lugarDele = LugarDe(l, m.Indice);
+                    if (!NaGuarda(l, lugarDele.X, lugarDele.Y)) continue;
+                    FerirComDano(l, m.Indice, dano, "-" + Js.NumberToString(dano));
+                }
+            }
+        }
+
+        /// <summary>TS: estadoNaArena — o estado do lacaio ou do animal nesta luta: o estratégico sem área marcada fica de retaguarda.</summary>
+        private static string EstadoNaArena(Luta l, Companion membro)
+        {
+            string estado = membro.Animal != null ? Animais.EstadoDoAnimal(membro) : Invocacao.EstadoDoLacaio(membro);
+            if (estado == "estrategico" && (membro.Animal == null || l.Arena.Guarda == null)) return "retaguarda";
+            return estado;
+        }
+
+        /// <summary>TS: naGuarda — o ponto está dentro da área de guarda (4 × 4 casas em volta do meio marcado)?</summary>
+        private static bool NaGuarda(Luta l, double x, double y)
+        {
+            var g = l.Arena.Guarda;
+            if (g == null) return false;
+            double meia = Animais.NaLuta.LadoDaGuarda * RoomWalk.TileUnits / 2;
+            return Math.Abs(x - g.X) <= meia && Math.Abs(y - g.Y) <= meia;
+        }
+
+        /// <summary>TS: marcarGuarda — só o Caçador com um animal da equipe no estratégico; dentro do chão da sala.</summary>
+        private static void MarcarGuarda(Luta l, PontoNaSala ponto)
+        {
+            var estado = Masmorra(l);
+            if (Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName) != "cacador" || l.Arena.Dupla?.Fantasma == true) return;
+            bool algum = false;
+            foreach (var membro in estado.Party ?? new List<Companion>())
+                if (membro.Animal != null && membro.Hp > 0 && Animais.EstadoDoAnimal(membro) == "estrategico") algum = true;
+            if (!algum) return;
+            var g = Geometria(l);
+            double t = RoomWalk.TileUnits;
+            double x = Math.Min(Math.Max(Math.Truncate(ponto.X), t), (g.Cols - 1) * t);
+            double y = Math.Min(Math.Max(Math.Truncate(ponto.Y), t), (g.Rows - 1) * t);
+            l.Arena.Guarda = new PontoNaSala { X = x, Y = y };
+            Contar(l, Aviso("🐾 Área de guarda marcada"));
         }
 
         /// <summary>TS: invocarLacaio — o Necromante invoca um lacaio: 65% da mana máxima, até 3 de pé, ao lado dele.</summary>
@@ -3484,11 +3548,13 @@ namespace RPGLegend.Engine
             m.Poder = null;
             bruto.Hp = 0;
             bruto.Domado = true;
-            l.Estado = Animais.Juntar(FimDaLuta.GravarMonstro(estado, indice, bruto), Animais.Domado(visto.SpeciesId, visto.MaxHp, visto.Dmg, id));
+            l.Estado = FimDaLuta.GravarMonstro(estado, indice, bruto);
             l.Domou = id;
             Contar(l, Aviso("🐾 Você domou " + Js.Str(visto.Name) + "!"));
             if (indice == l.Arena.Alvo) l.Arena.Escolhido = null;
             SeguirOuVencer(l, saiu);
+            // Entra na equipe depois: a vitória desta luta (se foi a última) não conta pra ele, que não lutou nela.
+            l.Estado = Animais.Juntar(Masmorra(l), Animais.Domado(visto.SpeciesId, visto.MaxHp, visto.Dmg, id));
         }
 
         // ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------

@@ -18,12 +18,32 @@ namespace RPGLegend.Engine
         public double Nome;
     }
 
+    /// <summary>TS: REGRAS_DOS_ANIMAIS — o animal na luta e os níveis (rodada 7c).</summary>
+    public sealed class RegrasDosAnimais
+    {
+        public double BatalhasPorNivel;
+        public double NivelMaximo;
+        public double PorNivel;
+        public double Retaguarda;
+        public double DanoNaRetaguarda;
+        public double ResistenciaNoOfensivo;
+        public double LadoDaGuarda;
+    }
+
     /// <summary>As tabelas de combat/animais.ts (fixtures/data/combat/animais.json).</summary>
     public sealed class AnimaisData
     {
         [JsName("COMIDA_DO_ANIMAL")] public OrderedMap<string> ComidaDoAnimal = new OrderedMap<string>();
         [JsName("COMIDAS_DOS_ANIMAIS")] public List<string> Comidas = new List<string>();
         [JsName("REGRAS_DE_DOMAR")] public RegrasDeDomar Regras;
+        [JsName("REGRAS_DOS_ANIMAIS")] public RegrasDosAnimais NaLuta;
+    }
+
+    /// <summary>TS: o retorno de contarBatalha — a equipe depois da batalha e os animais que subiram de nível.</summary>
+    public sealed class BatalhaContada
+    {
+        public List<Companion> Party;
+        public List<Companion> Subiram;
     }
 
     public static partial class GameData
@@ -44,6 +64,9 @@ namespace RPGLegend.Engine
         public string Id;
         public double Nivel;
         public double Batalhas;
+        /// <summary>A vida máxima e o dano de quando foi domado: o nível conta a partir deles (rodada 7c). Null, os de agora.</summary>
+        public double? VidaBase;
+        public double? AtaqueBase;
 
         public AnimalDoCompanheiro Clone() => (AnimalDoCompanheiro)MemberwiseClone();
     }
@@ -119,7 +142,7 @@ namespace RPGLegend.Engine
                 Ability = "Instinto",
                 AbilityDesc = "Um animal domado pelo Caçador.",
                 Especie = speciesId,
-                Animal = new AnimalDoCompanheiro { Id = id, Nivel = 1, Batalhas = 0 },
+                Animal = new AnimalDoCompanheiro { Id = id, Nivel = 1, Batalhas = 0, VidaBase = vida, AtaqueBase = ataque },
             };
         }
 
@@ -209,13 +232,109 @@ namespace RPGLegend.Engine
             return new EquipeDoHeroi { Hero = heroNovo, Party = equipe };
         }
 
-        public static T Nomear<T>(T estado, string id, string nome) where T : EstadoDoJogo
+        public static T Nomear<T>(T estado, string id, string nome) where T : EstadoDoJogo => ComEquipe(estado, Nomear(estado.Hero, estado.Party, id, nome));
+
+        private static T ComEquipe<T>(T estado, EquipeDoHeroi equipe) where T : EstadoDoJogo
         {
-            var nomeado = Nomear(estado.Hero, estado.Party, id, nome);
+            if (ReferenceEquals(equipe.Hero, estado.Hero) && ReferenceEquals(equipe.Party, estado.Party)) return estado;
             var copia = (T)((EstadoDoJogo)estado).Clone();
-            copia.Hero = nomeado.Hero;
-            copia.Party = nomeado.Party;
+            copia.Hero = equipe.Hero;
+            copia.Party = equipe.Party;
             return copia;
         }
+
+        // ---------- o animal na luta e os níveis (rodada 7c) ----------
+
+        public static RegrasDosAnimais NaLuta => D.NaLuta;
+
+        /// <summary>TS: estadoDoAnimal — o estado na arena (a retaguarda, se ainda não mudou).</summary>
+        public static string EstadoDoAnimal(Companion membro) => membro.EstadoDoLacaio ?? "retaguarda";
+
+        /// <summary>TS: statusNoNivel — o de quando foi domado, mais 20% dele por nível acima do 1.</summary>
+        public static double StatusNoNivel(double baseDoStatus, double nivel) => Js.Max(1, Js.Round(baseDoStatus * (100 + NaLuta.PorNivel * (nivel - 1)) / 100));
+
+        /// <summary>TS: contarBatalha — a luta vencida conta uma batalha pra cada animal; a cada 30, um nível (até o 10).</summary>
+        public static BatalhaContada ContarBatalha(IReadOnlyList<Companion> party)
+        {
+            var r = NaLuta;
+            var subiram = new List<Companion>();
+            var nova = new List<Companion>();
+            foreach (var membro in party)
+            {
+                if (membro.Animal == null)
+                {
+                    nova.Add(membro);
+                    continue;
+                }
+                double batalhas = membro.Animal.Batalhas + 1;
+                double vidaBase = membro.Animal.VidaBase ?? membro.MaxHp;
+                double ataqueBase = membro.Animal.AtaqueBase ?? membro.Attack;
+                var animal = membro.Animal.Clone();
+                animal.Batalhas = batalhas;
+                animal.VidaBase = vidaBase;
+                animal.AtaqueBase = ataqueBase;
+                var contado = membro.Clone();
+                contado.Animal = animal;
+                if (batalhas % r.BatalhasPorNivel != 0 || membro.Animal.Nivel >= r.NivelMaximo)
+                {
+                    nova.Add(contado);
+                    continue;
+                }
+                animal.Nivel = membro.Animal.Nivel + 1;
+                double maxHp = StatusNoNivel(vidaBase, animal.Nivel);
+                contado.Attack = StatusNoNivel(ataqueBase, animal.Nivel);
+                contado.Hp = membro.Hp > 0 ? Js.Min(maxHp, membro.Hp + (maxHp - membro.MaxHp)) : membro.Hp;
+                contado.MaxHp = maxHp;
+                subiram.Add(contado);
+                nova.Add(contado);
+            }
+            return new BatalhaContada { Party = nova, Subiram = subiram };
+        }
+
+        /// <summary>TS: mudarEstadoDoAnimal — esteja ele na equipe ou guardado.</summary>
+        public static EquipeDoHeroi MudarEstado(Hero hero, List<Companion> party, string id, string novo)
+        {
+            Companion Trocar(Companion membro)
+            {
+                if (membro.Animal == null || membro.Animal.Id != id) return membro;
+                var c = membro.Clone();
+                c.EstadoDoLacaio = novo;
+                return c;
+            }
+            var equipe = party.ConvertAll(Trocar);
+            if (hero.Animais == null) return new EquipeDoHeroi { Hero = hero, Party = equipe };
+            var heroNovo = hero.Clone();
+            heroNovo.Animais = hero.Animais.ConvertAll(Trocar);
+            return new EquipeDoHeroi { Hero = heroNovo, Party = equipe };
+        }
+
+        public static T MudarEstado<T>(T estado, string id, string novo) where T : EstadoDoJogo => ComEquipe(estado, MudarEstado(estado.Hero, estado.Party, id, novo));
+
+        /// <summary>TS: guardarAnimal — o da equipe vai pra junto dos guardados.</summary>
+        public static EquipeDoHeroi Guardar(Hero hero, List<Companion> party, string id)
+        {
+            var animal = party.Find(m => m.Animal != null && m.Animal.Id == id);
+            if (animal == null) return new EquipeDoHeroi { Hero = hero, Party = party };
+            var heroNovo = hero.Clone();
+            heroNovo.Animais = hero.Animais != null ? new List<Companion>(hero.Animais) : new List<Companion>();
+            heroNovo.Animais.Add(animal);
+            return new EquipeDoHeroi { Hero = heroNovo, Party = party.FindAll(m => !ReferenceEquals(m, animal)) };
+        }
+
+        public static T Guardar<T>(T estado, string id) where T : EstadoDoJogo => ComEquipe(estado, Guardar(estado.Hero, estado.Party, id));
+
+        /// <summary>TS: levarAnimal — o guardado volta a seguir o herói, se ainda cabe na equipe.</summary>
+        public static EquipeDoHeroi Levar(Hero hero, List<Companion> party, string id)
+        {
+            var guardados = hero.Animais ?? new List<Companion>();
+            var animal = guardados.Find(m => m.Animal != null && m.Animal.Id == id);
+            if (animal == null || DaEquipe(party).Count >= Regras.Ativos) return new EquipeDoHeroi { Hero = hero, Party = party };
+            var resto = guardados.FindAll(m => !ReferenceEquals(m, animal));
+            var heroNovo = hero.Clone();
+            heroNovo.Animais = resto.Count > 0 ? resto : null;
+            return new EquipeDoHeroi { Hero = heroNovo, Party = new List<Companion>(party) { animal } };
+        }
+
+        public static T Levar<T>(T estado, string id) where T : EstadoDoJogo => ComEquipe(estado, Levar(estado.Hero, estado.Party, id));
     }
 }

@@ -121,14 +121,107 @@ namespace RPGLegend.Game.Jogo
             Redesenhar();
         }
 
-        /// <summary>Depois da luta, o animal que o Caçador domou ganha nome (rodada 7b).</summary>
+        private Button _botaoAnimais;
+        private bool _botaoAnimaisVisivel;
+
+        /// <summary>
+        /// Depois da luta, o animal que o Caçador domou ganha nome (rodada 7b); fora da luta, a tecla K e o botão de
+        /// cima abrem a janela ANIMAIS (rodada 7c).
+        /// </summary>
         private void AtualizarAnimais()
         {
-            if (_partida == null || _partida.Luta != null || _janela != null || _partida.AnimaisPorNomear.Count == 0) return;
+            if (_partida == null) return;
+            var hero = _partida.Estado.Hero;
+            bool cacador = Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "cacador";
+            bool temAnimal = cacador && Animais.Quantos(hero, _partida.Estado.Party ?? new List<Companion>()) > 0;
+            MostrarBotaoAnimais(temAnimal && _partida.Luta == null);
+            if (temAnimal && _partida.Luta == null && _janela == null && Andando)
+            {
+                var teclado = Keyboard.current;
+                if (teclado != null && !DigitandoNoChat && teclado.kKey.wasPressedThisFrame)
+                {
+                    AbrirAnimais();
+                    return;
+                }
+            }
+            if (_partida.Luta != null || _janela != null || _partida.AnimaisPorNomear.Count == 0) return;
             string id = _partida.AnimaisPorNomear[0];
             // Sai da fila já: fechar a janela sem nome deixa o da espécie.
             _partida.AnimaisPorNomear.RemoveAt(0);
             AbrirNomeDoAnimal(id);
+        }
+
+        private void MostrarBotaoAnimais(bool mostrar)
+        {
+            if (_botaoAnimais == null && _tela != null)
+            {
+                var vizinho = _tela.Q<Button>("botao-chat");
+                if (vizinho?.parent == null) return;
+                _botaoAnimais = new Button(AbrirAnimais) { text = "ANIMAIS" };
+                _botaoAnimais.AddToClassList("botao");
+                _botaoAnimais.AddToClassList("botao-pequeno");
+                _botaoAnimais.style.display = DisplayStyle.None;
+                vizinho.parent.Add(_botaoAnimais);
+            }
+            if (_botaoAnimais == null || mostrar == _botaoAnimaisVisivel) return;
+            _botaoAnimaisVisivel = mostrar;
+            _botaoAnimais.style.display = mostrar ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private static string NomeDoEstado(string estado) => estado == "ofensivo" ? "Ofensivo" : estado == "estrategico" ? "Estratégico" : "Retaguarda";
+
+        /// <summary>
+        /// A janela ANIMAIS (rodada 7c): os que seguem o herói e os guardados, com o nível, as lutas, a vida e o estado;
+        /// troca o estado, dá nome, guarda e leva de volta (seguem até 2).
+        /// </summary>
+        private void AbrirAnimais()
+        {
+            if (_partida == null || _janela != null || _partida.Luta != null) return;
+            _janela = "animais";
+            var estado = _partida.Estado;
+            var equipe = estado.Party ?? new List<Companion>();
+            var naEquipe = Animais.DaEquipe(equipe);
+            var guardados = estado.Hero.Animais ?? new List<Companion>();
+            var r = Animais.NaLuta;
+            Janela("🐾 Animais", conteudo =>
+            {
+                conteudo.Add(Paragrafo("<b>Retaguarda</b>: anda perto de você e ataca quem chegar a 3 blocos (+20% de dano). <b>Ofensivo</b>: vai atrás de qualquer inimigo (+20% de resistência). <b>Estratégico</b>: guarda a área que você marca na luta (no PC, o botão direito no chão; no celular, segure o dedo parado no chão) e bate em todos dentro dela; sem área, vira retaguarda. Até 2 seguem você, e cada 30 lutas vencidas sobem um nível."));
+                void Linha(Companion animal, bool seguindo)
+                {
+                    string id = animal.Animal.Id;
+                    string atual = Animais.EstadoDoAnimal(animal);
+                    var linha = PecasDaTela.Bloco("passo-do-guia");
+                    linha.Add(PecasDaTela.Texto(animal.RaceIcon ?? "🐾", "icone-do-passo"));
+                    var textos = PecasDaTela.Bloco("textos-do-passo");
+                    textos.Add(PecasDaTela.Texto(animal.Name + (seguindo ? "" : " (guardado)"), "nome-do-passo"));
+                    string lutas = animal.Animal.Nivel >= r.NivelMaximo ? "nível máximo" : Js.NumberToString(animal.Animal.Batalhas % r.BatalhasPorNivel) + "/" + Js.NumberToString(r.BatalhasPorNivel) + " lutas";
+                    textos.Add(PecasDaTela.Texto("Nv " + Js.NumberToString(animal.Animal.Nivel) + " · " + lutas + " · Vida " + Js.NumberToString(Math.Floor(animal.Hp)) + "/" + Js.NumberToString(animal.MaxHp) + " · " + NomeDoEstado(atual), "dica-do-passo"));
+                    linha.Add(textos);
+                    foreach (var opcao in new[] { "retaguarda", "ofensivo", "estrategico" })
+                    {
+                        string escolhido = opcao;
+                        linha.Add(PecasDaTela.Botao(NomeDoEstado(opcao).ToUpperInvariant(), () => MexerNosAnimais(() => _partida.MudarEstadoDoAnimal(id, escolhido)), escolhido == atual, escolhido != atual));
+                    }
+                    linha.Add(PecasDaTela.Botao("NOME", () =>
+                    {
+                        FecharJanela();
+                        AbrirNomeDoAnimal(id);
+                    }));
+                    if (seguindo) linha.Add(PecasDaTela.Botao("GUARDAR", () => MexerNosAnimais(() => _partida.GuardarAnimal(id))));
+                    else linha.Add(PecasDaTela.Botao("LEVAR", () => MexerNosAnimais(() => _partida.LevarAnimal(id)), false, naEquipe.Count < Animais.Regras.Ativos));
+                    conteudo.Add(linha);
+                }
+                foreach (var animal in naEquipe) Linha(animal, true);
+                foreach (var animal in guardados) if (animal.Animal != null) Linha(animal, false);
+            }, ("FECHAR", FecharJanela));
+        }
+
+        /// <summary>Faz a mudança e redesenha a janela com o que mudou.</summary>
+        private void MexerNosAnimais(Action mudanca)
+        {
+            mudanca();
+            _janela = null;
+            AbrirAnimais();
         }
 
         /// <summary>A janela do nome do animal domado: o campo vem com o nome do bicho, e o PRONTO grava o que estiver nele.</summary>

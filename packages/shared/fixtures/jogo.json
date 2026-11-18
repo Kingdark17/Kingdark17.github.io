@@ -219630,7 +219630,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1795009402092_55026",
+                  "uid": "pot_mana_1795011118348_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -219760,7 +219760,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1795009402092_90893",
+                  "uid": "anel_som_1795011118348_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -220049,7 +220049,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1795009402092_87912",
+                  "uid": "pot_mana_1795011118349_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -220266,7 +220266,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795009402092_18536",
+                  "uid": "pot_vida_1795011118349_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -220468,7 +220468,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1795009402093_69928",
+                  "uid": "bota_vento_1795011118349_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -220544,7 +220544,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1795009402092_12429",
+                "uid": "tala_1795011118349_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -220718,7 +220718,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1795009402093_23232",
+              "uid": "placas_elmo_1795011118350_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -220800,7 +220800,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795009402093_3788",
+                  "uid": "pot_vida_1795011118350_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -220917,7 +220917,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1795009402093_56339",
+                  "uid": "amuleto_sab_1795011118350_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -221083,7 +221083,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1795009402093_93474",
+              "uid": "anel_som_1795011118350_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -288905,6 +288905,522 @@
         },
         "log": [
           "Aliado se despede da equipe após cumprir sua promessa."
+        ],
+        "loot": null
+      },
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "limparSala: o animal do Caçador conta a batalha e sobe de nível",
+    "input": {
+      "fn": "limparSala",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 300,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 29,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 4,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": false
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "abatido": {
+          "speciesId": "goblin",
+          "enemyClassId": "brutamontes",
+          "floor": 3,
+          "hp": 0,
+          "maxHp": 26,
+          "dmg": 7,
+          "speed": 8,
+          "xp": 17,
+          "gold": 10,
+          "isBoss": false,
+          "status": {},
+          "attackCount": 0,
+          "species": {
+            "id": "goblin",
+            "name": "Goblin",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 10,
+            "baseSpeed": 8,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Ataque Impulsivo",
+            "abilityDesc": "Pode causar dano extra."
+          },
+          "enemyClass": {
+            "id": "brutamontes",
+            "name": "Brutamontes",
+            "icon": "💥",
+            "power": "Impacto Brutal",
+            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
+            "hpMult": 1.15,
+            "dmgMult": 1.2,
+            "speedMult": 0.9
+          },
+          "name": "Goblin",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Ataque Impulsivo",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Brutamontes"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.99
+        ]
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [
+              "Golpe Poderoso"
+            ],
+            "powerIds": [
+              "golpe_poderoso"
+            ],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 1,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Mago",
+              "classIcon": "🧙",
+              "classId": "mago",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 440,
+              "maxHp": 840,
+              "attack": 42,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 2,
+                "batalhas": 30,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 5,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "dungeon",
+          "map": [
+            [
+              {
+                "type": "monster",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "W": true
+                },
+                "extras": [
+                  {
+                    "kind": "pot",
+                    "col": 1,
+                    "row": 6,
+                    "used": false
+                  },
+                  {
+                    "kind": "pot",
+                    "col": 2,
+                    "row": 6,
+                    "used": false
+                  }
+                ],
+                "visited": true,
+                "revealed": true,
+                "monsters": [
+                  {
+                    "speciesId": "goblin",
+                    "enemyClassId": "brutamontes",
+                    "floor": 3,
+                    "hp": 0,
+                    "maxHp": 26,
+                    "dmg": 7,
+                    "speed": 8,
+                    "xp": 17,
+                    "gold": 10,
+                    "isBoss": false,
+                    "status": {},
+                    "attackCount": 0
+                  }
+                ],
+                "monsterIndex": 0,
+                "beaten": true
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "log": [
+          "🐾 Lobo das Sombras subiu pro nível 2!"
         ],
         "loot": null
       },

@@ -60829,7 +60829,9 @@
         "animal": {
           "id": "animal_1_2",
           "nivel": 1,
-          "batalhas": 0
+          "batalhas": 0,
+          "vidaBase": 700,
+          "ataqueBase": 35
         }
       }
     }
@@ -60872,7 +60874,9 @@
         "animal": {
           "id": "animal_1_2",
           "nivel": 1,
-          "batalhas": 0
+          "batalhas": 0,
+          "vidaBase": 2,
+          "ataqueBase": 1
         }
       }
     }
@@ -60915,7 +60919,9 @@
         "animal": {
           "id": "animal_1_2",
           "nivel": 1,
-          "batalhas": 0
+          "batalhas": 0,
+          "vidaBase": 54,
+          "ataqueBase": 9
         }
       }
     }
@@ -60958,7 +60964,9 @@
         "animal": {
           "id": "animal_1_2",
           "nivel": 1,
-          "batalhas": 0
+          "batalhas": 0,
+          "vidaBase": 7,
+          "ataqueBase": 7
         }
       }
     }
@@ -61253,7 +61261,9 @@
           "animal": {
             "id": "a3",
             "nivel": 1,
-            "batalhas": 0
+            "batalhas": 0,
+            "vidaBase": 140,
+            "ataqueBase": 11
           }
         }
       }
@@ -61377,7 +61387,9 @@
             "animal": {
               "id": "a3",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
             }
           }
         ]
@@ -62323,7 +62335,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -62386,7 +62400,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           }
         ]
@@ -62542,7 +62558,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -62571,7 +62589,9 @@
           "animal": {
             "id": "a3",
             "nivel": 1,
-            "batalhas": 0
+            "batalhas": 0,
+            "vidaBase": 140,
+            "ataqueBase": 11
           }
         }
       }
@@ -62695,7 +62715,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -62722,7 +62744,9 @@
             "animal": {
               "id": "a3",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
             }
           }
         ]
@@ -62852,7 +62876,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -62980,7 +63006,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           }
         ]
@@ -63110,7 +63138,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -63238,7 +63268,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           }
         ]
@@ -63368,7 +63400,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -63496,7 +63530,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           }
         ]
@@ -63626,7 +63662,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             }
           ]
@@ -63754,7 +63792,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           }
         ]
@@ -63862,7 +63902,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -63889,7 +63931,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -63930,7 +63974,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -63957,7 +64003,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -64068,7 +64116,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -64095,7 +64145,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -64124,7 +64176,9 @@
           "animal": {
             "id": "a3",
             "nivel": 1,
-            "batalhas": 0
+            "batalhas": 0,
+            "vidaBase": 140,
+            "ataqueBase": 11
           }
         }
       }
@@ -64225,7 +64279,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             }
           ]
@@ -64255,7 +64311,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -64282,7 +64340,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -64390,7 +64450,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -64417,7 +64479,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -64523,7 +64587,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -64550,7 +64616,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -64658,7 +64726,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -64685,7 +64755,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -64791,7 +64863,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -64818,7 +64892,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -64926,7 +65002,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -64953,7 +65031,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -65059,7 +65139,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -65086,7 +65168,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -65194,7 +65278,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -65221,7 +65307,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             }
           ]
@@ -65327,7 +65415,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -65354,7 +65444,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           }
         ]
@@ -65461,7 +65553,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -65491,7 +65585,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -65518,7 +65614,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -65581,7 +65679,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -65608,7 +65708,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -65763,7 +65865,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -65793,7 +65897,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -65820,7 +65926,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -65871,7 +65979,9 @@
           "animal": {
             "id": "a3",
             "nivel": 1,
-            "batalhas": 0
+            "batalhas": 0,
+            "vidaBase": 140,
+            "ataqueBase": 11
           }
         }
       }
@@ -65972,7 +66082,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             },
             {
@@ -65999,7 +66111,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             }
           ]
@@ -66029,7 +66143,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -66056,7 +66172,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -66185,7 +66303,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -66215,7 +66335,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -66242,7 +66364,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -66369,7 +66493,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             }
           ]
@@ -66399,7 +66525,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -66426,7 +66554,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -66555,7 +66685,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -66585,7 +66717,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -66612,7 +66746,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -66739,7 +66875,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             }
           ]
@@ -66769,7 +66907,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -66796,7 +66936,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -66925,7 +67067,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -66955,7 +67099,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -66982,7 +67128,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -67109,7 +67257,9 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
               }
             }
           ]
@@ -67139,7 +67289,9 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
           },
           {
@@ -67166,7 +67318,9 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -67295,7 +67449,9 @@
                 "animal": {
                   "id": "a3",
                   "nivel": 1,
-                  "batalhas": 0
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
                 }
               }
             ]
@@ -67325,7 +67481,9 @@
               "animal": {
                 "id": "a1",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
               }
             },
             {
@@ -67352,7 +67510,9 @@
               "animal": {
                 "id": "a2",
                 "nivel": 1,
-                "batalhas": 0
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
               }
             },
             {
@@ -67479,6 +67639,3880 @@
               "animal": {
                 "id": "a3",
                 "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "statusNoNivel: 700 no 1",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 700,
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": 700
+    }
+  },
+  {
+    "name": "statusNoNivel: 700 no 2",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 700,
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": 840
+    }
+  },
+  {
+    "name": "statusNoNivel: 700 no 10",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 700,
+        "nivel": 10
+      }
+    },
+    "expected": {
+      "result": 1960
+    }
+  },
+  {
+    "name": "statusNoNivel: 1 no 1",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 1,
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "statusNoNivel: 3 no 7",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 3,
+        "nivel": 7
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "statusNoNivel: 35 no 4",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 35,
+        "nivel": 4
+      }
+    },
+    "expected": {
+      "result": 56
+    }
+  },
+  {
+    "name": "statusNoNivel: 77 no 11",
+    "input": {
+      "fn": "statusNoNivel",
+      "args": {
+        "base": 77,
+        "nivel": 11
+      }
+    },
+    "expected": {
+      "result": 231
+    }
+  },
+  {
+    "name": "contarBatalha: ninguém sobe",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 1,
+              "batalhas": 3,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 1,
+              "batalhas": 4,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ],
+        "subiram": []
+      }
+    }
+  },
+  {
+    "name": "contarBatalha: sobe pro 2, ferido",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 500,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 1,
+              "batalhas": 29,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 640,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 2,
+              "batalhas": 30,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ],
+        "subiram": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 640,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 2,
+              "batalhas": 30,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "contarBatalha: caído também sobe, e continua caído",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 0,
+            "maxHp": 840,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 1,
+              "batalhas": 59,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 0,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 2,
+              "batalhas": 60,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ],
+        "subiram": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 0,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 2,
+              "batalhas": 60,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "contarBatalha: no 10 não sobe mais",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 10,
+              "batalhas": 299,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "n1",
+              "nivel": 10,
+              "batalhas": 300,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ],
+        "subiram": []
+      }
+    }
+  },
+  {
+    "name": "contarBatalha: domado na 7b, sem a base",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "v",
+              "nivel": 1,
+              "batalhas": 29
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 840,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "v",
+              "nivel": 2,
+              "batalhas": 30,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ],
+        "subiram": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 840,
+            "maxHp": 840,
+            "attack": 42,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "v",
+              "nivel": 2,
+              "batalhas": 30,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "contarBatalha: dois animais e um recruta",
+    "input": {
+      "fn": "contarBatalha",
+      "args": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "x",
+              "nivel": 3,
+              "batalhas": 89,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "y",
+              "nivel": 2,
+              "batalhas": 10,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 1120,
+            "maxHp": 1120,
+            "attack": 56,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "x",
+              "nivel": 4,
+              "batalhas": 90,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "y",
+              "nivel": 2,
+              "batalhas": 11,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ],
+        "subiram": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 1120,
+            "maxHp": 1120,
+            "attack": 56,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "x",
+              "nivel": 4,
+              "batalhas": 90,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "estadoDoAnimal: sem estado",
+    "input": {
+      "fn": "estadoDoAnimal",
+      "args": {
+        "membro": {}
+      }
+    },
+    "expected": {
+      "result": "retaguarda"
+    }
+  },
+  {
+    "name": "estadoDoAnimal: ofensivo",
+    "input": {
+      "fn": "estadoDoAnimal",
+      "args": {
+        "membro": {
+          "estadoDoLacaio": "ofensivo"
+        }
+      }
+    },
+    "expected": {
+      "result": "ofensivo"
+    }
+  },
+  {
+    "name": "estadoDoAnimal: estrategico",
+    "input": {
+      "fn": "estadoDoAnimal",
+      "args": {
+        "membro": {
+          "estadoDoLacaio": "estrategico"
+        }
+      }
+    },
+    "expected": {
+      "result": "estrategico"
+    }
+  },
+  {
+    "name": "mudarEstadoDoAnimal: a1 pro estrategico",
+    "input": {
+      "fn": "mudarEstadoDoAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a1",
+        "novo": "estrategico"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            },
+            "estadoDoLacaio": "estrategico"
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "mudarEstadoDoAnimal: a3 pro ofensivo",
+    "input": {
+      "fn": "mudarEstadoDoAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a3",
+        "novo": "ofensivo"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              },
+              "estadoDoLacaio": "ofensivo"
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "mudarEstadoDoAnimal: nenhum pro ofensivo",
+    "input": {
+      "fn": "mudarEstadoDoAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "nenhum",
+        "novo": "ofensivo"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "guardarAnimal: a1",
+    "input": {
+      "fn": "guardarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a1"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            },
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "guardarAnimal: a2",
+    "input": {
+      "fn": "guardarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a2"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "guardarAnimal: a3",
+    "input": {
+      "fn": "guardarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a3"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "guardarAnimal: nenhum",
+    "input": {
+      "fn": "guardarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "nenhum"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "a2",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "levarAnimal: cabe",
+    "input": {
+      "fn": "levarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              },
+              {
+                "name": "Aranha Gigante",
+                "raceIcon": "🕷️",
+                "race": "Aranha Gigante",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 210,
+                "maxHp": 210,
+                "attack": 14,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "aranha",
+                "animal": {
+                  "id": "a4",
+                  "nivel": 1,
+                  "batalhas": 0
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ]
+        },
+        "id": "a3"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a4",
+                "nivel": 1,
                 "batalhas": 0
               }
             }
@@ -67509,8 +71543,668 @@
             "animal": {
               "id": "a1",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
             }
+          },
+          {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 140,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "a3",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "levarAnimal: o último guardado",
+    "input": {
+      "fn": "levarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ]
+        },
+        "id": "a3"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {}
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 140,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "a3",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
+            }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "levarAnimal: não cabe",
+    "input": {
+      "fn": "levarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            },
+            {
+              "name": "Aliado",
+              "raceIcon": "🧑",
+              "race": "Humano",
+              "className": "Guerreiro",
+              "classIcon": "⚔️",
+              "classId": "guerreiro",
+              "hp": 20,
+              "maxHp": 20,
+              "attack": 5,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "stance": "equilibrada",
+              "ability": "",
+              "abilityDesc": ""
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a2",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 210,
+                "ataqueBase": 14
+              }
+            }
+          ]
+        },
+        "id": "a3"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
           },
           {
             "name": "Aranha Gigante",
@@ -67536,19 +72230,23 @@
             "animal": {
               "id": "a2",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
-          },
-          {
-            "name": "Aliado",
-            "raceIcon": "🧑",
-            "race": "Humano",
-            "className": "Mago",
-            "classIcon": "🧙",
-            "classId": "mago",
-            "hp": 20,
-            "maxHp": 20,
-            "attack": 5,
+          }
+        ]
+      }
+    }
+  },
+  {
+    "name": "levarAnimal: não está guardado",
+    "input": {
+      "fn": "levarAnimal",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
             "attrs": {
               "forca": 10,
               "destreza": 10,
@@ -67557,9 +72255,318 @@
               "sabedoria": 10,
               "carisma": 10
             },
-            "stance": "equilibrada",
-            "ability": "",
-            "abilityDesc": ""
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 100,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {},
+            "animais": [
+              {
+                "name": "Morcego Vampírico",
+                "raceIcon": "🦇",
+                "race": "Morcego Vampírico",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 140,
+                "maxHp": 140,
+                "attack": 11,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "morcego",
+                "animal": {
+                  "id": "a3",
+                  "nivel": 1,
+                  "batalhas": 0,
+                  "vidaBase": 140,
+                  "ataqueBase": 11
+                }
+              },
+              {
+                "name": "Aranha Gigante",
+                "raceIcon": "🕷️",
+                "race": "Aranha Gigante",
+                "className": "Animal",
+                "classIcon": "🐾",
+                "hp": 210,
+                "maxHp": 210,
+                "attack": 14,
+                "attrs": {
+                  "forca": 0,
+                  "destreza": 0,
+                  "constituicao": 0,
+                  "intelecto": 0,
+                  "sabedoria": 0,
+                  "carisma": 0
+                },
+                "stance": "agressiva",
+                "ability": "Instinto",
+                "abilityDesc": "Um animal domado pelo Caçador.",
+                "especie": "aranha",
+                "animal": {
+                  "id": "a4",
+                  "nivel": 1,
+                  "batalhas": 0
+                }
+              }
+            ]
+          },
+          "party": [
+            {
+              "name": "Lobo das Sombras",
+              "raceIcon": "🐺",
+              "race": "Lobo das Sombras",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 700,
+              "maxHp": 700,
+              "attack": 35,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "lobo_sombras",
+              "animal": {
+                "id": "a1",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 700,
+                "ataqueBase": 35
+              }
+            }
+          ]
+        },
+        "id": "a1"
+      }
+    },
+    "expected": {
+      "result": {
+        "hero": {
+          "level": 1,
+          "attrs": {
+            "forca": 10,
+            "destreza": 10,
+            "constituicao": 10,
+            "intelecto": 10,
+            "sabedoria": 10,
+            "carisma": 10
+          },
+          "equip": {
+            "arma": {
+              "uid": "arco_1700000000000_62706",
+              "templateId": "arco",
+              "rarity": "comum",
+              "stats": {
+                "ataque": 4,
+                "esquiva": 2,
+                "critico": 6
+              },
+              "value": 24,
+              "equipped": false
+            },
+            "secundaria": null,
+            "elmo": null,
+            "armadura": null,
+            "calca": null,
+            "botas": null,
+            "acessorio": null
+          },
+          "name": "Teste",
+          "race": "Humano",
+          "raceIcon": "🧑",
+          "className": "Caçador",
+          "classIcon": "🐺",
+          "classId": "cacador",
+          "raceId": "humano",
+          "xp": 0,
+          "xpNext": 40,
+          "attrPoints": 0,
+          "gold": 100,
+          "powerNames": [],
+          "powerIds": [],
+          "debuff": {
+            "id": "orgulhoso",
+            "name": "Orgulhoso",
+            "icon": "👑",
+            "desc": "-1 Carisma em negociações com autoridades.",
+            "attr": "carisma"
+          },
+          "killCount": 0,
+          "masteryBattles": 0,
+          "derived": {
+            "maxHp": 125,
+            "maxMp": 62,
+            "dmgFisico": 20,
+            "dmgMagico": 30,
+            "esquiva": 7,
+            "critico": 10,
+            "velocidade": 10,
+            "curaBonus": 10,
+            "resistMagica": 10,
+            "descontoLoja": 5
+          },
+          "maxHp": 125,
+          "hp": 125,
+          "maxMp": 62,
+          "mp": 62,
+          "buffs": {},
+          "animais": [
+            {
+              "name": "Morcego Vampírico",
+              "raceIcon": "🦇",
+              "race": "Morcego Vampírico",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 140,
+              "maxHp": 140,
+              "attack": 11,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "morcego",
+              "animal": {
+                "id": "a3",
+                "nivel": 1,
+                "batalhas": 0,
+                "vidaBase": 140,
+                "ataqueBase": 11
+              }
+            },
+            {
+              "name": "Aranha Gigante",
+              "raceIcon": "🕷️",
+              "race": "Aranha Gigante",
+              "className": "Animal",
+              "classIcon": "🐾",
+              "hp": 210,
+              "maxHp": 210,
+              "attack": 14,
+              "attrs": {
+                "forca": 0,
+                "destreza": 0,
+                "constituicao": 0,
+                "intelecto": 0,
+                "sabedoria": 0,
+                "carisma": 0
+              },
+              "stance": "agressiva",
+              "ability": "Instinto",
+              "abilityDesc": "Um animal domado pelo Caçador.",
+              "especie": "aranha",
+              "animal": {
+                "id": "a4",
+                "nivel": 1,
+                "batalhas": 0
+              }
+            }
+          ]
+        },
+        "party": [
+          {
+            "name": "Lobo das Sombras",
+            "raceIcon": "🐺",
+            "race": "Lobo das Sombras",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 700,
+            "maxHp": 700,
+            "attack": 35,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "lobo_sombras",
+            "animal": {
+              "id": "a1",
+              "nivel": 1,
+              "batalhas": 0,
+              "vidaBase": 700,
+              "ataqueBase": 35
+            }
           }
         ]
       }

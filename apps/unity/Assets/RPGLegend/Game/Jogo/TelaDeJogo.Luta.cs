@@ -82,6 +82,8 @@ namespace RPGLegend.Game.Jogo
         private int? _mirar;
         /// <summary>O Caçador ofereceu a comida a este monstro (rodada 7b).</summary>
         private int? _alimentar;
+        /// <summary>O Caçador marcou a área de guarda dos animais (rodada 7c): o botão direito no chão, ou o dedo parado nele.</summary>
+        private PontoNaSala _guardar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
         private double _sobraDaLuta;
@@ -345,6 +347,7 @@ namespace RPGLegend.Game.Jogo
                 Florescer = _apertouFlor ? true : (bool?)null,
                 Chapeu = _apertouChapeu ? true : (bool?)null,
                 Alimentar = _alimentar,
+                Guardar = _guardar,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
@@ -358,6 +361,7 @@ namespace RPGLegend.Game.Jogo
             _mirar = null;
             _mirarAliado = null;
             _alimentar = null;
+            _guardar = null;
             return entrada;
         }
 

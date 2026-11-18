@@ -22,6 +22,8 @@ namespace RPGLegend.Game.Jogo
     {
         private const float RaioDoJoystick = 56f;
         private const float ZonaMorta = 0.15f;
+        /// <summary>Quanto o dedo fica parado no chão, na luta, pra marcar a área de guarda (rodada 7c).</summary>
+        private const long TempoDoDedoParado = 450;
         /// <summary>
         /// Quanto o que fala do lugar fica na tela depois da chegada: um tanto fixo mais o tempo de ler, entre o mínimo
         /// e o máximo. Depois some apagando.
@@ -362,7 +364,26 @@ namespace RPGLegend.Game.Jogo
 
         private void ApertarDedo(PointerDownEvent e)
         {
+            // Na luta, o Caçador marca a área de guarda dos animais (rodada 7c): no PC, o botão direito no chão.
+            if (_partida?.Luta != null && e.button == 1)
+            {
+                var ponto = _palcoDaLuta?.CursorNaSala();
+                if (ponto != null) _guardar = ponto;
+                return;
+            }
             if (!Andando || _dedo.HasValue) return;
+            // No celular, o dedo parado no chão por um tempo também marca (o joystick sem mexer).
+            if (_partida?.Luta != null && e.pointerType != UnityEngine.UIElements.PointerType.mouse)
+            {
+                int id = e.pointerId;
+                var ondeTocou = (Vector2)e.position;
+                _palco.schedule.Execute(() =>
+                {
+                    if (_dedo != id || _partida?.Luta == null || _joystick.X != 0 || _joystick.Y != 0) return;
+                    var ponto = _palcoDaLuta?.NaSala(ondeTocou);
+                    if (ponto != null) _guardar = ponto;
+                }).StartingIn(TempoDoDedoParado);
+            }
             _dedo = e.pointerId;
             _origemDoDedo = e.localPosition;
             _palco.CapturePointer(e.pointerId);

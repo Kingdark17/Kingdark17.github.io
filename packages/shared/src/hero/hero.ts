@@ -669,7 +669,8 @@ export interface Companion {
    * (ausente, a retaguarda). O site só guarda.
    */
   especie?: string;
-  estadoDoLacaio?: 'retaguarda' | 'ofensivo';
+  /** O estado na arena: o do lacaio (a retaguarda ou o ofensivo) e, só no animal do Caçador, o estratégico (rodada 7c). */
+  estadoDoLacaio?: 'retaguarda' | 'ofensivo' | 'estrategico';
   /**
    * O animal domado pelo Caçador (rodada 7b, `combat/animais.ts`): um id que
    * não muda (pra dar nome e achar ele), o nível e as batalhas que ele já
@@ -683,6 +684,9 @@ export interface AnimalDoCompanheiro {
   id: string;
   nivel: number;
   batalhas: number;
+  /** A vida máxima e o dano de quando foi domado: o nível conta a partir deles (rodada 7c). Ausentes, os de agora. */
+  vidaBase?: number;
+  ataqueBase?: number;
 }
 
 /** Por id da classe, não pelo nome — ver a nota em `catalog.ts`. */

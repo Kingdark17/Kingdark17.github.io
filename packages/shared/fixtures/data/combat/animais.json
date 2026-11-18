@@ -19,5 +19,14 @@
     "maximo": 4,
     "ativos": 2,
     "nome": 20
+  },
+  "REGRAS_DOS_ANIMAIS": {
+    "batalhasPorNivel": 30,
+    "nivelMaximo": 10,
+    "porNivel": 20,
+    "retaguarda": 3,
+    "danoNaRetaguarda": 20,
+    "resistenciaNoOfensivo": 20,
+    "ladoDaGuarda": 4
   }
 }

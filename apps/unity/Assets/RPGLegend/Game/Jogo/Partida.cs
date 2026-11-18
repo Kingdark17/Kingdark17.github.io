@@ -508,6 +508,19 @@ namespace RPGLegend.Game.Jogo
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
         }
 
+        /// <summary>A janela ANIMAIS (rodada 7c): troca o estado de um animal, guarda ou leva de volta. Só fora da luta.</summary>
+        public void MudarEstadoDoAnimal(string id, string estado) => MudarAnimais(Animais.MudarEstado(Estado, id, estado));
+        public void GuardarAnimal(string id) => MudarAnimais(Animais.Guardar(Estado, id));
+        public void LevarAnimal(string id) => MudarAnimais(Animais.Levar(Estado, id));
+
+        private void MudarAnimais(EstadoDoJogo novo)
+        {
+            if (Luta != null || ReferenceEquals(novo, Estado)) return;
+            Estado = novo;
+            MarcarParaSalvar();
+            Mudou?.Invoke();
+        }
+
         /// <summary>Dá nome a um animal do Caçador (rodada 7b), na equipe ou guardado, e grava.</summary>
         public void NomearAnimal(string id, string nome)
         {

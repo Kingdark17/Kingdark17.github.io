@@ -789,9 +789,28 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   corpo na arena; no site, por turnos, como recruta — decisão do usuário) e
   segue o herói no mapa com o emoji da espécie. Arte das comidas do Claude,
   em `img/materials/` e `Art/Jogo/Resources/Itens/materials/`.
-  Falta: 7c (o animal com corpo na luta, estados, janela do K, níveis) e 7d
-  (montaria, cristal do animal morto, reviver, soltar) do Caçador, e o
-  tratador na cidade.
+  **7c feita** (o animal na luta, regras em `REGRAS_DOS_ANIMAIS`): o animal
+  da equipe entra com corpo na arena como o lacaio (`abrirLuta`, e o resto
+  do caminho do lacaio: `alvoDoLacaio`, `agirLacaio`, os monstros vão atrás
+  dele), batendo pelo jeito da espécie, com o estado em
+  `Companion.estadoDoLacaio`: a **retaguarda** guarda o dono a até 3 blocos
+  (+20% de dano), o **ofensivo** vai em qualquer um (+20% de resistência) e
+  o **estratégico** guarda a área de 4 × 4 casas que o Caçador marca na luta
+  (`EntradaDaLuta.guardar` → `Arena.guarda`, só com um animal no
+  estratégico; no PC o botão direito no chão, no celular o dedo parado no
+  chão; desenhada no chão em amarelo) e cada golpe dele pega todos dentro
+  dela, com o mesmo dano; sem área marcada, vira retaguarda (`estadoNaArena`).
+  **Níveis** (`contarBatalha`, em `limparSala`: valem no site e no app): cada
+  luta vencida com ele na equipe (de pé ou caído) conta uma batalha; a cada
+  30, +1 nível até o 10, e a vida máxima e o dano vão a +20% dos de quando
+  foi domado por nível (`animal.vidaBase`/`ataqueBase`, `statusNoNivel`);
+  o domado na luta não conta aquela vitória. A janela **ANIMAIS** (tecla K
+  fora da luta, ou o botão de cima) mostra os da equipe e os guardados, com
+  nível, lutas, vida e estado, e troca o estado, dá nome, guarda e leva de
+  volta (`mudarEstadoDoAnimal`, `guardarAnimal`, `levarAnimal`; seguem até 2).
+  Na dupla o animal vai pro parceiro com o emoji da espécie.
+  Falta: 7d (montaria, cristal do animal morto, reviver, soltar) do Caçador,
+  e o tratador na cidade.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

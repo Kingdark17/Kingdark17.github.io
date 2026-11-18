@@ -15,6 +15,7 @@
  */
 
 import { FIM_DOS_ESQUELETOS, liberarMagia, semInvocados, semInvocadosCaidos, temInvocadoCaido } from '../combat/invocacao.js';
+import { contarBatalha } from '../combat/animais.js';
 import { freshCombatMonster, type CombatMonster, type CombatMonsterView } from '../combat/monster-state.js';
 import { DIFFICULTIES, DUNGEON_FLOORS, dungeonById, DUNGEONS, isCleared, lockReason, markCleared, runName, type DungeonProgress } from '../dungeon/dungeons.js';
 import type { DungeonCell } from '../dungeon/generate.js';
@@ -156,8 +157,12 @@ export function limparSala(estado: EstadoNaMasmorra, abatido: CombatMonsterView,
 
   // Os esqueletos de pé seguem o herói pra próxima sala (2026-11-10); só os caídos somem.
   if (temInvocadoCaido(estado.party)) log.push(FIM_DOS_ESQUELETOS);
-  const { party, saindo } = despedirTemporarios(semInvocadosCaidos(estado.party));
+  const { party: equipe, saindo } = despedirTemporarios(semInvocadosCaidos(estado.party));
   for (const membro of saindo) log.push(`${membro.name} se despede da equipe após cumprir sua promessa.`);
+  // Os animais do Caçador contam a batalha (rodada 7c): a cada 30, um nível.
+  const contados = contarBatalha(equipe);
+  const party = contados.party;
+  for (const animal of contados.subiram) log.push(`🐾 ${animal.name} subiu pro nível ${animal.animal?.nivel}!`);
 
   let hero = estado.hero;
   let inventory = estado.inventory;

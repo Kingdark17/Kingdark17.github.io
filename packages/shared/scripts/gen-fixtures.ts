@@ -1102,6 +1102,41 @@ for (const cls of ['monge', 'mago', 'necromante']) {
         caso(`(7b) nomearAnimal: ${nome}, ${id} = "${nomeNovo}"`, 'nomearAnimal', { estado, id, nome: nomeNovo }, (a) => E.nomearAnimal(a.estado as never, a.id, a.nome));
       }
     }
+    // Os níveis e a janela do K (rodada 7c).
+    for (const [base, nivel] of [[700, 1], [700, 2], [700, 10], [1, 1], [3, 7], [35, 4], [77, 11]] as const) {
+      caso(`statusNoNivel: ${base} no ${nivel}`, 'statusNoNivel', { base, nivel }, (a) => E.statusNoNivel(a.base, a.nivel));
+    }
+    const comNivel = (nivel: number, batalhas: number, o: Partial<Companion> = {}, id = 'n1') =>
+      ({ ...lobo, ...o, animal: { id, nivel, batalhas, vidaBase: 700, ataqueBase: 35 } }) as Companion;
+    for (const [nome, party] of [
+      ['ninguém sobe', [comNivel(1, 3), companheiro('guerreiro')]],
+      ['sobe pro 2, ferido', [comNivel(1, 29, { hp: 500 })]],
+      ['caído também sobe, e continua caído', [comNivel(1, 59, { hp: 0, maxHp: 840 })]],
+      ['no 10 não sobe mais', [comNivel(10, 299)]],
+      ['domado na 7b, sem a base', [{ ...lobo, animal: { id: 'v', nivel: 1, batalhas: 29 } } as Companion]],
+      ['dois animais e um recruta', [comNivel(3, 89, {}, 'x'), companheiro('mago'), comNivel(2, 10, {}, 'y')]],
+    ] as const) {
+      caso(`contarBatalha: ${nome}`, 'contarBatalha', { party }, (a) => E.contarBatalha(a.party as never));
+    }
+    for (const estadoDoLacaio of [undefined, 'ofensivo', 'estrategico'] as const) {
+      caso(`estadoDoAnimal: ${estadoDoLacaio ?? 'sem estado'}`, 'estadoDoAnimal', { membro: estadoDoLacaio ? { estadoDoLacaio } : {} }, (a) => E.estadoDoAnimal(a.membro as never));
+    }
+    {
+      const equipe = { hero: { ...base, animais: [morcego] }, party: [lobo, companheiro('guerreiro'), aranha] };
+      for (const [id, novo] of [['a1', 'estrategico'], ['a3', 'ofensivo'], ['nenhum', 'ofensivo']] as const) {
+        caso(`mudarEstadoDoAnimal: ${id} pro ${novo}`, 'mudarEstadoDoAnimal', { estado: equipe, id, novo }, (a) => E.mudarEstadoDoAnimal(a.estado as never, a.id, a.novo));
+      }
+      for (const id of ['a1', 'a2', 'a3', 'nenhum']) caso(`guardarAnimal: ${id}`, 'guardarAnimal', { estado: equipe, id }, (a) => E.guardarAnimal(a.estado as never, a.id));
+      const umNaEquipe = { hero: { ...base, animais: [morcego, { ...aranha, animal: { id: 'a4', nivel: 1, batalhas: 0 } }] }, party: [lobo] };
+      for (const [nome, estado, id] of [
+        ['cabe', umNaEquipe, 'a3'],
+        ['o último guardado', { hero: { ...base, animais: [morcego] }, party: [lobo] }, 'a3'],
+        ['não cabe', equipe, 'a3'],
+        ['não está guardado', umNaEquipe, 'a1'],
+      ] as const) {
+        caso(`levarAnimal: ${nome}`, 'levarAnimal', { estado, id }, (a) => E.levarAnimal(a.estado as never, a.id));
+      }
+    }
     for (const nome of ['Presa', '  Sombra\n<b>  ', '', '   ', 'a'.repeat(30), '🐺'.repeat(25), 'Lobo\u0000Mau', 'Ana Júlia', ' 🕷️ Teia ']) {
       caso(`nomeDoAnimal: ${JSON.stringify(nome)}`, 'nomeDoAnimal', { nome, padrao: 'Lobo das Sombras' }, (a) => E.nomeDoAnimal(a.nome, a.padrao));
     }
@@ -5203,6 +5238,12 @@ caso('comecarCombate: na cidade não há combate', 'comecarCombate', { combate: 
     { sequence: [0.99] },
   );
   limpa('o temporário se despede, o fiel fica', { ...ultimo.estado, party: [temporario, fiel] }, ultimo.abatido, { sequence: [0.99] });
+  {
+    // Os animais do Caçador contam a batalha (rodada 7c): a cada 30, um nível.
+    const animal = (batalhas: number, id: string, o: Partial<Companion> = {}) =>
+      ({ ...E.animalDomado({ speciesId: 'lobo_sombras', maxHp: 1000, dmg: 50 }, id), ...o, animal: { id, nivel: 1, batalhas, vidaBase: 700, ataqueBase: 35 } }) as Companion;
+    limpa('o animal do Caçador conta a batalha e sobe de nível', { ...ultimo.estado, party: [fiel, animal(29, 'a1', { hp: 300 }), animal(4, 'a2')] }, ultimo.abatido, { sequence: [0.99] });
+  }
   limpa('a maestria sobe', caiu(umMonstro, 0, veterano).estado, ultimo.abatido, { sequence: [0.99] });
   const noChefe = caiu(chefe, 0);
   limpa('o chefe leva ao andar seguinte', comGradeInteira(noChefe.estado), noChefe.abatido, { seed: 42 });
@@ -6412,6 +6453,31 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
         simula('domar: o lobo que recusou seis vezes não aceita mais', cansado, oferecer(1, 30), { seed: 951 });
       }
       caso('abrirLuta: com um animal na equipe (7b)', 'abrirLuta', { estado: { ...salaCom([bicho('zumbi')]), party: [lobo] }, chegada: PERTO }, (a) => E.abrirLuta(a.estado, a.chegada));
+
+      // O animal na luta (rodada 7c): com corpo, na retaguarda (+20%), no ofensivo (-20% no golpe levado) e no estratégico (a área marcada).
+      // A equipe entra antes de abrir a luta (é na abertura que o animal ganha o corpo).
+      const comAnimal = (estadoDoLacaio: 'retaguarda' | 'ofensivo' | 'estrategico', monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>, ataque = 120) => {
+        const hero = forte({ classe: 'cacador', arma: 'arco' });
+        const aberta = E.abrirLuta({ ...salaCom(monstros), hero, party: [{ ...lobo, attack: ataque, estadoDoLacaio }] }, EMBAIXO).luta;
+        return {
+          ...aberta,
+          arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (corpos[i] as [number, number])[0] * T, corpoY: (corpos[i] as [number, number])[1] * T })) },
+        };
+      };
+      const dois = () => [bicho('zumbi', { hp: 3000, maxHp: 3000, dmg: 20 }), bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 20 })];
+      simula('o animal na retaguarda guarda o dono', comAnimal('retaguarda', dois(), [[4.5, 5.5], [6.5, 2.5]]), parado(400), { seed: 960 });
+      simula('o animal no ofensivo vai em qualquer um e apanha menos', comAnimal('ofensivo', dois(), [[1.5, 1.5], [6.5, 2.5]]), parado(500), { seed: 961 });
+      {
+        const guardando = comAnimal('estrategico', dois(), [[6.5, 1.5], [7.5, 2.5]], 200);
+        simula('o animal no estratégico guarda a área marcada e bate em todos dentro', guardando, [{ x: 0, y: 0, guardar: { x: 7 * T, y: 2 * T } }, ...parado(500)], { seed: 962 });
+        simula('o animal no estratégico, sem área marcada, fica de retaguarda', guardando, parado(300), { seed: 963 });
+        simula('a área fora do chão fica na beirada', guardando, [{ x: 0, y: 0, guardar: { x: 99 * T, y: -5 * T } }, ...parado(30)], { seed: 964 });
+      }
+      simula('sem animal no estratégico, a área não se marca', comAnimal('retaguarda', dois(), [[6.5, 1.5], [7.5, 2.5]]), [{ x: 0, y: 0, guardar: { x: 7 * T, y: 2 * T } }, ...parado(30)], { seed: 965 });
+      {
+        const domavel = caca([loboFraco()], [[4.5, 5.5]], { party: [{ ...lobo, animal: { id: 'a1', nivel: 1, batalhas: 29, vidaBase: 700, ataqueBase: 35 } }] });
+        simula('domar o último: a vitória conta pros animais que já estavam, não pro domado', domavel, oferecer(4), { seed: acha(domavel, oferecer(4), 'Você domou') });
+      }
     }
   }
 

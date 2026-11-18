@@ -183,6 +183,10 @@ namespace RPGLegend.Engine
                 if (depois.Temporary == true && (depois.CombatsLeft ?? 0) <= 0) saindo.Add(depois);
             }
             foreach (var membro in saindo) log.Add(Js.Str(membro.Name) + " se despede da equipe após cumprir sua promessa.");
+            // Os animais do Caçador contam a batalha (rodada 7c): a cada 30, um nível.
+            var contados = Animais.ContarBatalha(party);
+            party = contados.Party;
+            foreach (var animal in contados.Subiram) log.Add("🐾 " + Js.Str(animal.Name) + " subiu pro nível " + Js.NumberToString(animal.Animal.Nivel) + "!");
 
             var hero = estado.Hero;
             var inventory = estado.Inventory;

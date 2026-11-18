@@ -7179,7 +7179,9 @@
             "animal": {
               "id": "x",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -7206,7 +7208,9 @@
             "animal": {
               "id": "y",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
             }
           }
         ]
@@ -7286,7 +7290,9 @@
             "animal": {
               "id": "x",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 210,
+              "ataqueBase": 14
             }
           },
           {
@@ -7313,7 +7319,9 @@
             "animal": {
               "id": "y",
               "nivel": 1,
-              "batalhas": 0
+              "batalhas": 0,
+              "vidaBase": 140,
+              "ataqueBase": 11
             }
           },
           {

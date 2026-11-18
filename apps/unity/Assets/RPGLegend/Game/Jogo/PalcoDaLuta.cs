@@ -597,6 +597,18 @@ namespace RPGLegend.Game.Jogo
             return new PontoNaSala { X = x, Y = y };
         }
 
+        /// <summary>O ponto da sala (em unidades dela) de uma posição no painel; null fora do chão da sala (rodada 7c: o dedo que marca a área de guarda).</summary>
+        public PontoNaSala NaSala(Vector2 noPainel)
+        {
+            var area = AreaDaSala;
+            if (panel == null || area.width <= 0 || _colunas <= 0) return null;
+            var aqui = this.WorldToLocal(noPainel);
+            float unidade = area.width / (float)_colunas / (float)RoomWalk.TileUnits;
+            double x = Math.Truncate((aqui.x - area.x) / unidade), y = Math.Truncate((aqui.y - area.y) / unidade);
+            if (x < 0 || y < 0 || x > _colunas * RoomWalk.TileUnits || aqui.y > area.yMax) return null;
+            return new PontoNaSala { X = x, Y = y };
+        }
+
         public Vector2 PosicaoDoHeroi(Arena arena)
         {
             var area = AreaDaSala;
@@ -642,6 +654,8 @@ namespace RPGLegend.Game.Jogo
             private static readonly Color Canteiro = new Color(0.36f, 0.66f, 0.30f, 1f);
             private static readonly Color Petala = new Color(0.96f, 0.56f, 0.70f, 1f);
             private static readonly Color MioloDaFlor = new Color(0.98f, 0.84f, 0.33f, 1f);
+            /// <summary>A área de guarda dos animais no estratégico (rodada 7c): o amarelo do Breno.</summary>
+            private static readonly Color CorDaGuarda = new Color(0.98f, 0.84f, 0.33f, 1f);
             /// <summary>A escuridão do Mago (rodada 5c): um roxo quase preto, como a sombra das salas.</summary>
             private static readonly Color Breu = new Color(0.10f, 0.05f, 0.16f, 1f);
             private static readonly Color BordaDoBreu = new Color(0.45f, 0.25f, 0.62f, 1f);
@@ -780,6 +794,35 @@ namespace RPGLegend.Game.Jogo
             }
 
             /// <summary>A área de escuridão (5 × 5 casas): um véu escuro que respira devagar e some no último segundo.</summary>
+            /// <summary>A área que os animais no estratégico guardam: o quadrado de 4 × 4 casas, de leve, com a borda.</summary>
+            private static void DesenharGuarda(Painter2D p, PontoNaSala g, float escala)
+            {
+                if (g == null) return;
+                float meia = (float)(Animais.NaLuta.LadoDaGuarda * RoomWalk.TileUnits / 2) * escala;
+                float cx = (float)g.X * escala, cy = (float)g.Y * escala;
+                var a = new Vector2(cx - meia, cy - meia);
+                var b = new Vector2(cx + meia, cy - meia);
+                var c = new Vector2(cx + meia, cy + meia);
+                var d = new Vector2(cx - meia, cy + meia);
+                p.fillColor = Cor(CorDaGuarda, 0.12f);
+                p.BeginPath();
+                p.MoveTo(a);
+                p.LineTo(b);
+                p.LineTo(c);
+                p.LineTo(d);
+                p.ClosePath();
+                p.Fill();
+                p.strokeColor = Cor(CorDaGuarda, 0.75f);
+                p.lineWidth = 2f;
+                p.BeginPath();
+                p.MoveTo(a);
+                p.LineTo(b);
+                p.LineTo(c);
+                p.LineTo(d);
+                p.ClosePath();
+                p.Stroke();
+            }
+
             private static void DesenharEscuridao(Painter2D p, EscuridaoNaSala e, float escala)
             {
                 if (e == null) return;
@@ -813,6 +856,7 @@ namespace RPGLegend.Game.Jogo
                 DesenharFlores(p, _arena.Flores, escala);
                 DesenharFlores(p, _arena.Dupla?.FloresDoParceiro, escala);
                 DesenharEscuridao(p, _arena.Escuridao, escala);
+                DesenharGuarda(p, _arena.Guarda, escala);
 
                 for (int i = 0; i < _arena.Monstros.Count && i < _instancias.Count; i++)
                 {

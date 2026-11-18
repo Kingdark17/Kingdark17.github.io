@@ -501,8 +501,10 @@ namespace RPGLegend.Game.Jogo
                 foreach (var c in luta.Arena.Companheiros)
                 {
                     int i = (int)c.Indice;
-                    if (c.X == null || c.Y == null || i >= equipe.Count || equipe[i].Hp <= 0 || lacaios.Count >= 3) continue;
-                    lacaios.Add(new JArray(Math.Round(c.X.Value), Math.Round(c.Y.Value), equipe[i].ClassIcon ?? "💀"));
+                    if (c.X == null || c.Y == null || i >= equipe.Count || equipe[i].Hp <= 0 || lacaios.Count >= 5) continue;
+                    // O animal do Caçador (rodada 7c) vai com o emoji da espécie; o lacaio, com o dele.
+                    string icone = equipe[i].Animal != null ? equipe[i].RaceIcon ?? "🐾" : equipe[i].ClassIcon ?? "💀";
+                    lacaios.Add(new JArray(Math.Round(c.X.Value), Math.Round(c.Y.Value), icone));
                 }
             }
             // Na luta, as flores do Florescimento vão junto (rodada 5b): curam o parceiro também.

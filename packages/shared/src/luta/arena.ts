@@ -79,7 +79,7 @@ import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { aljavaNoArco, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
-import { animalDomado, comidaPreferida, juntarAnimal, quantosAnimais, REGRAS_DE_DOMAR } from '../combat/animais.js';
+import { animalDomado, comidaPreferida, estadoDoAnimal, juntarAnimal, quantosAnimais, REGRAS_DE_DOMAR, REGRAS_DOS_ANIMAIS } from '../combat/animais.js';
 import { removeByUid } from '../inventory/inventory.js';
 import { templateById } from '../items/templates.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
@@ -570,6 +570,8 @@ export interface Arena {
   /** O chapéu do espadachim voando, e a espera dele (rodada 6c). */
   chapeu?: ChapeuNaSala;
   recargaDoChapeu?: number;
+  /** O meio da área que os animais no estratégico guardam (rodada 7c), em unidades da sala: só nesta luta. */
+  guarda?: { x: number; y: number };
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -642,6 +644,8 @@ export interface EntradaDaLuta {
   chapeu?: boolean;
   /** O Caçador (rodada 7b): ofereceu a comida a este monstro (no PC, o botão direito nele; no celular, segurar o dedo nele). */
   alimentar?: number;
+  /** O Caçador (rodada 7c): marcou a área que os animais no estratégico guardam (no PC, o botão direito no chão; no celular, segurar o dedo no chão). */
+  guardar?: { x: number; y: number };
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -733,7 +737,7 @@ export function abrirLuta(
     if (membro.hp <= 0) return;
     const c: CompanheiroNaArena = { indice, tempo: CADENCIA_DO_COMPANHEIRO / 2 + indice * 10 };
     // O lacaio do Necromante entra ao lado do herói (rodada 4b).
-    if (membro.invocado) Object.assign(c, lugarAoLado(heroiNaSala, comCorpo++, formato, paredes));
+    if (membro.invocado || membro.animal) Object.assign(c, lugarAoLado(heroiNaSala, comCorpo++, formato, paredes));
     companheiros.push(c);
   });
 
@@ -805,6 +809,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
 
   if (entrada.mirar !== undefined) mirar(l, entrada.mirar);
   if (entrada.mirarAliado) mirarAliado(l, entrada.mirarAliado);
+  if (entrada.guardar) marcarGuarda(l, entrada.guardar);
   // O fantasma anda, mas não age.
   if (l.arena.dupla?.fantasma) l.arena.evento = null;
   else if (l.arena.evento) seguirEvento(l, entrada);
@@ -918,6 +923,7 @@ function copiarArena(arena: Arena): Arena {
     ...(arena.danosLevados ? { danosLevados: arena.danosLevados.map((d) => ({ ...d })) } : {}),
     ...(arena.cristais ? { cristais: arena.cristais.map((c) => ({ ...c })) } : {}),
     ...(arena.chapeu ? { chapeu: { ...arena.chapeu, pegos: [...arena.chapeu.pegos] } } : {}),
+    ...(arena.guarda ? { guarda: { ...arena.guarda } } : {}),
   };
 }
 
@@ -1969,8 +1975,16 @@ function escolherComLacaios(l: Luta, m: MonstroNaArena, parceiro: { x: number; y
 /** O golpe do monstro num membro da equipe, como no site; o lacaio no ofensivo leva 10% a menos. */
 function golpeNoMembro(membro: Companion, monstro: CombatMonsterView, forca: number, rng: Rng): { member: Companion; damage: number; defeated: boolean } {
   const golpe = hitPartyMember(membro, monstro, forca, rng);
-  if (!membro.invocado || estadoDoLacaio(membro) !== 'ofensivo') return golpe;
-  const dano = Math.max(1, golpe.damage - Math.floor((golpe.damage * REGRAS_DO_NECROMANTE.resistenciaNoOfensivo) / 100));
+  // O animal do Caçador no ofensivo (rodada 7c) leva 20% a menos; o lacaio, 10%.
+  const resistencia = membro.animal
+    ? estadoDoAnimal(membro) === 'ofensivo'
+      ? REGRAS_DOS_ANIMAIS.resistenciaNoOfensivo
+      : 0
+    : membro.invocado && estadoDoLacaio(membro) === 'ofensivo'
+      ? REGRAS_DO_NECROMANTE.resistenciaNoOfensivo
+      : 0;
+  if (resistencia === 0) return golpe;
+  const dano = Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100));
   const member: Companion = { ...membro, hp: Math.max(0, membro.hp - dano) };
   return { member, damage: dano, defeated: member.hp <= 0 };
 }
@@ -1993,8 +2007,9 @@ function alcanceDoLacaio(membro: Companion): number {
  * perto dele em toda a sala. `null`, nenhum.
  */
 function alvoDoLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): number | null {
-  const retaguarda = estadoDoLacaio(membro) === 'retaguarda';
-  const doDono = REGRAS_DO_NECROMANTE.retaguarda * TILE_UNITS + TILE_UNITS / 2;
+  const estado = estadoNaArena(l, membro);
+  const retaguarda = estado === 'retaguarda';
+  const doDono = (membro.animal ? REGRAS_DOS_ANIMAIS.retaguarda : REGRAS_DO_NECROMANTE.retaguarda) * TILE_UNITS + TILE_UNITS / 2;
   const heroi = l.arena.heroi;
   let melhor: number | null = null;
   let menor = 0;
@@ -2002,6 +2017,8 @@ function alvoDoLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): number
     if (m.fase === 'caido') continue;
     const lugar = lugarDe(l, m.indice);
     if (retaguarda && (lugar.x - heroi.x) * (lugar.x - heroi.x) + (lugar.y - heroi.y) * (lugar.y - heroi.y) > doDono * doDono) continue;
+    // O estratégico (o animal do Caçador, rodada 7c) só vai em quem entra na área dele.
+    if (estado === 'estrategico' && !naGuarda(l, lugar)) continue;
     const distancia = (lugar.x - (c.x as number)) * (lugar.x - (c.x as number)) + (lugar.y - (c.y as number)) * (lugar.y - (c.y as number));
     if (melhor === null || distancia < menor) {
       melhor = m.indice;
@@ -2031,12 +2048,14 @@ function andarLacaio(l: Luta, c: CompanheiroNaArena, x: number, y: number): void
 function agirLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): void {
   if (c.tempo > 0) c.tempo -= 1;
   const alvo = alvoDoLacaio(l, c, membro);
+  const estrategico = estadoNaArena(l, membro) === 'estrategico';
   if (alvo === null) {
-    const heroi = l.arena.heroi;
+    // Sem alvo: volta pra perto do dono (o estratégico, pro meio da área dele).
+    const casa = estrategico && l.arena.guarda ? l.arena.guarda : l.arena.heroi;
     const perto = TILE_UNITS + TILE_UNITS / 2;
-    const dx = heroi.x - (c.x as number);
-    const dy = heroi.y - (c.y as number);
-    if (dx * dx + dy * dy > perto * perto) andarLacaio(l, c, heroi.x, heroi.y);
+    const dx = casa.x - (c.x as number);
+    const dy = casa.y - (c.y as number);
+    if (dx * dx + dy * dy > perto * perto) andarLacaio(l, c, casa.x, casa.y);
     return;
   }
   const lugar = lugarDe(l, alvo);
@@ -2054,8 +2073,9 @@ function agirLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): void {
   const resultado = acao.outcome;
   let depois = acao.monster;
   let dano = resultado.kind === 'miss' ? 0 : resultado.amount;
-  if (resultado.kind !== 'miss' && resultado.kind !== 'healed_hero' && estadoDoLacaio(membro) === 'retaguarda') {
-    const extra = Math.trunc((dano * REGRAS_DO_NECROMANTE.danoNaRetaguarda) / 100);
+  if (resultado.kind !== 'miss' && resultado.kind !== 'healed_hero' && estadoNaArena(l, membro) === 'retaguarda') {
+    // Na retaguarda o lacaio bate 10% mais forte; o animal do Caçador, 20% (rodada 7c).
+    const extra = Math.trunc((dano * (membro.animal ? REGRAS_DOS_ANIMAIS.danoNaRetaguarda : REGRAS_DO_NECROMANTE.danoNaRetaguarda)) / 100);
     dano += extra;
     depois = { ...depois, hp: depois.hp - extra };
   }
@@ -2067,6 +2087,42 @@ function agirLacaio(l: Luta, c: CompanheiroNaArena, membro: Companion): void {
   if (resultado.kind === 'healed_hero') return;
   contar(l, numeroNoMonstro(ferida, alvo, `-${dano}`, 'dano'));
   if (ferida.caiu) abater(l, alvo, monsterView(depois as CombatMonster));
+  // O estratégico pega todos os outros dentro da área, com o mesmo dano (rodada 7c).
+  if (estrategico) {
+    for (let i = 0; i < l.arena.monstros.length; i++) {
+      if (l.fim) return;
+      const m = l.arena.monstros[i] as MonstroNaArena;
+      if (m.indice === alvo || m.fase === 'caido' || !naGuarda(l, lugarDe(l, m.indice))) continue;
+      ferirComDano(l, m.indice, dano, `-${dano}`);
+    }
+  }
+}
+
+/** O estado do lacaio ou do animal nesta luta: o estratégico sem área marcada fica de retaguarda. */
+function estadoNaArena(l: Luta, membro: Companion): 'retaguarda' | 'ofensivo' | 'estrategico' {
+  const estado = membro.animal ? estadoDoAnimal(membro) : estadoDoLacaio(membro);
+  if (estado === 'estrategico' && (!membro.animal || !l.arena.guarda)) return 'retaguarda';
+  return estado;
+}
+
+/** O ponto está dentro da área de guarda (4 × 4 casas em volta do meio marcado)? */
+function naGuarda(l: Luta, ponto: { x: number; y: number }): boolean {
+  const g = l.arena.guarda;
+  if (!g) return false;
+  const meia = (REGRAS_DOS_ANIMAIS.ladoDaGuarda * TILE_UNITS) / 2;
+  return Math.abs(ponto.x - g.x) <= meia && Math.abs(ponto.y - g.y) <= meia;
+}
+
+/** O Caçador marca a área de guarda (rodada 7c): só com um animal da equipe no estratégico; dentro do chão da sala. */
+function marcarGuarda(l: Luta, ponto: { x: number; y: number }): void {
+  const estado = masmorra(l);
+  if (idDaClasse(estado.hero) !== 'cacador' || l.arena.dupla?.fantasma) return;
+  if (!estado.party.some((membro) => !!membro.animal && membro.hp > 0 && estadoDoAnimal(membro) === 'estrategico')) return;
+  const { cols, rows } = geometria(l);
+  const x = Math.min(Math.max(Math.trunc(ponto.x), TILE_UNITS), (cols - 1) * TILE_UNITS);
+  const y = Math.min(Math.max(Math.trunc(ponto.y), TILE_UNITS), (rows - 1) * TILE_UNITS);
+  l.arena.guarda = { x, y };
+  contar(l, { tipo: 'aviso', texto: '🐾 Área de guarda marcada' });
 }
 
 /**
@@ -2537,11 +2593,13 @@ function domar(l: Luta, indice: number): void {
   m.fase = 'caido';
   m.domado = true;
   delete m.poder;
-  l.estado = juntarAnimal(gravarMonstro(estado, indice, { ...bruto, hp: 0, domado: true }), animalDomado(visto, id));
+  l.estado = gravarMonstro(estado, indice, { ...bruto, hp: 0, domado: true });
   l.domou = id;
   contar(l, { tipo: 'aviso', texto: `🐾 Você domou ${visto.name}!` });
   if (indice === l.arena.alvo) delete l.arena.escolhido;
   seguirOuVencer(l, { ...visto, hp: 0 });
+  // Entra na equipe depois: a vitória desta luta (se foi a última) não conta pra ele, que não lutou nela.
+  l.estado = juntarAnimal(masmorra(l), animalDomado(visto, id));
 }
 
 // ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------

@@ -124,7 +124,7 @@ export function especieDoLacaio(membro: Pick<Companion, 'especie'>): string {
 }
 
 /** O estado do lacaio (a retaguarda, se ainda não mudou). */
-export function estadoDoLacaio(membro: Pick<Companion, 'estadoDoLacaio'>): 'retaguarda' | 'ofensivo' {
+export function estadoDoLacaio(membro: Pick<Companion, 'estadoDoLacaio'>): 'retaguarda' | 'ofensivo' | 'estrategico' {
   return membro.estadoDoLacaio ?? 'retaguarda';
 }
 

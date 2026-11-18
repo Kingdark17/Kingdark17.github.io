@@ -96,7 +96,7 @@ export function animalDomado(monstro: { speciesId: string; maxHp: number; dmg: n
     ability: 'Instinto',
     abilityDesc: 'Um animal domado pelo Caçador.',
     especie: monstro.speciesId,
-    animal: { id, nivel: 1, batalhas: 0 },
+    animal: { id, nivel: 1, batalhas: 0, vidaBase: maxHp, ataqueBase: attack },
   };
 }
 
@@ -127,4 +127,85 @@ export function nomearAnimal<T extends { hero: Hero; party: Companion[] }>(estad
   const party = estado.party.map(trocar);
   const guardados = estado.hero.animais;
   return { ...estado, party, ...(guardados ? { hero: { ...estado.hero, animais: guardados.map(trocar) } } : {}) };
+}
+
+// ---------- o animal na luta e os níveis (rodada 7c) ----------
+
+export const REGRAS_DOS_ANIMAIS = {
+  /** O nível: 1 a cada `batalhasPorNivel` lutas vencidas com ele na equipe, até `nivelMaximo`; cada nível soma `porNivel`% da vida e do dano de quando foi domado. */
+  batalhasPorNivel: 30,
+  nivelMaximo: 10,
+  porNivel: 20,
+  /** A retaguarda guarda o dono a até `retaguarda` blocos e bate `danoNaRetaguarda`% mais forte; o ofensivo leva `resistenciaNoOfensivo`% menos. */
+  retaguarda: 3,
+  danoNaRetaguarda: 20,
+  resistenciaNoOfensivo: 20,
+  /** O estratégico guarda a área de `ladoDaGuarda` × `ladoDaGuarda` casas marcada no chão, e o golpe dele pega todos dentro dela. */
+  ladoDaGuarda: 4,
+} as const;
+
+export type EstadoDoAnimal = 'retaguarda' | 'ofensivo' | 'estrategico';
+
+/** O estado do animal na arena (a retaguarda, se ainda não mudou). */
+export function estadoDoAnimal(membro: Pick<Companion, 'estadoDoLacaio'>): EstadoDoAnimal {
+  return membro.estadoDoLacaio ?? 'retaguarda';
+}
+
+/** A vida ou o dano no nível: o de quando foi domado, mais 20% dele por nível acima do 1. */
+export function statusNoNivel(base: number, nivel: number): number {
+  return Math.max(1, Math.round((base * (100 + REGRAS_DOS_ANIMAIS.porNivel * (nivel - 1))) / 100));
+}
+
+/**
+ * A luta vencida conta uma batalha pra cada animal da equipe (de pé ou caído):
+ * a cada 30, ele sobe um nível (até o 10), e a vida máxima e o dano sobem com
+ * ele (a vida que falta continua faltando; o caído continua caído).
+ */
+export function contarBatalha(party: readonly Companion[]): { party: Companion[]; subiram: Companion[] } {
+  const r = REGRAS_DOS_ANIMAIS;
+  const subiram: Companion[] = [];
+  const nova = party.map((membro) => {
+    if (!membro.animal) return membro;
+    const batalhas = membro.animal.batalhas + 1;
+    const vidaBase = membro.animal.vidaBase ?? membro.maxHp;
+    const ataqueBase = membro.animal.ataqueBase ?? membro.attack;
+    const animal = { ...membro.animal, batalhas, vidaBase, ataqueBase };
+    if (batalhas % r.batalhasPorNivel !== 0 || membro.animal.nivel >= r.nivelMaximo) return { ...membro, animal };
+    const nivel = membro.animal.nivel + 1;
+    const maxHp = statusNoNivel(vidaBase, nivel);
+    const attack = statusNoNivel(ataqueBase, nivel);
+    const hp = membro.hp > 0 ? Math.min(maxHp, membro.hp + (maxHp - membro.maxHp)) : membro.hp;
+    const subiu: Companion = { ...membro, hp, maxHp, attack, animal: { ...animal, nivel } };
+    subiram.push(subiu);
+    return subiu;
+  });
+  return { party: nova, subiram };
+}
+
+/** Troca o estado do animal `id` na arena, esteja ele na equipe ou guardado. */
+export function mudarEstadoDoAnimal<T extends { hero: Hero; party: Companion[] }>(estado: T, id: string, novo: EstadoDoAnimal): T {
+  const trocar = (membro: Companion): Companion => (membro.animal?.id === id ? { ...membro, estadoDoLacaio: novo } : membro);
+  const guardados = estado.hero.animais;
+  return { ...estado, party: estado.party.map(trocar), ...(guardados ? { hero: { ...estado.hero, animais: guardados.map(trocar) } } : {}) };
+}
+
+/** O animal da equipe vai pra junto dos guardados (deixa de seguir o herói). */
+export function guardarAnimal<T extends { hero: Hero; party: Companion[] }>(estado: T, id: string): T {
+  const animal = estado.party.find((membro) => membro.animal?.id === id);
+  if (!animal) return estado;
+  return {
+    ...estado,
+    party: estado.party.filter((membro) => membro !== animal),
+    hero: { ...estado.hero, animais: [...(estado.hero.animais ?? []), animal] },
+  };
+}
+
+/** O animal guardado volta a seguir o herói, se ainda cabe na equipe (2 seguem). */
+export function levarAnimal<T extends { hero: Hero; party: Companion[] }>(estado: T, id: string): T {
+  const guardados = estado.hero.animais ?? [];
+  const animal = guardados.find((membro) => membro.animal?.id === id);
+  if (!animal || animaisDaEquipe(estado.party).length >= REGRAS_DE_DOMAR.ativos) return estado;
+  const resto = guardados.filter((membro) => membro !== animal);
+  const { animais: _antes, ...semGuardados } = estado.hero;
+  return { ...estado, party: [...estado.party, animal], hero: resto.length > 0 ? { ...estado.hero, animais: resto } : semGuardados };
 }
