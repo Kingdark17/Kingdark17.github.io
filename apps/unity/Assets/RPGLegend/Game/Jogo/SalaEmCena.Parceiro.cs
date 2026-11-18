@@ -149,7 +149,7 @@ namespace RPGLegend.Game.Jogo
                 s.DeCostas.gameObject.SetActive(deCostas);
                 s.DeFrente.gameObject.SetActive(!deCostas);
             }
-            float tamanho = s.DeEmoji ? 1f : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
+            float tamanho = s.DeEmoji ? EscalaDoEmoji : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
             s.DeFrente.localScale = new Vector3(s.Espelhado ? -tamanho : tamanho, tamanho, 1f);
             s.DeCostas.localScale = new Vector3(tamanho, tamanho, 1f);
             var cor = _parceiroFantasma ? CorDoFantasma : Color.white;
@@ -169,8 +169,10 @@ namespace RPGLegend.Game.Jogo
             bool mostrar = !_parceiroFantasma && _vidaDoParceiro != null;
             if (_barraDoParceiro.gameObject.activeSelf != mostrar) _barraDoParceiro.gameObject.SetActive(mostrar);
             if (!mostrar) return;
-            float largura = Lado * 0.8f, altura = Mathf.Max(2f, Lado * 0.09f), borda = Mathf.Max(1f, Lado * 0.02f);
-            float cabeca = s.DeEmoji ? Lado * 1.35f : Lado * 1.1f;
+            // A casa desta cena (a da cidade é menor que a da sala da masmorra): a barra fica do mesmo tamanho nas duas.
+            float casa = _escala * (float)GameData.RoomWalkTable.TileUnits;
+            float largura = casa * 0.8f, altura = Mathf.Max(2f, casa * 0.09f), borda = Mathf.Max(1f, casa * 0.02f);
+            float cabeca = s.DeEmoji ? Lado * 1.35f * EscalaDoEmoji : casa * 1.1f;
             _barraDoParceiro.localPosition = new Vector3(0f, cabeca, -0.05f);
             float cheia = (float)_vidaDoParceiro.Value;
             _bordaDaBarra.transform.localScale = new Vector3(largura + borda * 2f, altura + borda * 2f, 1f);

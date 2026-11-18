@@ -971,8 +971,13 @@ namespace RPGLegend.Game.Jogo
                 ("SIM, SAIR", Sair), ("CONTINUAR JOGANDO", FecharJanela));
         }
 
-        /// <summary>A janela aberta não é tela de sala: o diário, o guia, a ficha, a pergunta de saída ou a vitória de quem zera.</summary>
-        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida" || _janela == "vitoria" || _janela == "cristal" || _janela == "lacaios";
+        /// <summary>
+        /// A janela aberta não é tela de sala: o diário, o guia, a ficha, a pergunta de saída, a vitória de quem zera, o
+        /// cristal e os lacaios do Necromante, e as janelas do Caçador (ANIMAIS e o nome do bicho novo). Janela nova
+        /// entra aqui, ou o <see cref="FecharJanela"/> não a fecha (o nome do animal ficou preso assim até 2026-11-18).
+        /// </summary>
+        private bool JanelaSemTela => _janela == "diario" || _janela == "guia" || _janela == "ficha" || _janela == "saida" || _janela == "vitoria"
+            || _janela == "cristal" || _janela == "lacaios" || _janela == "animais" || _janela == "nome-do-animal";
 
         private void FecharJanela()
         {

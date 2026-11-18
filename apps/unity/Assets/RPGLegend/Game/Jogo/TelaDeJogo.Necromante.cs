@@ -198,23 +198,27 @@ namespace RPGLegend.Game.Jogo
                     textos.Add(PecasDaTela.Texto(animal.Name + (seguindo ? "" : " (guardado)"), "nome-do-passo"));
                     string lutas = animal.Animal.Nivel >= r.NivelMaximo ? "nível máximo" : Js.NumberToString(animal.Animal.Batalhas % r.BatalhasPorNivel) + "/" + Js.NumberToString(r.BatalhasPorNivel) + " lutas";
                     textos.Add(PecasDaTela.Texto("Nv " + Js.NumberToString(animal.Animal.Nivel) + " · " + lutas + " · Vida " + Js.NumberToString(Math.Floor(animal.Hp)) + "/" + Js.NumberToString(animal.MaxHp) + " · " + NomeDoEstado(atual), "dica-do-passo"));
+                    // Os botões vão embaixo dos textos, quebrando linha: numa fila só (até oito) eles espremiam o nome
+                    // até uma letra por linha e saíam pela borda da janela.
+                    var botoes = PecasDaTela.Bloco("opcoes-da-janela");
+                    textos.Add(botoes);
                     linha.Add(textos);
                     foreach (var opcao in new[] { "retaguarda", "ofensivo", "estrategico" })
                     {
                         string escolhido = opcao;
-                        linha.Add(PecasDaTela.Botao(NomeDoEstado(opcao).ToUpperInvariant(), () => MexerNosAnimais(() => _partida.MudarEstadoDoAnimal(id, escolhido)), escolhido == atual, escolhido != atual));
+                        botoes.Add(PecasDaTela.Botao(NomeDoEstado(opcao).ToUpperInvariant(), () => MexerNosAnimais(() => _partida.MudarEstadoDoAnimal(id, escolhido)), escolhido == atual, escolhido != atual));
                     }
-                    linha.Add(PecasDaTela.Botao("NOME", () =>
+                    botoes.Add(PecasDaTela.Botao("NOME", () =>
                     {
                         FecharJanela();
                         AbrirNomeDoAnimal(id);
                     }));
-                    if (seguindo) linha.Add(PecasDaTela.Botao("GUARDAR", () => MexerNosAnimais(() => _partida.GuardarAnimal(id))));
-                    else linha.Add(PecasDaTela.Botao("LEVAR", () => MexerNosAnimais(() => _partida.LevarAnimal(id)), false, naEquipe.Count < Animais.Regras.Ativos));
+                    if (seguindo) botoes.Add(PecasDaTela.Botao("GUARDAR", () => MexerNosAnimais(() => _partida.GuardarAnimal(id))));
+                    else botoes.Add(PecasDaTela.Botao("LEVAR", () => MexerNosAnimais(() => _partida.LevarAnimal(id)), false, naEquipe.Count < Animais.Regras.Ativos));
                     // A montaria (rodada 7d): do nível 5 em diante, quem segue o herói.
-                    if (seguindo && estado.Hero.Montaria == id) linha.Add(PecasDaTela.Botao("DESMONTAR", () => MexerNosAnimais(() => _partida.Desmontar()), true));
-                    else if (seguindo) linha.Add(PecasDaTela.Botao("MONTAR", () => MexerNosAnimais(() => _partida.MontarAnimal(id)), false, Animais.PodeMontar(animal)));
-                    BotaoDeSoltar(linha, id);
+                    if (seguindo && estado.Hero.Montaria == id) botoes.Add(PecasDaTela.Botao("DESMONTAR", () => MexerNosAnimais(() => _partida.Desmontar()), true));
+                    else if (seguindo) botoes.Add(PecasDaTela.Botao("MONTAR", () => MexerNosAnimais(() => _partida.MontarAnimal(id)), false, Animais.PodeMontar(animal)));
+                    BotaoDeSoltar(botoes, id);
                     conteudo.Add(linha);
                 }
                 foreach (var animal in naEquipe) Linha(animal, true);

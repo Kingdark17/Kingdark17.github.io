@@ -231,6 +231,16 @@ namespace RPGLegend.Game.Jogo
         private string _montaria, _emojiDaMontaria;
         private SpriteRenderer _corpoDaMontaria;
 
+        /// <summary>
+        /// A escala de quem é desenhado de emoji (o herói ou o seguidor sem mini, o animal, a montaria): o tamanho
+        /// deles é dado em <see cref="Lado"/>, a casa da sala da masmorra, e a casa da cidade é menor (32 contra 48).
+        /// 1 na masmorra; na cidade, o emoji encolhe junto com o chão, como o mini boneco (antes ficava 1,5× maior).
+        /// </summary>
+        private float EscalaDoEmoji => _escala * (float)GameData.RoomWalkTable.TileUnits / Lado;
+
+        /// <summary>Quanto o herói montado fica acima do pé, na casa da sala (0 a pé); a cada quadro vai na escala do emoji.</summary>
+        private float _acimaDaMontaria;
+
         /// <summary>O herói monta (o emoji do bicho embaixo, ele um pouco acima) ou desce (id null).</summary>
         public void DefinirMontaria(string id, string emoji)
         {
@@ -247,9 +257,7 @@ namespace RPGLegend.Game.Jogo
             bool montado = id != null;
             _corpoDaMontaria.gameObject.SetActive(montado);
             if (montado) PorNoPe(_corpoDaMontaria, EmojiDoSistema.Sprite(string.IsNullOrEmpty(emoji) ? "🐾" : emoji), Lado * 1.2f);
-            float acima = montado ? Lado * 0.55f : 0f;
-            _deFrente.localPosition = new Vector3(0f, acima, 0f);
-            _deCostas.localPosition = new Vector3(0f, acima, 0f);
+            _acimaDaMontaria = montado ? Lado * 0.55f : 0f;
         }
 
         /// <summary>Quem anda na fila atrás do herói: os de pé da equipe, menos a montaria (ela leva o herói).</summary>
@@ -697,9 +705,14 @@ namespace RPGLegend.Game.Jogo
                 _deCostas.gameObject.SetActive(deCostas);
                 _deFrente.gameObject.SetActive(!deCostas);
             }
-            float tamanho = _heroiDeEmoji ? 1f : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
+            float emoji = EscalaDoEmoji;
+            float tamanho = _heroiDeEmoji ? emoji : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
             _deFrente.localScale = new Vector3(_espelhado ? -tamanho : tamanho, tamanho, 1f);
             _deCostas.localScale = new Vector3(tamanho, tamanho, 1f);
+            // Montado (rodada 7d): o bicho e a altura do herói em cima dele também vão na escala da cena.
+            var acima = new Vector3(0f, _acimaDaMontaria * emoji, 0f);
+            if (_deFrente.localPosition != acima) { _deFrente.localPosition = acima; _deCostas.localPosition = acima; }
+            if (_corpoDaMontaria != null && _corpoDaMontaria.gameObject.activeSelf) _corpoDaMontaria.transform.localScale = new Vector3(emoji, emoji, 1f);
             if (_naCidade)
             {
                 // A janela segue o herói, sem passar da borda do mapa, em meio pixel (a textura é 2×): fração faz a arte tremer.

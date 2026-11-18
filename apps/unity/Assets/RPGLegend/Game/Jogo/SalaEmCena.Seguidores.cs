@@ -177,7 +177,7 @@ namespace RPGLegend.Game.Jogo
                     s.DeCostas.gameObject.SetActive(deCostas);
                     s.DeFrente.gameObject.SetActive(!deCostas);
                 }
-                float tamanho = s.DeEmoji ? 1f : tamanhoDoMini;
+                float tamanho = s.DeEmoji ? EscalaDoEmoji : tamanhoDoMini;
                 s.DeFrente.localScale = new Vector3(s.Espelhado ? -tamanho : tamanho, tamanho, 1f);
                 s.DeCostas.localScale = new Vector3(tamanho, tamanho, 1f);
                 foreach (var camada in s.Camadas) camada.sortingOrder = (int)s.Onde.y;
