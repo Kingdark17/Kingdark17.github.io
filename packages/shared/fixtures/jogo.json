@@ -181307,6 +181307,2085 @@
     }
   },
   {
+    "name": "abrirLoja: o vendedor do app tem as comidas pro Caçador",
+    "input": {
+      "fn": "abrirLoja",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "app": true
+      },
+      "rng": {
+        "seed": 64
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "carne_crua_1700000000000_20590",
+                    "templateId": "carne_crua",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "grilo_1700000000000_58262",
+                    "templateId": "grilo",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "fruta_madura_1700000000000_80252",
+                    "templateId": "fruta_madura",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "carne_crua_1700000000000_20590",
+                    "templateId": "carne_crua",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "grilo_1700000000000_58262",
+                    "templateId": "grilo",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "fruta_madura_1700000000000_80252",
+                    "templateId": "fruta_madura",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "desconto": 0,
+        "descontoRolado": false,
+        "renovacoes": 0,
+        "dado": null,
+        "log": [
+          "O vendedor itinerante abre a sacola."
+        ],
+        "app": true,
+        "comidas": true
+      },
+      "rngCalls": 19
+    }
+  },
+  {
+    "name": "abrirLoja: o ferreiro do app não tem as comidas",
+    "input": {
+      "fn": "abrirLoja",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "blacksmith",
+        "app": true
+      },
+      "rng": {
+        "seed": 64
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": [
+            [
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                },
+                "forSale": [
+                  {
+                    "uid": "amuleto_sab_1700000000000_30684",
+                    "templateId": "amuleto_sab",
+                    "rarity": "incomum",
+                    "stats": {
+                      "mana": 8,
+                      "vida": 5
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "colar_forca_1700000000000_45813",
+                    "templateId": "colar_forca",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 3,
+                      "vida": 10
+                    },
+                    "value": 29,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "bota_vento_1700000000000_86399",
+                    "templateId": "bota_vento",
+                    "rarity": "incomum",
+                    "stats": {
+                      "velocidade": 4,
+                      "esquiva": 1
+                    },
+                    "value": 23,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "cajado_1700000000000_20590",
+                    "templateId": "cajado",
+                    "rarity": "comum",
+                    "stats": {
+                      "ataque": 3,
+                      "mana": 8
+                    },
+                    "value": 24,
+                    "equipped": false,
+                    "procChance": 0.1
+                  },
+                  {
+                    "uid": "robe_chapeu_1700000000000_83434",
+                    "templateId": "robe_chapeu",
+                    "rarity": "comum",
+                    "stats": {
+                      "mana": 2
+                    },
+                    "value": 5,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                },
+                "forSale": [
+                  {
+                    "uid": "amuleto_sab_1700000000000_30684",
+                    "templateId": "amuleto_sab",
+                    "rarity": "incomum",
+                    "stats": {
+                      "mana": 8,
+                      "vida": 5
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "colar_forca_1700000000000_45813",
+                    "templateId": "colar_forca",
+                    "rarity": "incomum",
+                    "stats": {
+                      "ataque": 3,
+                      "vida": 10
+                    },
+                    "value": 29,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "bota_vento_1700000000000_86399",
+                    "templateId": "bota_vento",
+                    "rarity": "incomum",
+                    "stats": {
+                      "velocidade": 4,
+                      "esquiva": 1
+                    },
+                    "value": 23,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "cajado_1700000000000_20590",
+                    "templateId": "cajado",
+                    "rarity": "comum",
+                    "stats": {
+                      "ataque": 3,
+                      "mana": 8
+                    },
+                    "value": 24,
+                    "equipped": false,
+                    "procChance": 0.1
+                  },
+                  {
+                    "uid": "robe_chapeu_1700000000000_83434",
+                    "templateId": "robe_chapeu",
+                    "rarity": "comum",
+                    "stats": {
+                      "mana": 2
+                    },
+                    "value": 5,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "blacksmith",
+        "desconto": 0,
+        "descontoRolado": false,
+        "renovacoes": 0,
+        "dado": null,
+        "log": [
+          "A forja do ferreiro está acesa."
+        ],
+        "app": true,
+        "comidas": true
+      },
+      "rngCalls": 22
+    }
+  },
+  {
+    "name": "abrirLoja: o vendedor do site não tem as comidas",
+    "input": {
+      "fn": "abrirLoja",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "app": false
+      },
+      "rng": {
+        "seed": 64
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "desconto": 0,
+        "descontoRolado": false,
+        "renovacoes": 0,
+        "dado": null,
+        "log": [
+          "O vendedor itinerante abre a sacola."
+        ]
+      },
+      "rngCalls": 15
+    }
+  },
+  {
+    "name": "abrirLoja: o vendedor do app não tem as comidas pro Arqueiro",
+    "input": {
+      "fn": "abrirLoja",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Arqueiro",
+            "classIcon": "⚔️",
+            "classId": "arqueiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": null,
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "app": true
+      },
+      "rng": {
+        "seed": 64
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Arqueiro",
+            "classIcon": "⚔️",
+            "classId": "arqueiro",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 5000,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pergaminho_1700000000000_66140",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_mana_1700000000000_99273",
+                    "templateId": "pot_mana",
+                    "rarity": "incomum",
+                    "stats": {
+                      "curaMana": 21
+                    },
+                    "value": 18,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_87666",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_86399",
+                    "templateId": "tala",
+                    "rarity": "incomum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 26,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_3565",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "desconto": 0,
+        "descontoRolado": false,
+        "renovacoes": 0,
+        "dado": null,
+        "log": [
+          "O vendedor itinerante abre a sacola."
+        ],
+        "app": true
+      },
+      "rngCalls": 16
+    }
+  },
+  {
+    "name": "renovarEstoque: o vendedor do app com as comidas",
+    "input": {
+      "fn": "renovarEstoque",
+      "args": {
+        "loja": {
+          "estado": {
+            "hero": {
+              "level": 1,
+              "attrs": {
+                "forca": 10,
+                "destreza": 10,
+                "constituicao": 10,
+                "intelecto": 10,
+                "sabedoria": 10,
+                "carisma": 10
+              },
+              "equip": {
+                "arma": {
+                  "uid": "espada_1700000000000_62706",
+                  "templateId": "espada",
+                  "rarity": "comum",
+                  "stats": {
+                    "ataque": 4
+                  },
+                  "value": 22,
+                  "equipped": false,
+                  "procChance": 0.15
+                },
+                "secundaria": null,
+                "elmo": null,
+                "armadura": null,
+                "calca": null,
+                "botas": null,
+                "acessorio": null
+              },
+              "name": "Teste",
+              "race": "Humano",
+              "raceIcon": "🧑",
+              "className": "Caçador",
+              "classIcon": "⚔️",
+              "classId": "cacador",
+              "raceId": "humano",
+              "xp": 0,
+              "xpNext": 40,
+              "attrPoints": 0,
+              "gold": 5000,
+              "powerNames": [],
+              "powerIds": [],
+              "debuff": {
+                "id": "orgulhoso",
+                "name": "Orgulhoso",
+                "icon": "👑",
+                "desc": "-1 Carisma em negociações com autoridades.",
+                "attr": "carisma"
+              },
+              "killCount": 0,
+              "masteryBattles": 0,
+              "derived": {
+                "maxHp": 125,
+                "maxMp": 62,
+                "dmgFisico": 20,
+                "dmgMagico": 30,
+                "esquiva": 5,
+                "critico": 10,
+                "velocidade": 10,
+                "curaBonus": 10,
+                "resistMagica": 10,
+                "descontoLoja": 5
+              },
+              "maxHp": 125,
+              "hp": 125,
+              "maxMp": 62,
+              "mp": 62,
+              "buffs": {}
+            },
+            "party": [],
+            "inventory": [],
+            "quests": [],
+            "floor": 1,
+            "mapRows": 1,
+            "mapCols": 1,
+            "cityMap": [
+              [
+                {
+                  "type": "shop",
+                  "x": 2,
+                  "y": 3,
+                  "doors": {
+                    "E": true,
+                    "W": true
+                  },
+                  "forSale": [
+                    {
+                      "uid": "pergaminho_1700000000000_66140",
+                      "templateId": "pergaminho",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 10,
+                        "curaMana": 10
+                      },
+                      "value": 16,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pot_mana_1700000000000_99273",
+                      "templateId": "pot_mana",
+                      "rarity": "incomum",
+                      "stats": {
+                        "curaMana": 21
+                      },
+                      "value": 18,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pergaminho_1700000000000_87666",
+                      "templateId": "pergaminho",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 10,
+                        "curaMana": 10
+                      },
+                      "value": 16,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "tala_1700000000000_86399",
+                      "templateId": "tala",
+                      "rarity": "incomum",
+                      "stats": {
+                        "tala": 1
+                      },
+                      "value": 26,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pot_vida_1700000000000_3565",
+                      "templateId": "pot_vida",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 22
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "carne_crua_1700000000000_20590",
+                      "templateId": "carne_crua",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "grilo_1700000000000_58262",
+                      "templateId": "grilo",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "fruta_madura_1700000000000_80252",
+                      "templateId": "fruta_madura",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    }
+                  ]
+                }
+              ]
+            ],
+            "cityStart": null,
+            "masmorra": {
+              "dungeon": "floresta",
+              "difficulty": "normal"
+            },
+            "progresso": {
+              "cleared": [],
+              "totems": {}
+            },
+            "dificuldade": "normal",
+            "mapMode": "city",
+            "map": [
+              [
+                {
+                  "type": "shop",
+                  "x": 2,
+                  "y": 3,
+                  "doors": {
+                    "E": true,
+                    "W": true
+                  },
+                  "forSale": [
+                    {
+                      "uid": "pergaminho_1700000000000_66140",
+                      "templateId": "pergaminho",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 10,
+                        "curaMana": 10
+                      },
+                      "value": 16,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pot_mana_1700000000000_99273",
+                      "templateId": "pot_mana",
+                      "rarity": "incomum",
+                      "stats": {
+                        "curaMana": 21
+                      },
+                      "value": 18,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pergaminho_1700000000000_87666",
+                      "templateId": "pergaminho",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 10,
+                        "curaMana": 10
+                      },
+                      "value": 16,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "tala_1700000000000_86399",
+                      "templateId": "tala",
+                      "rarity": "incomum",
+                      "stats": {
+                        "tala": 1
+                      },
+                      "value": 26,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "pot_vida_1700000000000_3565",
+                      "templateId": "pot_vida",
+                      "rarity": "comum",
+                      "stats": {
+                        "cura": 22
+                      },
+                      "value": 14,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "carne_crua_1700000000000_20590",
+                      "templateId": "carne_crua",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "grilo_1700000000000_58262",
+                      "templateId": "grilo",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    },
+                    {
+                      "uid": "fruta_madura_1700000000000_80252",
+                      "templateId": "fruta_madura",
+                      "rarity": "comum",
+                      "stats": {},
+                      "value": 30,
+                      "equipped": false
+                    }
+                  ]
+                }
+              ]
+            ],
+            "pos": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "kind": "shop",
+          "desconto": 0,
+          "descontoRolado": false,
+          "renovacoes": 0,
+          "dado": null,
+          "log": [
+            "O vendedor itinerante abre a sacola."
+          ],
+          "app": true,
+          "comidas": true
+        }
+      },
+      "rng": {
+        "seed": 65
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": {
+        "estado": {
+          "hero": {
+            "level": 1,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "espada_1700000000000_62706",
+                "templateId": "espada",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4
+                },
+                "value": 22,
+                "equipped": false,
+                "procChance": 0.15
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "⚔️",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 40,
+            "attrPoints": 0,
+            "gold": 4987,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 125,
+              "maxMp": 62,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 5,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 125,
+            "hp": 125,
+            "maxMp": 62,
+            "mp": 62,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 1,
+          "mapCols": 1,
+          "cityMap": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pot_vida_1700000000000_60120",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_20047",
+                    "templateId": "tala",
+                    "rarity": "comum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 20,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_56892",
+                    "templateId": "pergaminho",
+                    "rarity": "incomum",
+                    "stats": {
+                      "cura": 13,
+                      "curaMana": 13
+                    },
+                    "value": 21,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_92689",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_91948",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "carne_crua_1700000000000_74680",
+                    "templateId": "carne_crua",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "grilo_1700000000000_85623",
+                    "templateId": "grilo",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "fruta_madura_1700000000000_26526",
+                    "templateId": "fruta_madura",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "cityStart": null,
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                },
+                "forSale": [
+                  {
+                    "uid": "pot_vida_1700000000000_60120",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "tala_1700000000000_20047",
+                    "templateId": "tala",
+                    "rarity": "comum",
+                    "stats": {
+                      "tala": 1
+                    },
+                    "value": 20,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_56892",
+                    "templateId": "pergaminho",
+                    "rarity": "incomum",
+                    "stats": {
+                      "cura": 13,
+                      "curaMana": 13
+                    },
+                    "value": 21,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pot_vida_1700000000000_92689",
+                    "templateId": "pot_vida",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 22
+                    },
+                    "value": 14,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "pergaminho_1700000000000_91948",
+                    "templateId": "pergaminho",
+                    "rarity": "comum",
+                    "stats": {
+                      "cura": 10,
+                      "curaMana": 10
+                    },
+                    "value": 16,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "carne_crua_1700000000000_74680",
+                    "templateId": "carne_crua",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "grilo_1700000000000_85623",
+                    "templateId": "grilo",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  },
+                  {
+                    "uid": "fruta_madura_1700000000000_26526",
+                    "templateId": "fruta_madura",
+                    "rarity": "comum",
+                    "stats": {},
+                    "value": 30,
+                    "equipped": false
+                  }
+                ]
+              }
+            ]
+          ],
+          "pos": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "kind": "shop",
+        "desconto": 0,
+        "descontoRolado": false,
+        "renovacoes": 1,
+        "dado": null,
+        "log": [
+          "Estoque renovado por 13 de ouro."
+        ],
+        "app": true,
+        "comidas": true
+      },
+      "rngCalls": 19
+    }
+  },
+  {
     "name": "renovarEstoque: ferreiro do app",
     "input": {
       "fn": "renovarEstoque",
@@ -217551,7 +219630,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1795007541883_55026",
+                  "uid": "pot_mana_1795009402092_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -217681,7 +219760,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1795007541883_90893",
+                  "uid": "anel_som_1795009402092_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -217970,7 +220049,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1795007541884_87912",
+                  "uid": "pot_mana_1795009402092_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -218187,7 +220266,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795007541884_18536",
+                  "uid": "pot_vida_1795009402092_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -218389,7 +220468,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1795007541884_69928",
+                  "uid": "bota_vento_1795009402093_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -218465,7 +220544,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1795007541884_12429",
+                "uid": "tala_1795009402092_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -218639,7 +220718,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1795007541885_23232",
+              "uid": "placas_elmo_1795009402093_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -218721,7 +220800,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795007541885_3788",
+                  "uid": "pot_vida_1795009402093_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -218838,7 +220917,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1795007541885_56339",
+                  "uid": "amuleto_sab_1795009402093_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -219004,7 +221083,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1795007541885_93474",
+              "uid": "anel_som_1795009402093_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {

@@ -319,7 +319,8 @@ namespace RPGLegend.Engine
         {
             rng = rng ?? Rng.Default;
             // Os esqueletos do necromante não ocupam vaga: são da luta, não da equipe.
-            if (Invocacao.SemInvocados(party).Count >= MaxPartySize)
+            // Nem os esqueletos nem os animais do Caçador (rodada 7b) ocupam vaga.
+            if (Animais.Recrutas(party).Count >= MaxPartySize)
                 return new RecruitResult { Party = new List<Companion>(party), Outcome = RecruitOutcome.PartyFull(), Used = false };
 
             // { ...generateCompanion(rng), temporary: true, combatsLeft: TEMPORARY_RECRUIT_COMBATS }

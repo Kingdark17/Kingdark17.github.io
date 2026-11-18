@@ -197,6 +197,8 @@ namespace RPGLegend.Game.Jogo
         private double _magiaVoltaEm;
         /// <summary>Em dupla: a Magia Proibida levantou o parceiro, com quantos % (vai pelo "r", como a poção).</summary>
         public double? ReviverPraMandar;
+        /// <summary>Os animais que o Caçador domou e ainda não ganharam nome (rodada 7b): a tela abre a janela do nome depois da luta.</summary>
+        public readonly List<string> AnimaisPorNomear = new List<string>();
 
         /// <summary>O que vai pra próxima luta: a moral, quanto falta (em passos) pro Poder da fé e pra Magia Proibida voltarem, e o ki.</summary>
         private MemoriaDaLuta MemoriaPraLuta()
@@ -506,6 +508,15 @@ namespace RPGLegend.Game.Jogo
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
         }
 
+        /// <summary>Dá nome a um animal do Caçador (rodada 7b), na equipe ou guardado, e grava.</summary>
+        public void NomearAnimal(string id, string nome)
+        {
+            Estado = Animais.Nomear(Estado, id, nome);
+            if (Luta != null) Luta.Estado = Animais.Nomear(Luta.Estado, id, nome);
+            MarcarParaSalvar();
+            Mudou?.Invoke();
+        }
+
         /// <summary>Um passo da luta (1/60 s de jogo). O estado acompanha a cada golpe, e grava como o resto.</summary>
         public void PassoDaLuta(EntradaDaLuta entrada)
         {
@@ -517,6 +528,7 @@ namespace RPGLegend.Game.Jogo
             if (quadro.Apoios != null) ApoiosPraMandar.AddRange(quadro.Apoios);
             if (quadro.Moral != null) MoralPraMandar = quadro.Moral;
             if (quadro.Reviver != null) ReviverPraMandar = quadro.Reviver;
+            if (quadro.Domou != null) AnimaisPorNomear.Add(quadro.Domou);
             if (quadro.Acontecimentos.Count > 0) NaLuta?.Invoke(quadro.Acontecimentos);
             if (Luta.Fim != null)
             {

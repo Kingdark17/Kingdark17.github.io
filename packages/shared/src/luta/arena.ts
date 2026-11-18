@@ -79,6 +79,9 @@ import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
 import { aljavaNoArco, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
+import { animalDomado, comidaPreferida, juntarAnimal, quantosAnimais, REGRAS_DE_DOMAR } from '../combat/animais.js';
+import { removeByUid } from '../inventory/inventory.js';
+import { templateById } from '../items/templates.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import {
   criarLacaio,
@@ -324,6 +327,10 @@ export interface MonstroNaArena {
   fraco?: number;
   /** A aljava flamejante (rodada 6b): incendiado, os passos que faltam e o dano de cada segundo. */
   incendio?: { tempo: number; dano: number };
+  /** Domar (rodada 7b): quantas vezes ele aceitou e recusou a comida do Caçador, e se já foi domado (saiu da luta). */
+  aceitou?: number;
+  recusou?: number;
+  domado?: boolean;
 }
 
 /** A área de escuridão do Mago (rodada 5c): o meio dela, em unidades da sala, e os passos que ainda dura. */
@@ -633,6 +640,8 @@ export interface EntradaDaLuta {
   florescer?: boolean;
   /** O Monge e o Espadachim (rodada 6c): apertou o chapéu do espadachim (vai rumo ao cursor, ou ao alvo). */
   chapeu?: boolean;
+  /** O Caçador (rodada 7b): ofereceu a comida a este monstro (no PC, o botão direito nele; no celular, segurar o dedo nele). */
+  alimentar?: number;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -670,6 +679,8 @@ export interface QuadroDaLuta {
   moral?: number;
   /** A Magia Proibida levantou o parceiro: com quantos % da vida máxima (vai pela rede como a Poção de Reviver). */
   reviver?: number;
+  /** O Caçador domou um bicho neste passo: o id do animal (o app abre a janela do nome). */
+  domou?: string;
 }
 
 // ---------- abrir ----------
@@ -805,6 +816,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.magia) usarMagia(l);
   else if (entrada.corte) corteInvernal(l);
   else if (entrada.chapeu) lancarChapeu(l, entrada);
+  else if (entrada.alimentar !== undefined) alimentar(l, entrada.alimentar);
   else if (entrada.florescer && l.arena.recarga <= 0) plantar(l, l.arena.heroi.x, l.arena.heroi.y);
   else if (entrada.item) usarItem(l, entrada.item);
 
@@ -825,6 +837,7 @@ function fecharPasso(l: Luta): QuadroDaLuta {
   if (l.apoios.length > 0) quadro.apoios = l.apoios;
   if (l.moralSubiu !== undefined) quadro.moral = l.moralSubiu;
   if (l.reviverParceiro !== undefined) quadro.reviver = l.reviverParceiro;
+  if (l.domou !== undefined) quadro.domou = l.domou;
   return quadro;
 }
 
@@ -841,6 +854,7 @@ export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaL
   const apoios: ApoioDoParceiro[] = [];
   let moral: number | undefined;
   let reviver: number | undefined;
+  let domou: string | undefined;
   for (const entrada of entradas) {
     if (atual.fim) break;
     const quadro = passoDaLuta(atual, entrada, rng, now);
@@ -850,12 +864,14 @@ export function simularLuta(luta: LutaEmTempoReal, entradas: readonly EntradaDaL
     if (quadro.apoios) apoios.push(...quadro.apoios);
     if (quadro.moral !== undefined) moral = quadro.moral;
     if (quadro.reviver !== undefined) reviver = quadro.reviver;
+    if (quadro.domou !== undefined) domou = quadro.domou;
   }
   const quadro: QuadroDaLuta = { luta: atual, acontecimentos };
   if (danos.length > 0) quadro.danos = danos;
   if (apoios.length > 0) quadro.apoios = apoios;
   if (moral !== undefined) quadro.moral = moral;
   if (reviver !== undefined) quadro.reviver = reviver;
+  if (domou !== undefined) quadro.domou = domou;
   return quadro;
 }
 
@@ -872,6 +888,8 @@ interface Luta extends LutaEmTempoReal {
   moralSubiu?: number;
   /** A Magia Proibida levantou o parceiro neste passo (`QuadroDaLuta.reviver`). */
   reviverParceiro?: number;
+  /** O Caçador domou um bicho neste passo (`QuadroDaLuta.domou`). */
+  domou?: string;
 }
 
 function copiarArena(arena: Arena): Arena {
@@ -2465,6 +2483,67 @@ function naEscuridao(l: Luta, m: MonstroNaArena | undefined): boolean {
   return Math.abs(m.corpoX - e.x) <= meio && Math.abs(m.corpoY - e.y) <= meio;
 }
 
+// ---------- domar (rodada 7b): o Caçador oferece a comida preferida do bicho ----------
+
+/**
+ * O Caçador oferece a comida ao monstro `indice`. Precisa: o bicho se domar
+ * (lobo das sombras, aranha, morcego; o chefe não), não ter recusado 6
+ * vezes, caber mais um animal, estar a até 3 blocos, abaixo de 25% da vida, e
+ * a comida dele na mochila (cada oferta gasta uma). Metade das vezes aceita
+ * (2 vezes doma); recusou, ataca na hora. No espelho, não (o monstro é do
+ * anfitrião).
+ */
+function alimentar(l: Luta, indice: number): void {
+  const r = REGRAS_DE_DOMAR;
+  const estado = masmorra(l);
+  const m = l.arena.monstros[indice];
+  if (idDaClasse(estado.hero) !== 'cacador' || !m || m.fase === 'caido' || noEspelho(l) || l.arena.recarga > 0) return;
+  const monstro = monstroNo(l, indice);
+  const aviso = (texto: string) => contar(l, { tipo: 'aviso', texto });
+  const comida = comidaPreferida(monstro.speciesId);
+  if (comida === null || monstro.isBoss) return aviso(`${monstro.name} não se deixa domar`);
+  if ((m.recusou ?? 0) >= r.recusas) return aviso(`${monstro.name} não aceita mais comida`);
+  if (quantosAnimais(estado) >= r.maximo) return aviso(`Você já tem ${r.maximo} animais`);
+  const lugar = lugarDe(l, indice);
+  const dx = l.arena.heroi.x - lugar.x;
+  const dy = l.arena.heroi.y - lugar.y;
+  const limite = r.distancia * TILE_UNITS + TILE_UNITS / 2;
+  if (dx * dx + dy * dy > limite * limite) return aviso('Chegue mais perto');
+  if (monstro.hp * 100 >= monstro.maxHp * r.vida) return aviso(`${monstro.name} ainda está forte demais`);
+  const pedaco = estado.inventory.find((item) => item.templateId === comida);
+  if (!pedaco) return aviso(`Falta ${(templateById(comida)?.name ?? comida).toLowerCase()}`);
+  l.estado = { ...estado, inventory: removeByUid(estado.inventory, pedaco.uid).inventory };
+  l.arena.recarga = RECARGA_DO_ATAQUE;
+  if (l.rng() * 100 < r.chance) {
+    m.aceitou = (m.aceitou ?? 0) + 1;
+    contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🍖', tom: 'cura' });
+    if (m.aceitou >= r.aceites) domar(l, indice);
+    else aviso(`🍖 ${monstro.name} aceitou (${m.aceitou}/${r.aceites})`);
+    return;
+  }
+  m.recusou = (m.recusou ?? 0) + 1;
+  aviso(m.recusou >= r.recusas ? `🚫 ${monstro.name} recusou de vez` : `${monstro.name} recusou (${m.recusou}/${r.recusas})`);
+  // Recusou: ataca na hora (o que já está no golpe, atordoado ou preso segue como está).
+  if (m.fase === 'esperando' || m.fase === 'descansando' || m.fase === 'hesitando') comecarGolpe(l, m);
+}
+
+/** Aceitou 2 vezes: o bicho vira o animal do Caçador e sai da luta (sem o XP e o ouro dele); era o último, a sala está vencida. */
+function domar(l: Luta, indice: number): void {
+  const estado = masmorra(l);
+  const visto = monstroNo(l, indice);
+  const bruto = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const id = `animal_${Math.trunc((l.now ?? Date.now)())}_${randomInt(100000, l.rng)}`;
+  const m = l.arena.monstros[indice] as MonstroNaArena;
+  m.fase = 'caido';
+  m.domado = true;
+  delete m.poder;
+  l.estado = juntarAnimal(gravarMonstro(estado, indice, { ...bruto, hp: 0, domado: true }), animalDomado(visto, id));
+  l.domou = id;
+  contar(l, { tipo: 'aviso', texto: `🐾 Você domou ${visto.name}!` });
+  if (indice === l.arena.alvo) delete l.arena.escolhido;
+  seguirOuVencer(l, { ...visto, hp: 0 });
+}
+
 // ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------
 
 /** A kusarigama: quem está na área de 3 casas de largura e 2 de fundo no alvo (ele e a fileira atrás dele) leva o mesmo dano. */
@@ -3567,6 +3646,11 @@ function abater(l: Luta, indice: number, abatido: CombatMonsterView): void {
   l.estado = furia.estado;
   diario(l, [...pago.log, ...furia.log]);
   for (const texto of furia.log) contar(l, { tipo: 'aviso', texto });
+  seguirOuVencer(l, abatido);
+}
+
+/** Alguém saiu da luta (caiu ou foi domado): o alvo passa pro primeiro de pé; foi o último, a sala está limpa e a luta acaba em vitória. */
+function seguirOuVencer(l: Luta, abatido: CombatMonsterView): void {
   const dePe = indicesDePe(sala(l));
   if (dePe.length > 0) {
     if (!dePe.includes(l.arena.alvo)) l.arena.alvo = dePe[0] as number;

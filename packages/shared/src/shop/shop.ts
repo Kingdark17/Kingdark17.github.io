@@ -18,6 +18,7 @@ import { RARITIES, rarityById, type Rarity } from '../items/rarity.js';
 import { CHANCE_DO_CHAPEU, CHAPEU_DO_ESPADACHIM, RARIDADE_DAS_PECAS_SECRETAS } from '../items/pecas-secretas.js';
 import { templateById, type ItemCategory, type ItemTemplate } from '../items/templates.js';
 import { aposMudarDeTier } from '../items/runas.js';
+import { COMIDAS_DOS_ANIMAIS } from '../combat/animais.js';
 import { reforge, tierRank, type Tier } from '../items/tiers.js';
 import { defaultRng, pick, type Rng } from '../rng.js';
 
@@ -32,6 +33,8 @@ export interface RollStockOptions {
   app?: boolean;
   /** A Floresta já foi zerada: o ferreiro do app pode ter o chapéu do espadachim (rodada 6). */
   chapeu?: boolean;
+  /** O herói é o Caçador: o vendedor do app tem as comidas dos bichos (rodada 7b). */
+  comidas?: boolean;
 }
 
 /** O degrau mais alto que a loja do app vende. */
@@ -53,6 +56,10 @@ export function rollStock(kind: ShopKind, floor: number, options: RollStockOptio
   if (options.app && options.chapeu && kind === 'blacksmith' && rng() < CHANCE_DO_CHAPEU) {
     const raro = rarityById(RARIDADE_DAS_PECAS_SECRETAS) as Rarity;
     stock.push(instantiate(templateById(CHAPEU_DO_ESPADACHIM) as ItemTemplate, raro, options.now ? { rng, now: options.now } : { rng }));
+  }
+  // As comidas dos bichos: o vendedor do app sempre as tem pro Caçador (rodada 7b).
+  if (options.app && options.comidas && kind !== 'blacksmith') {
+    for (const id of COMIDAS_DOS_ANIMAIS) stock.push(instantiate(templateById(id) as ItemTemplate, RARITIES[0] as Rarity, options.now ? { rng, now: options.now } : { rng }));
   }
   return stock;
 }

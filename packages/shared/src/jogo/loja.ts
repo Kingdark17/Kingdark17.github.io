@@ -15,6 +15,7 @@
 
 import type { CityCell } from '../city/city.js';
 import { isCleared } from '../dungeon/dungeons.js';
+import { idDaClasse } from '../hero/catalog.js';
 import { concordar, displayName, type Item } from '../items/item.js';
 import { defaultRng, type Rng } from '../rng.js';
 import { buyPrice, discountForRoll, resolveBuy, resolveForge, resolveRestock, resolveSell, rollStock, sellPrice, type ShopKind } from '../shop/shop.js';
@@ -35,15 +36,22 @@ export interface Loja {
   app?: true;
   /** No app, com a Floresta zerada: o ferreiro pode ter o chapéu do espadachim (rodada 6). */
   chapeu?: true;
+  /** No app, pro Caçador: o vendedor tem as comidas dos bichos (rodada 7b). */
+  comidas?: true;
 }
 
 export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng, now?: () => number, app = false): Loja {
   const sala = celulaAtual(estado) as CityCell;
   // O chapéu do espadachim (rodada 6): só no app, depois de zerar a Floresta na dificuldade do personagem.
   const chapeu = app && isCleared(estado.progresso, { dungeon: 'floresta', difficulty: estado.masmorra.difficulty });
+  // As comidas dos bichos (rodada 7b): só no app, pro Caçador.
+  const comidas = app && idDaClasse(estado.hero) === 'cacador';
   const comEstoque = sala.forSale?.length
     ? estado
-    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now, ...(app ? { app } : {}), ...(chapeu ? { chapeu } : {}) }) });
+    : substituirCelulaAtual(estado, {
+        ...sala,
+        forSale: rollStock(kind, andarDeForca(estado), { rng, now, ...(app ? { app } : {}), ...(chapeu ? { chapeu } : {}), ...(comidas ? { comidas } : {}) }),
+      });
 
   return {
     estado: comEstoque,
@@ -55,6 +63,7 @@ export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = def
     log: [kind === 'blacksmith' ? 'A forja do ferreiro está acesa.' : 'O vendedor itinerante abre a sacola.'],
     ...(app ? { app: true as const } : {}),
     ...(chapeu ? { chapeu: true as const } : {}),
+    ...(comidas ? { comidas: true as const } : {}),
   };
 }
 
@@ -132,6 +141,7 @@ export function renovarEstoque(loja: Loja, rng: Rng = defaultRng, now?: () => nu
     now,
     ...(loja.app ? { app: true } : {}),
     ...(loja.chapeu ? { chapeu: true } : {}),
+    ...(loja.comidas ? { comidas: true } : {}),
   });
 
   if (renovacao.outcome.kind === 'insufficient_gold') {

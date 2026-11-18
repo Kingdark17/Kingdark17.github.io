@@ -635,6 +635,40 @@ export const TEMPLATES: readonly ItemTemplate[] = [
   },
 
   // ---------- materiais ----------
+  // As comidas dos bichos (rodada 7b): o vendedor do app as vende ao Caçador, que as oferece pra domar.
+  {
+    id: 'carne_crua',
+    name: 'Carne Crua',
+    genero: 'f',
+    category: 'material',
+    desc: 'A comida preferida do lobo das sombras. No app, o Caçador a oferece pra domá-lo.',
+    sprite: 'materials/carne_crua.png',
+    base: {},
+    value: 30,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'grilo',
+    name: 'Grilo',
+    genero: 'm',
+    category: 'material',
+    desc: 'A comida preferida da aranha gigante. No app, o Caçador o oferece pra domá-la.',
+    sprite: 'materials/grilo.png',
+    base: {},
+    value: 30,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'fruta_madura',
+    name: 'Fruta Madura',
+    genero: 'f',
+    category: 'material',
+    desc: 'A comida preferida do morcego vampírico. No app, o Caçador a oferece pra domá-lo.',
+    sprite: 'materials/fruta_madura.png',
+    base: {},
+    value: 30,
+    foraDoSorteio: true,
+  },
   {
     id: 'minerio',
     name: 'Minério Bruto',

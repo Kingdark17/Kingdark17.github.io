@@ -107,6 +107,7 @@ export * from './jogo/professor.js';
 export * from './jogo/mestre-de-estilo.js';
 export * from './jogo/negociante.js';
 export * from './items/pecas-secretas.js';
+export * from './combat/animais.js';
 export * from './jogo/sala.js';
 export * from './jogo/save-inicial.js';
 export * from './jogo/totem.js';

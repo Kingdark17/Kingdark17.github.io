@@ -7104,5 +7104,273 @@
       },
       "rngCalls": 10
     }
+  },
+  {
+    "name": "resolveRecruit: dois recrutas e dois animais: os animais não ocupam vaga (7b)",
+    "input": {
+      "fn": "resolveRecruit",
+      "args": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "x",
+              "nivel": 1,
+              "batalhas": 0
+            }
+          },
+          {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 140,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "y",
+              "nivel": 1,
+              "batalhas": 0
+            }
+          }
+        ]
+      },
+      "rng": {
+        "seed": 5
+      }
+    },
+    "expected": {
+      "result": {
+        "party": [
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Guerreiro",
+            "classIcon": "⚔️",
+            "classId": "guerreiro",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aliado",
+            "raceIcon": "🧑",
+            "race": "Humano",
+            "className": "Mago",
+            "classIcon": "🧙",
+            "classId": "mago",
+            "hp": 20,
+            "maxHp": 20,
+            "attack": 5,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "",
+            "abilityDesc": ""
+          },
+          {
+            "name": "Aranha Gigante",
+            "raceIcon": "🕷️",
+            "race": "Aranha Gigante",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 210,
+            "maxHp": 210,
+            "attack": 14,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "aranha",
+            "animal": {
+              "id": "x",
+              "nivel": 1,
+              "batalhas": 0
+            }
+          },
+          {
+            "name": "Morcego Vampírico",
+            "raceIcon": "🦇",
+            "race": "Morcego Vampírico",
+            "className": "Animal",
+            "classIcon": "🐾",
+            "hp": 140,
+            "maxHp": 140,
+            "attack": 11,
+            "attrs": {
+              "forca": 0,
+              "destreza": 0,
+              "constituicao": 0,
+              "intelecto": 0,
+              "sabedoria": 0,
+              "carisma": 0
+            },
+            "stance": "agressiva",
+            "ability": "Instinto",
+            "abilityDesc": "Um animal domado pelo Caçador.",
+            "especie": "morcego",
+            "animal": {
+              "id": "y",
+              "nivel": 1,
+              "batalhas": 0
+            }
+          },
+          {
+            "name": "Sten Duasluas",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Monge",
+            "classIcon": "🥋",
+            "classId": "monge",
+            "hp": 36,
+            "maxHp": 36,
+            "attack": 9,
+            "attrs": {
+              "forca": 5,
+              "destreza": 11,
+              "constituicao": 6,
+              "intelecto": 11,
+              "sabedoria": 12,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Golpe Atordoante",
+            "abilityDesc": "Pode impedir a reação do inimigo.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        ],
+        "outcome": {
+          "kind": "recruited",
+          "companion": {
+            "name": "Sten Duasluas",
+            "raceIcon": "🧚",
+            "race": "Fada",
+            "className": "Monge",
+            "classIcon": "🥋",
+            "classId": "monge",
+            "hp": 36,
+            "maxHp": 36,
+            "attack": 9,
+            "attrs": {
+              "forca": 5,
+              "destreza": 11,
+              "constituicao": 6,
+              "intelecto": 11,
+              "sabedoria": 12,
+              "carisma": 10
+            },
+            "stance": "equilibrada",
+            "ability": "Golpe Atordoante",
+            "abilityDesc": "Pode impedir a reação do inimigo.",
+            "temporary": true,
+            "combatsLeft": 3
+          }
+        },
+        "used": true
+      },
+      "rngCalls": 10
+    }
   }
 ]

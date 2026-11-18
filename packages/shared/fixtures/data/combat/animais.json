@@ -1,0 +1,23 @@
+{
+  "COMIDA_DO_ANIMAL": {
+    "lobo_sombras": "carne_crua",
+    "aranha": "grilo",
+    "morcego": "fruta_madura"
+  },
+  "COMIDAS_DOS_ANIMAIS": [
+    "carne_crua",
+    "grilo",
+    "fruta_madura"
+  ],
+  "REGRAS_DE_DOMAR": {
+    "distancia": 3,
+    "vida": 25,
+    "chance": 50,
+    "aceites": 2,
+    "recusas": 6,
+    "status": 70,
+    "maximo": 4,
+    "ativos": 2,
+    "nome": 20
+  }
+}

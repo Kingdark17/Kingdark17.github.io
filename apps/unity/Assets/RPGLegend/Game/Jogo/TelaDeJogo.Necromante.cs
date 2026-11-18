@@ -121,6 +121,39 @@ namespace RPGLegend.Game.Jogo
             Redesenhar();
         }
 
+        /// <summary>Depois da luta, o animal que o Caçador domou ganha nome (rodada 7b).</summary>
+        private void AtualizarAnimais()
+        {
+            if (_partida == null || _partida.Luta != null || _janela != null || _partida.AnimaisPorNomear.Count == 0) return;
+            string id = _partida.AnimaisPorNomear[0];
+            // Sai da fila já: fechar a janela sem nome deixa o da espécie.
+            _partida.AnimaisPorNomear.RemoveAt(0);
+            AbrirNomeDoAnimal(id);
+        }
+
+        /// <summary>A janela do nome do animal domado: o campo vem com o nome do bicho, e o PRONTO grava o que estiver nele.</summary>
+        private void AbrirNomeDoAnimal(string id)
+        {
+            var estado = _partida.Estado;
+            Companion animal = (estado.Party ?? new List<Companion>()).Find(m => m.Animal != null && m.Animal.Id == id)
+                ?? (estado.Hero.Animais ?? new List<Companion>()).Find(m => m.Animal != null && m.Animal.Id == id);
+            if (animal == null) return;
+            _janela = "nome-do-animal";
+            var campo = new TextField { maxLength = 40, value = animal.Name };
+            campo.AddToClassList("campo-do-nome");
+            bool naEquipe = (estado.Party ?? new List<Companion>()).Contains(animal);
+            Janela("🐾 Novo companheiro", conteudo =>
+            {
+                conteudo.Add(Paragrafo((animal.RaceIcon ?? "🐾") + " " + animal.Race + (naEquipe ? " agora segue você." : " ficou guardado: na equipe já seguem dois animais.") + " Dê um nome ao seu novo companheiro:"));
+                conteudo.Add(campo);
+            }, ("PRONTO", () =>
+            {
+                _partida.NomearAnimal(id, campo.value ?? "");
+                FecharJanela();
+            }));
+            campo.Focus();
+        }
+
         /// <summary>A janela LACAIOS: cada lacaio de pé, com a vida, a espécie e o estado (a retaguarda ou o ofensivo).</summary>
         private void AbrirLacaios()
         {

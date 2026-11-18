@@ -74,6 +74,8 @@ namespace RPGLegend.Engine
         public Ferimentos Ferimentos;
         /// <summary>O Necromante que a Magia Proibida levantou (rodada 4b): a masmorra a zerar pra ter a magia de volta. Null, liberada.</summary>
         public string BloqueioDaMagia;
+        /// <summary>Os animais do Caçador guardados (rodada 7b, <see cref="Animais"/>): os domados que não cabem na equipe. Null, nenhum.</summary>
+        public List<Companion> Animais;
         /// <summary>Os estilos de luta aprendidos com o mestre (rodada 5a; só o app ensina) e o ativo, escolhido na guilda. Null, nenhum.</summary>
         public List<string> Estilos;
         public string Estilo;
@@ -190,6 +192,8 @@ namespace RPGLegend.Engine
         /// <summary>O lacaio do Necromante na luta do app (rodada 4b): a espécie (o cristal troca; null, o esqueleto) e o estado (null, a retaguarda).</summary>
         public string Especie;
         public string EstadoDoLacaio;
+        /// <summary>O animal domado pelo Caçador (rodada 7b, <see cref="Animais"/>): o id, o nível e as batalhas. Não ocupa vaga de recruta.</summary>
+        public AnimalDoCompanheiro Animal;
 
         [JsExtra] public JsExtras Extra;
 

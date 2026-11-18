@@ -90,6 +90,19 @@ namespace RPGLegend.Tests
                 return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras, quem.Ativo,
                     PecasSecretas.AljavaNoArco(quem.Equip?.Get("arma")?.TemplateId, quem.Equip?.Get("secundaria")?.TemplateId)));
             });
+            // ---------- os animais do Caçador (rodada 7b) ----------
+            Fn(M, "comidaPreferida", (a, c) => W(Animais.ComidaPreferida((string)a["speciesId"])));
+            Fn(M, "domavel", (a, c) => W(Animais.Domavel((string)JsJson.Prop(a["monstro"], "speciesId"), JsJson.Truthy(JsJson.Prop(a["monstro"], "isBoss")))));
+            Fn(M, "animalDomado", (a, c) =>
+            {
+                var m = a["monstro"];
+                return W(Animais.Domado((string)JsJson.Prop(m, "speciesId"), JsJson.ToOptionalNumber(JsJson.Prop(m, "maxHp")) ?? 0, JsJson.ToOptionalNumber(JsJson.Prop(m, "dmg")) ?? 0, (string)a["id"]));
+            });
+            Fn(M, "quantosAnimais", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return N(Animais.Quantos(e.Hero, e.Party)); });
+            Fn(M, "recrutas", (a, c) => W(Animais.Recrutas(R<System.Collections.Generic.List<Companion>>(a["party"]))));
+            Fn(M, "juntarAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Juntar(e.Hero, e.Party, R<Companion>(a["animal"]))); });
+            Fn(M, "nomearAnimal", (a, c) => { var e = R<EquipeDoHeroi>(a["estado"]); return W(Animais.Nomear(e.Hero, e.Party, (string)a["id"], (string)a["nome"])); });
+            Fn(M, "nomeDoAnimal", (a, c) => W(Animais.NomeDoAnimal((string)a["nome"], (string)a["padrao"])));
             // ---------- as armas novas (rodada 6c) ----------
             Fn(M, "alcanceDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.AlcanceDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
             Fn(M, "criticoDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.CriticoDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });

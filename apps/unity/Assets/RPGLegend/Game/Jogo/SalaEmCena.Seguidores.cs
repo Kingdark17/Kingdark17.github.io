@@ -77,6 +77,8 @@ namespace RPGLegend.Game.Jogo
         /// <summary>As camadas do mini boneco de quem segue: o esqueleto só com o corpo; o recruta, como um herói sem nada.</summary>
         private static List<string> MiniDoSeguidor(Companion membro, bool costas)
         {
+            // O animal do Caçador (rodada 7b) segue com o emoji da espécie.
+            if (membro.Animal != null) return new List<string>();
             if (membro.Invocado == true)
             {
                 // O lacaio que o cristal trocou por outra espécie (rodada 4b) fica com o emoji dela.

@@ -59,6 +59,50 @@ namespace RPGLegend.Game.Jogo
         /// <summary>Tocou num monstro de pé: o índice dele na sala.</summary>
         public event Action<int> AoMirar;
 
+        /// <summary>
+        /// O Caçador oferece a comida ao bicho (rodada 7b): no PC, o botão direito nele (ou na placa); no celular, o dedo
+        /// segurando nele por <see cref="TempoDeSegurar"/> s. Só quando <see cref="PodeAlimentar"/>.
+        /// </summary>
+        public event Action<int> AoAlimentar;
+        public bool PodeAlimentar;
+        private const long TempoDeSegurar = 450;
+        private IVisualElementScheduledItem _segurar;
+        private int _segurando = -1;
+
+        /// <summary>O toque que pode virar a oferta: o botão direito oferece na hora; o dedo segurando, depois de um tempo.</summary>
+        private void TocouNoLutador(PointerDownEvent e, int indice)
+        {
+            e.StopPropagation();
+            if (e.button == 1)
+            {
+                if (PodeAlimentar) AoAlimentar?.Invoke(indice);
+                return;
+            }
+            AoMirar?.Invoke(indice);
+            if (!PodeAlimentar || e.pointerType == UnityEngine.UIElements.PointerType.mouse) return;
+            _segurando = indice;
+            _segurar?.Pause();
+            _segurar = schedule.Execute(() =>
+            {
+                if (_segurando == indice && PodeAlimentar) AoAlimentar?.Invoke(indice);
+                _segurando = -1;
+            }).StartingIn(TempoDeSegurar);
+        }
+
+        private void SoltouDoLutador()
+        {
+            _segurando = -1;
+            _segurar?.Pause();
+        }
+
+        private void OuvirOToque(VisualElement elemento, int indice)
+        {
+            elemento.RegisterCallback<PointerDownEvent>(e => TocouNoLutador(e, indice));
+            elemento.RegisterCallback<PointerUpEvent>(_ => SoltouDoLutador());
+            elemento.RegisterCallback<PointerLeaveEvent>(_ => SoltouDoLutador());
+            elemento.RegisterCallback<PointerCancelEvent>(_ => SoltouDoLutador());
+        }
+
         /// <summary>Tocou na placa de um aliado ("eu" ou "parceiro"): o apoio do Bardo, do Clérigo e do Druida vai nele.</summary>
         public event Action<string> AoMirarAliado;
 
@@ -284,9 +328,12 @@ namespace RPGLegend.Game.Jogo
                 if (i >= instancias.Count) continue;
                 var visao = Monsters.View(instancias[i]);
                 bool caido = m.Fase == "caido";
+                // O que o Caçador domou (rodada 7b) sai da sala: some do chão, e a placa diz.
+                bool domado = m.Domado == true;
+                l.Corpo.style.display = domado ? DisplayStyle.None : DisplayStyle.Flex;
 
                 l.Nome.text = Js.Str(visao.Name) + (visao.IsBoss ? " 👑" : "");
-                l.Subtitulo.text = caido ? "Caiu" : "Nv " + Js.NumberToString(Monsters.MonsterLevel(instancias[i].Floor)) + " · " + (visao.EnemyClassLabel ?? "");
+                l.Subtitulo.text = domado ? "Domado 🐾" : caido ? "Caiu" : "Nv " + Js.NumberToString(Monsters.MonsterLevel(instancias[i].Floor)) + " · " + (visao.EnemyClassLabel ?? "");
                 double vida = Math.Max(0, instancias[i].Hp);
                 double maximo = Math.Max(1, instancias[i].MaxHp);
                 l.Preenchimento.style.width = Length.Percent((float)Math.Min(100.0, vida / maximo * 100.0));
@@ -405,12 +452,8 @@ namespace RPGLegend.Game.Jogo
         {
             var l = new Lutador { Raiz = new VisualElement() };
             l.Raiz.AddToClassList("lutador");
-            l.Raiz.RegisterCallback<PointerDownEvent>(e =>
-            {
-                // Tocar no monstro escolhe o alvo; não vira o joystick do palco.
-                e.StopPropagation();
-                AoMirar?.Invoke(indice);
-            });
+            // Tocar no monstro escolhe o alvo (não vira o joystick do palco); segurar, ou o botão direito, oferece a comida (o Caçador).
+            OuvirOToque(l.Raiz, indice);
 
             l.Placa = new VisualElement { pickingMode = PickingMode.Ignore };
             l.Placa.AddToClassList("placa-da-luta");
@@ -433,11 +476,7 @@ namespace RPGLegend.Game.Jogo
             // O corpo fica na sala, fora da placa: tocar nele também escolhe o alvo.
             l.Corpo = new VisualElement();
             l.Corpo.AddToClassList("corpo-do-lutador");
-            l.Corpo.RegisterCallback<PointerDownEvent>(e =>
-            {
-                e.StopPropagation();
-                AoMirar?.Invoke(indice);
-            });
+            OuvirOToque(l.Corpo, indice);
             l.Mira = Rotulo(l.Corpo, "mira-do-lutador");
             l.Mira.text = "🎯";
             // A barra de vida em cima do monstro, na sala (doc do Breno de 2026-11-15); a placa ao lado continua.

@@ -63,6 +63,10 @@ namespace RPGLegend.Engine
         public double? Fraco;
         /// <summary>A aljava flamejante (rodada 6b): incendiado, os passos que faltam e o dano de cada segundo. Nunca muda no lugar (troca inteiro).</summary>
         public IncendioNaArena Incendio;
+        /// <summary>Domar (rodada 7b): quantas vezes ele aceitou e recusou a comida do Caçador, e se já foi domado (saiu da luta).</summary>
+        public double? Aceitou;
+        public double? Recusou;
+        public bool? Domado;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
     }
@@ -418,6 +422,8 @@ namespace RPGLegend.Engine
         public bool? Florescer;
         /// <summary>O Monge e o Espadachim (rodada 6c): apertou o chapéu do espadachim (vai rumo ao cursor, ou ao alvo).</summary>
         public bool? Chapeu;
+        /// <summary>O Caçador (rodada 7b): ofereceu a comida a este monstro (no PC, o botão direito nele; no celular, segurar o dedo nele).</summary>
+        public double? Alimentar;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -450,6 +456,8 @@ namespace RPGLegend.Engine
         public double? Moral;
         /// <summary>A Magia Proibida levantou o parceiro: com quantos % (vai pela rede como a Poção de Reviver).</summary>
         public double? Reviver;
+        /// <summary>O Caçador domou um bicho neste passo: o id do animal (o app abre a janela do nome).</summary>
+        public string Domou;
     }
 
     /// <summary>As tabelas de luta/arena.ts (fixtures/data/luta/arena.json).</summary>
@@ -534,6 +542,8 @@ namespace RPGLegend.Engine
             public double? MoralSubiu;
             /// <summary>A Magia Proibida levantou o parceiro neste passo.</summary>
             public double? ReviverParceiro;
+            /// <summary>O Caçador domou um bicho neste passo.</summary>
+            public string Domou;
         }
 
         // ---------- abrir ----------
@@ -683,6 +693,7 @@ namespace RPGLegend.Engine
             else if (entrada.Magia == true) UsarMagia(l);
             else if (entrada.Corte == true) CorteInvernal(l);
             else if (entrada.Chapeu == true) LancarChapeu(l, entrada);
+            else if (entrada.Alimentar != null) Alimentar(l, entrada.Alimentar.Value);
             else if (entrada.Florescer == true && l.Arena.Recarga <= 0) Plantar(l, l.Arena.Heroi.X, l.Arena.Heroi.Y);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
@@ -705,6 +716,7 @@ namespace RPGLegend.Engine
             Apoios = l.Apoios.Count > 0 ? l.Apoios : null,
             Moral = l.MoralSubiu,
             Reviver = l.ReviverParceiro,
+            Domou = l.Domou,
         };
 
         /// <summary>TS: simularLuta — vários passos de uma vez, cada um com a sua entrada; para no fim da luta.</summary>
@@ -716,6 +728,7 @@ namespace RPGLegend.Engine
             var apoios = new List<ApoioDoParceiro>();
             double? moral = null;
             double? reviver = null;
+            string domou = null;
             foreach (var entrada in entradas)
             {
                 if (atual.Fim != null) break;
@@ -726,8 +739,9 @@ namespace RPGLegend.Engine
                 if (quadro.Apoios != null) apoios.AddRange(quadro.Apoios);
                 if (quadro.Moral != null) moral = quadro.Moral;
                 if (quadro.Reviver != null) reviver = quadro.Reviver;
+                if (quadro.Domou != null) domou = quadro.Domou;
             }
-            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null, Apoios = apoios.Count > 0 ? apoios : null, Moral = moral, Reviver = reviver };
+            return new QuadroDaLuta { Luta = atual, Acontecimentos = acontecimentos, Danos = danos.Count > 0 ? danos : null, Apoios = apoios.Count > 0 ? apoios : null, Moral = moral, Reviver = reviver, Domou = domou };
         }
 
         private static Arena CopiarArena(Arena arena)
@@ -2637,6 +2651,12 @@ namespace RPGLegend.Engine
             Diario(l, pago.Log);
             Diario(l, furia.Log);
             foreach (var texto in furia.Log) Contar(l, Aviso(texto));
+            SeguirOuVencer(l, abatido);
+        }
+
+        /// <summary>TS: seguirOuVencer — alguém saiu da luta (caiu ou foi domado): o alvo passa pro primeiro de pé; foi o último, a luta acaba em vitória.</summary>
+        private static void SeguirOuVencer(Luta l, CombatMonsterView abatido)
+        {
             var dePe = FimDaLuta.IndicesDePe(Sala(l));
             if (dePe.Count > 0)
             {
@@ -3401,6 +3421,74 @@ namespace RPGLegend.Engine
             if (NoEspelho(l) || m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) return;
             m.Preso = passos ?? Estilos.Raizes.Preso;
             Contar(l, Numero("monstro", m.Indice, texto, "erro"));
+        }
+
+        // ---------- domar (rodada 7b): o Caçador oferece a comida preferida do bicho ----------
+
+        /// <summary>
+        /// TS: alimentar — o Caçador oferece a comida ao monstro: o bicho se doma, não recusou 6 vezes, cabe mais um
+        /// animal, está a até 3 blocos, abaixo de 25% da vida, e a comida dele está na mochila (cada oferta gasta uma).
+        /// Metade das vezes aceita (2 vezes doma); recusou, ataca na hora. No espelho, não.
+        /// </summary>
+        private static void Alimentar(Luta l, double indice)
+        {
+            var r = Animais.Regras;
+            var estado = Masmorra(l);
+            var m = MonstroDaArena(l, indice);
+            if (Catalog.IdDaClasse(estado.Hero.ClassId, estado.Hero.ClassName) != "cacador" || m == null || m.Fase == "caido" || NoEspelho(l) || l.Arena.Recarga > 0) return;
+            var monstro = MonstroNo(l, indice);
+            string nome = Js.Str(monstro.Name);
+            string comida = Animais.ComidaPreferida(monstro.SpeciesId);
+            if (comida == null || monstro.IsBoss) { Contar(l, Aviso(nome + " não se deixa domar")); return; }
+            if ((m.Recusou ?? 0) >= r.Recusas) { Contar(l, Aviso(nome + " não aceita mais comida")); return; }
+            if (Animais.Quantos(estado.Hero, estado.Party) >= r.Maximo) { Contar(l, Aviso("Você já tem " + Js.NumberToString(r.Maximo) + " animais")); return; }
+            var lugar = LugarDe(l, indice);
+            double dx = l.Arena.Heroi.X - lugar.X;
+            double dy = l.Arena.Heroi.Y - lugar.Y;
+            double limite = r.Distancia * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            if (dx * dx + dy * dy > limite * limite) { Contar(l, Aviso("Chegue mais perto")); return; }
+            if (monstro.Hp * 100 >= monstro.MaxHp * r.Vida) { Contar(l, Aviso(nome + " ainda está forte demais")); return; }
+            var pedaco = estado.Inventory.Find(item => item.TemplateId == comida);
+            if (pedaco == null) { Contar(l, Aviso("Falta " + (ItemTemplates.ById(comida)?.Name ?? comida).ToLowerInvariant())); return; }
+            var semPedaco = estado.Clone();
+            semPedaco.Inventory = Inventory.RemoveByUid(estado.Inventory, pedaco.Uid).Inventory;
+            l.Estado = semPedaco;
+            l.Arena.Recarga = D.RecargaDoAtaque;
+            if (l.Rng() * 100 < r.Chance)
+            {
+                m.Aceitou = (m.Aceitou ?? 0) + 1;
+                Contar(l, Numero("monstro", indice, "🍖", "cura"));
+                if (m.Aceitou.Value >= r.Aceites) Domar(l, indice);
+                else Contar(l, Aviso("🍖 " + nome + " aceitou (" + Js.NumberToString(m.Aceitou.Value) + "/" + Js.NumberToString(r.Aceites) + ")"));
+                return;
+            }
+            m.Recusou = (m.Recusou ?? 0) + 1;
+            Contar(l, Aviso(m.Recusou.Value >= r.Recusas ? "🚫 " + nome + " recusou de vez" : nome + " recusou (" + Js.NumberToString(m.Recusou.Value) + "/" + Js.NumberToString(r.Recusas) + ")"));
+            // Recusou: ataca na hora (o que já está no golpe, atordoado ou preso segue como está).
+            if (m.Fase == "esperando" || m.Fase == "descansando" || m.Fase == "hesitando") ComecarGolpe(l, m);
+        }
+
+        /// <summary>TS: domar — aceitou 2 vezes: o bicho vira o animal do Caçador e sai da luta (sem o XP e o ouro dele); era o último, a sala está vencida.</summary>
+        private static void Domar(Luta l, double indice)
+        {
+            var estado = Masmorra(l);
+            var visto = MonstroNo(l, indice);
+            var saiu = MonstroNo(l, indice);
+            saiu.Hp = 0;
+            var bruto = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            double agora = (l.Now ?? Js.DateNow)();
+            string id = "animal_" + Js.NumberToString(Math.Truncate(agora)) + "_" + Js.NumberToString(Rng.RandomInt(100000, l.Rng));
+            var m = l.Arena.Monstros[(int)indice];
+            m.Fase = "caido";
+            m.Domado = true;
+            m.Poder = null;
+            bruto.Hp = 0;
+            bruto.Domado = true;
+            l.Estado = Animais.Juntar(FimDaLuta.GravarMonstro(estado, indice, bruto), Animais.Domado(visto.SpeciesId, visto.MaxHp, visto.Dmg, id));
+            l.Domou = id;
+            Contar(l, Aviso("🐾 Você domou " + Js.Str(visto.Name) + "!"));
+            if (indice == l.Arena.Alvo) l.Arena.Escolhido = null;
+            SeguirOuVencer(l, saiu);
         }
 
         // ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------

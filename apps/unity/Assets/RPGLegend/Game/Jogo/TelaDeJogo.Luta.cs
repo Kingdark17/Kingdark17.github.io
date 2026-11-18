@@ -80,6 +80,8 @@ namespace RPGLegend.Game.Jogo
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
         private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte, _apertouFlor, _apertouChapeu;
         private int? _mirar;
+        /// <summary>O Caçador ofereceu a comida a este monstro (rodada 7b).</summary>
+        private int? _alimentar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
         private double _sobraDaLuta;
@@ -113,6 +115,7 @@ namespace RPGLegend.Game.Jogo
             // a poeira dos golpes dos monstros no chão e o estouro das bolas vão pra sala, por baixo dos corpos
             _palcoDaLuta.EfeitoNaSala = (nome, x, y) => _sala?.TocarEfeito(nome, x, y);
             _palcoDaLuta.AoMirar += indice => _mirar = indice;
+            _palcoDaLuta.AoAlimentar += indice => _alimentar = indice;
             _palcoDaLuta.AoMirarAliado += aliado => _mirarAliado = aliado;
             _palcoDaLuta.Esconder();
             palco.Insert(0, _palcoDaLuta);
@@ -341,6 +344,7 @@ namespace RPGLegend.Game.Jogo
                 Corte = _apertouCorte ? true : (bool?)null,
                 Florescer = _apertouFlor ? true : (bool?)null,
                 Chapeu = _apertouChapeu ? true : (bool?)null,
+                Alimentar = _alimentar,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
@@ -353,6 +357,7 @@ namespace RPGLegend.Game.Jogo
             _tecla = null;
             _mirar = null;
             _mirarAliado = null;
+            _alimentar = null;
             return entrada;
         }
 
@@ -507,6 +512,8 @@ namespace RPGLegend.Game.Jogo
                 PosicionarEmVolta();
             }
             if (flor) _botaoFlor.EnableInClassList("sem-mana", arena.Recarga > 0 || arena.Evento != null);
+            // Domar (rodada 7b): só o Caçador oferece a comida (o botão direito, ou o dedo segurando no bicho).
+            _palcoDaLuta.PodeAlimentar = Catalog.IdDaClasse(hero.ClassId, hero.ClassName) == "cacador";
             // O chapéu do espadachim (rodada 6c): apagado sem os 50 de ki, na espera ou voando.
             bool chapeu = ClassesDeLuta.PodeLancarChapeu(hero);
             if (chapeu != _chapeuNoArco)

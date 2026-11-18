@@ -770,7 +770,28 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   Cuidado: a luta abre com os monstros sem estado (`prepararLuta`,
   `freshCombatMonster`), então caso de teste com monstro já sangrando põe o
   status depois de abrir a luta.
-  Falta: 7b, 7c e 7d do Caçador.
+  **7b feita** (domar; regras em `combat/animais.ts` ↔ `Engine/Combat/Animais.cs`,
+  o domar na arena em `alimentar`/`domar`): o Caçador oferece a comida
+  preferida (carne crua pro lobo das sombras, grilo pra aranha, fruta madura
+  pro morcego; `foraDoSorteio`, 30 de ouro, só o vendedor do app as tem pro
+  Caçador, `rollStock(..., comidas)`) no PC com o botão direito no bicho e no
+  celular segurando o dedo nele (`PalcoDaLuta.AoAlimentar`,
+  `EntradaDaLuta.alimentar`): a até 3 blocos, abaixo de 25% da vida, cada
+  oferta gasta uma comida; metade das vezes aceita, 2 vezes doma (ele sai da
+  luta sem pagar o abate, `MonsterInstance.domado`, e se era o último a sala
+  está vencida, `seguirOuVencer`), recusou ataca na hora, 6 recusas e não
+  aceita mais (o chefe nunca). O domado é um `Companion` com `animal` (`id`,
+  `nivel`, `batalhas`) e `especie`, com 70% da vida e do dano do bicho; até
+  4, os 2 primeiros na equipe e os outros em `Hero.animais` (`juntarAnimal`);
+  não ocupam a vaga dos recrutas (`recrutas`). Depois da luta o app abre a
+  janela do nome (`QuadroDaLuta.domou`, `Partida.AnimaisPorNomear`,
+  `nomearAnimal`/`nomeDoAnimal`). Na 7b o animal luta como um recruta (sem
+  corpo na arena; no site, por turnos, como recruta — decisão do usuário) e
+  segue o herói no mapa com o emoji da espécie. Arte das comidas do Claude,
+  em `img/materials/` e `Art/Jogo/Resources/Itens/materials/`.
+  Falta: 7c (o animal com corpo na luta, estados, janela do K, níveis) e 7d
+  (montaria, cristal do animal morto, reviver, soltar) do Caçador, e o
+  tratador na cidade.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

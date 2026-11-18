@@ -62,6 +62,8 @@ export interface MonsterInstance {
   chamou?: boolean;
   /** Chefe final: os lacaios caíram e ele ficou furioso. */
   furia?: boolean;
+  /** O Caçador o domou (rodada 7b): saiu da sala sem cair, com a vida em 0. */
+  domado?: boolean;
   /** Chefe final: quantos poderes já soltou (a vez de cada um se alterna). */
   poderes?: number;
   /** Chamado pelo chefe final: não dá ouro. */

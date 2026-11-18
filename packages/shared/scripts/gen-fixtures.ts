@@ -1071,6 +1071,41 @@ for (const cls of ['monge', 'mago', 'necromante']) {
       }
     }
   }
+  // Os animais do Caçador (rodada 7b).
+  {
+    for (const id of ['lobo_sombras', 'aranha', 'morcego', 'goblin', 'esqueleto', 'inventado', 'constructor']) {
+      caso(`comidaPreferida: ${id}`, 'comidaPreferida', { speciesId: id }, (a) => E.comidaPreferida(a.speciesId));
+      for (const isBoss of [false, true]) caso(`domavel: ${id}${isBoss ? ', chefe' : ''}`, 'domavel', { monstro: { speciesId: id, isBoss } }, (a) => E.domavel(a.monstro));
+    }
+    for (const [nome, monstro] of [
+      ['lobo', { speciesId: 'lobo_sombras', maxHp: 1000, dmg: 50 }],
+      ['aranha pequena', { speciesId: 'aranha', maxHp: 3, dmg: 1 }],
+      ['morcego quebrado', { speciesId: 'morcego', maxHp: 77, dmg: 13 }],
+      ['espécie inventada', { speciesId: 'inventado', maxHp: 10, dmg: 10 }],
+    ] as const) {
+      caso(`animalDomado: ${nome}`, 'animalDomado', { monstro, id: 'animal_1_2' }, (a) => E.animalDomado(a.monstro, a.id));
+    }
+    const lobo = E.animalDomado({ speciesId: 'lobo_sombras', maxHp: 1000, dmg: 50 }, 'a1');
+    const aranha = E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'a2');
+    const morcego = E.animalDomado({ speciesId: 'morcego', maxHp: 200, dmg: 15 }, 'a3');
+    const base = heroi({ classe: 'cacador' });
+    for (const [nome, estado] of [
+      ['sem animais', { hero: base, party: [companheiro('guerreiro')] }],
+      ['um animal', { hero: base, party: [companheiro('guerreiro'), lobo] }],
+      ['dois na equipe', { hero: base, party: [lobo, aranha] }],
+      ['dois na equipe e um guardado', { hero: { ...base, animais: [morcego] }, party: [lobo, aranha, companheiro('mago')] }],
+    ] as const) {
+      caso(`(7b) quantosAnimais: ${nome}`, 'quantosAnimais', { estado }, (a) => E.quantosAnimais(a.estado as never));
+      caso(`(7b) recrutas: ${nome}`, 'recrutas', { party: estado.party }, (a) => E.recrutas(a.party as never));
+      caso(`(7b) juntarAnimal: ${nome}`, 'juntarAnimal', { estado, animal: morcego }, (a) => E.juntarAnimal(a.estado as never, a.animal as never));
+      for (const [id, nomeNovo] of [['a1', 'Uivo'], ['a3', '  Asa  '], ['nenhum', 'X'], ['a2', '']] as const) {
+        caso(`(7b) nomearAnimal: ${nome}, ${id} = "${nomeNovo}"`, 'nomearAnimal', { estado, id, nome: nomeNovo }, (a) => E.nomearAnimal(a.estado as never, a.id, a.nome));
+      }
+    }
+    for (const nome of ['Presa', '  Sombra\n<b>  ', '', '   ', 'a'.repeat(30), '🐺'.repeat(25), 'Lobo\u0000Mau', 'Ana Júlia', ' 🕷️ Teia ']) {
+      caso(`nomeDoAnimal: ${JSON.stringify(nome)}`, 'nomeDoAnimal', { nome, padrao: 'Lobo das Sombras' }, (a) => E.nomeDoAnimal(a.nome, a.padrao));
+    }
+  }
   // As peças secretas (rodada 6a).
   for (const classId of ['arqueiro', 'monge', 'guerreiro', 'mago', 'cacador']) {
     caso(`pecasDaClasse: ${classId}`, 'pecasDaClasse', { quem: { classId } }, (a) => E.pecasDaClasse(a.quem));
@@ -3388,6 +3423,11 @@ for (const service of [...Object.keys(E.NPC_SERVICE_INFO), 'xyz']) caso(`npcServ
     ['dois na equipe', [companheiro('guerreiro'), companheiro('mago')], 3],
     ['equipe cheia, sem sortear', [companheiro('guerreiro'), companheiro('mago'), companheiro('bardo')], 1],
     ['dois recrutas e dois esqueletos: os esqueletos não ocupam vaga', [companheiro('guerreiro'), companheiro('mago'), { ...companheiro('bardo'), invocado: true }, { ...companheiro('bardo'), invocado: true }], 4],
+    [
+      'dois recrutas e dois animais: os animais não ocupam vaga (7b)',
+      [companheiro('guerreiro'), companheiro('mago'), E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'x'), E.animalDomado({ speciesId: 'morcego', maxHp: 200, dmg: 15 }, 'y')],
+      5,
+    ],
   ] as const) {
     caso(`resolveRecruit: ${nome}`, 'resolveRecruit', { party }, (a, { rng }) => E.resolveRecruit(a.party, rng), { rng: { seed } });
   }
@@ -4449,6 +4489,23 @@ for (const [nome, kind, semente] of [
     rng: { seed: semente },
     now: AGORA,
   });
+}
+// As comidas dos bichos (rodada 7b): o vendedor do app as tem pro Caçador.
+{
+  const cacador = { ...rico, classId: 'cacador', className: 'Caçador' };
+  for (const [nome, kind, heroDaLoja, app] of [
+    ['o vendedor do app tem as comidas pro Caçador', 'shop', cacador, true],
+    ['o ferreiro do app não tem as comidas', 'blacksmith', cacador, true],
+    ['o vendedor do site não tem as comidas', 'shop', cacador, false],
+    ['o vendedor do app não tem as comidas pro Arqueiro', 'shop', { ...rico, classId: 'arqueiro', className: 'Arqueiro' }, true],
+  ] as const) {
+    caso(`abrirLoja: ${nome}`, 'abrirLoja', { estado: naSalaDaCidade(kind, heroDaLoja), kind, app }, (a, ctx) => E.abrirLoja(a.estado, a.kind, ctx.rng, ctx.now, a.app), {
+      rng: { seed: 64 },
+      now: AGORA,
+    });
+  }
+  const comComidas = E.abrirLoja(naSalaDaCidade('shop', cacador), 'shop', E.seededRng(64), relogio, true);
+  caso('renovarEstoque: o vendedor do app com as comidas', 'renovarEstoque', { loja: comComidas }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: 65 }, now: AGORA });
 }
 const ferreiroDoApp = E.abrirLoja({ ...naSalaDaCidade('blacksmith', rico), floor: 80 }, 'blacksmith', E.seededRng(62), relogio, true);
 caso('renovarEstoque: ferreiro do app', 'renovarEstoque', { loja: ferreiroDoApp }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: 63 }, now: AGORA });
@@ -6298,6 +6355,63 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       const goblin = bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 });
       simula('o monstro sangrando bate mais fraco no Caçador', comSangue(cacador(null, [goblin], [[4.5, 6.5]])), parado(400), { seed: 932 });
       simula('o monstro sangrando bate igual no Arqueiro', comSangue(comPecas('arqueiro', { arma: 'arco' }, [goblin], [[4.5, 6.5]])), parado(400), { seed: 932 });
+    }
+
+    // Domar (rodada 7b): o Caçador oferece a comida preferida ao bicho fraco, a até 3 blocos.
+    {
+      const comComida = (luta: LutaEmTempoReal, quantas = 3, id = 'carne_crua'): LutaEmTempoReal => ({
+        ...luta,
+        estado: { ...luta.estado, inventory: Array.from({ length: quantas }, (_, k) => item(id, 'comum', 100 + k)) },
+      });
+      const loboFraco = (o: Partial<MonsterInstance> = {}) => bicho('lobo_sombras', { hp: 60, maxHp: 1000, dmg: 30, ...o });
+      const caca = (monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>, o: { quantas?: number; comida?: string; party?: Companion[]; animais?: Companion[]; classe?: string } = {}) => {
+        const base = comPecas(o.classe ?? 'cacador', { arma: 'arco' }, monstros, corpos);
+        const comEquipe = {
+          ...base,
+          estado: {
+            ...base.estado,
+            ...(o.party ? { party: o.party } : {}),
+            ...(o.animais ? { hero: { ...base.estado.hero, animais: o.animais } } : {}),
+          },
+        };
+        return comComida(comEquipe as LutaEmTempoReal, o.quantas ?? 3, o.comida ?? 'carne_crua');
+      };
+      const oferecer = (vezes: number, depois = 60): EntradaDaLuta[] => {
+        const lista: EntradaDaLuta[] = [];
+        for (let v = 0; v < vezes; v++) lista.push({ x: 0, y: 0, alimentar: 0 }, ...parado(20));
+        return [...lista, ...parado(depois)];
+      };
+      const acha = (luta: LutaEmTempoReal, entradas: EntradaDaLuta[], texto: string, de = 940) => {
+        let semente = de;
+        while (!JSON.stringify(E.simularLuta(luta, entradas, E.seededRng(semente), () => AGORA).acontecimentos).includes(texto)) semente++;
+        return semente;
+      };
+      const perto = caca([loboFraco()], [[4.5, 5.5]]);
+      simula('domar: o lobo aceita duas vezes e vira o animal do Caçador', perto, oferecer(3), { seed: acha(perto, oferecer(3), 'Você domou') });
+      simula('domar: o lobo recusa e ataca na hora', perto, oferecer(1, 120), { seed: acha(perto, oferecer(1, 120), 'recusou (1/6)') });
+      const comGoblin = caca([loboFraco(), bicho('goblin', { hp: 900, maxHp: 900 })], [[4.5, 5.5], [1.5, 1.5]]);
+      simula('domar: com outro de pé, o domado só sai da luta', comGoblin, oferecer(4), { seed: acha(comGoblin, oferecer(4), 'Você domou') });
+      const aranha = caca([bicho('aranha', { hp: 20, maxHp: 400, dmg: 12 })], [[5.5, 6.5]], { comida: 'grilo' });
+      simula('domar: a aranha com o grilo', aranha, oferecer(4), { seed: acha(aranha, oferecer(4), 'Você domou') });
+      const lobo = E.animalDomado({ speciesId: 'lobo_sombras', maxHp: 1000, dmg: 50 }, 'a1');
+      const doisNaEquipe = caca([loboFraco()], [[4.5, 5.5]], { party: [lobo, { ...lobo, animal: { id: 'a2', nivel: 1, batalhas: 0 } }] });
+      simula('domar: com dois na equipe, o terceiro fica guardado', doisNaEquipe, oferecer(4), { seed: acha(doisNaEquipe, oferecer(4), 'Você domou') });
+      for (const [nome, luta] of [
+        ['forte demais', caca([loboFraco({ hp: 400 })], [[4.5, 5.5]])],
+        ['longe', caca([loboFraco()], [[4.5, 1.5]])],
+        ['sem a comida', caca([loboFraco()], [[4.5, 5.5]], { comida: 'grilo' })],
+        ['o goblin não se doma', caca([bicho('goblin', { hp: 60, maxHp: 1000 })], [[4.5, 5.5]])],
+        ['o chefe não se doma', caca([loboFraco({ isBoss: true, bossTitle: 'o Alfa' })], [[4.5, 5.5]])],
+        ['o Arqueiro não doma', caca([loboFraco()], [[4.5, 5.5]], { classe: 'arqueiro' })],
+        ['com quatro animais', caca([loboFraco()], [[4.5, 5.5]], { party: [lobo, lobo], animais: [lobo, lobo] })],
+      ] as const) {
+        simula(`domar: ${nome}`, luta, oferecer(1, 30), { seed: 950 });
+      }
+      {
+        const cansado = { ...perto, arena: { ...perto.arena, monstros: perto.arena.monstros.map((m) => ({ ...m, recusou: 6 })) } };
+        simula('domar: o lobo que recusou seis vezes não aceita mais', cansado, oferecer(1, 30), { seed: 951 });
+      }
+      caso('abrirLuta: com um animal na equipe (7b)', 'abrirLuta', { estado: { ...salaCom([bicho('zumbi')]), party: [lobo] }, chegada: PERTO }, (a) => E.abrirLuta(a.estado, a.chegada));
     }
   }
 

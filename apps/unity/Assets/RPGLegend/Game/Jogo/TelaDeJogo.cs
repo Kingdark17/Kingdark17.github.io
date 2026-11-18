@@ -321,6 +321,7 @@ namespace RPGLegend.Game.Jogo
             if (_partida == null) return;
             AtualizarLugar();
             AtualizarNecromante();
+            AtualizarAnimais();
             // Na luta os nomes dos monstros ficam no alto da sala: os botões descem em coluna pelo escuro da esquerda.
             _tela.EnableInClassList("em-luta", _partida.Luta != null);
 

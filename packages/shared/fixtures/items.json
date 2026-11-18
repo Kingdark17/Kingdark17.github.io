@@ -711,6 +711,39 @@
           "value": 16
         },
         {
+          "id": "carne_crua",
+          "name": "Carne Crua",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do lobo das sombras. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/carne_crua.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "grilo",
+          "name": "Grilo",
+          "genero": "m",
+          "category": "material",
+          "desc": "A comida preferida da aranha gigante. No app, o Caçador o oferece pra domá-la.",
+          "sprite": "materials/grilo.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "fruta_madura",
+          "name": "Fruta Madura",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do morcego vampírico. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/fruta_madura.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        {
           "id": "minerio",
           "name": "Minério Bruto",
           "genero": "m",
@@ -2312,6 +2345,39 @@
     },
     "expected": {
       "result": [
+        {
+          "id": "carne_crua",
+          "name": "Carne Crua",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do lobo das sombras. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/carne_crua.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "grilo",
+          "name": "Grilo",
+          "genero": "m",
+          "category": "material",
+          "desc": "A comida preferida da aranha gigante. No app, o Caçador o oferece pra domá-la.",
+          "sprite": "materials/grilo.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "fruta_madura",
+          "name": "Fruta Madura",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do morcego vampírico. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/fruta_madura.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
         {
           "id": "minerio",
           "name": "Minério Bruto",
@@ -9779,6 +9845,483 @@
     }
   },
   {
+    "name": "instantiate: carne_crua em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "carne_crua",
+          "name": "Carne Crua",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do lobo das sombras. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/carne_crua.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "carne_crua_1700000000000_62706",
+          "templateId": "carne_crua",
+          "rarity": "comum",
+          "stats": {},
+          "value": 30,
+          "equipped": false
+        },
+        {
+          "uid": "carne_crua_1700000000000_273",
+          "templateId": "carne_crua",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 39,
+          "equipped": false
+        },
+        {
+          "uid": "carne_crua_1700000000000_52744",
+          "templateId": "carne_crua",
+          "rarity": "raro",
+          "stats": {},
+          "value": 51,
+          "equipped": false
+        },
+        {
+          "uid": "carne_crua_1700000000000_98104",
+          "templateId": "carne_crua",
+          "rarity": "epico",
+          "stats": {},
+          "value": 66,
+          "equipped": false
+        },
+        {
+          "uid": "carne_crua_1700000000000_96836",
+          "templateId": "carne_crua",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 90,
+          "equipped": false
+        },
+        {
+          "uid": "carne_crua_1700000000000_28110",
+          "templateId": "carne_crua",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: grilo em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "grilo",
+          "name": "Grilo",
+          "genero": "m",
+          "category": "material",
+          "desc": "A comida preferida da aranha gigante. No app, o Caçador o oferece pra domá-la.",
+          "sprite": "materials/grilo.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "grilo_1700000000000_62706",
+          "templateId": "grilo",
+          "rarity": "comum",
+          "stats": {},
+          "value": 30,
+          "equipped": false
+        },
+        {
+          "uid": "grilo_1700000000000_273",
+          "templateId": "grilo",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 39,
+          "equipped": false
+        },
+        {
+          "uid": "grilo_1700000000000_52744",
+          "templateId": "grilo",
+          "rarity": "raro",
+          "stats": {},
+          "value": 51,
+          "equipped": false
+        },
+        {
+          "uid": "grilo_1700000000000_98104",
+          "templateId": "grilo",
+          "rarity": "epico",
+          "stats": {},
+          "value": 66,
+          "equipped": false
+        },
+        {
+          "uid": "grilo_1700000000000_96836",
+          "templateId": "grilo",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 90,
+          "equipped": false
+        },
+        {
+          "uid": "grilo_1700000000000_28110",
+          "templateId": "grilo",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: fruta_madura em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "fruta_madura",
+          "name": "Fruta Madura",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do morcego vampírico. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/fruta_madura.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "fruta_madura_1700000000000_62706",
+          "templateId": "fruta_madura",
+          "rarity": "comum",
+          "stats": {},
+          "value": 30,
+          "equipped": false
+        },
+        {
+          "uid": "fruta_madura_1700000000000_273",
+          "templateId": "fruta_madura",
+          "rarity": "incomum",
+          "stats": {},
+          "value": 39,
+          "equipped": false
+        },
+        {
+          "uid": "fruta_madura_1700000000000_52744",
+          "templateId": "fruta_madura",
+          "rarity": "raro",
+          "stats": {},
+          "value": 51,
+          "equipped": false
+        },
+        {
+          "uid": "fruta_madura_1700000000000_98104",
+          "templateId": "fruta_madura",
+          "rarity": "epico",
+          "stats": {},
+          "value": 66,
+          "equipped": false
+        },
+        {
+          "uid": "fruta_madura_1700000000000_96836",
+          "templateId": "fruta_madura",
+          "rarity": "lendario",
+          "stats": {},
+          "value": 90,
+          "equipped": false
+        },
+        {
+          "uid": "fruta_madura_1700000000000_28110",
+          "templateId": "fruta_madura",
+          "rarity": "mitico",
+          "stats": {},
+          "value": 120,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: minerio em cada raridade",
     "input": {
       "fn": "instantiate",
@@ -15192,6 +15735,117 @@
         "Pergaminho Selado",
         "Pergaminho Selado",
         "Pergaminho Selado"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: carne_crua",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "carne_crua",
+          "name": "Carne Crua",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do lobo das sombras. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/carne_crua.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Carne Crua",
+        "Carne Crua",
+        "Carne Crua",
+        "Carne Crua",
+        "Carne Crua",
+        "Carne Crua"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: grilo",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "grilo",
+          "name": "Grilo",
+          "genero": "m",
+          "category": "material",
+          "desc": "A comida preferida da aranha gigante. No app, o Caçador o oferece pra domá-la.",
+          "sprite": "materials/grilo.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Grilo",
+        "Grilo",
+        "Grilo",
+        "Grilo",
+        "Grilo",
+        "Grilo"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: fruta_madura",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "fruta_madura",
+          "name": "Fruta Madura",
+          "genero": "f",
+          "category": "material",
+          "desc": "A comida preferida do morcego vampírico. No app, o Caçador a oferece pra domá-lo.",
+          "sprite": "materials/fruta_madura.png",
+          "base": {},
+          "value": 30,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Fruta Madura",
+        "Fruta Madura",
+        "Fruta Madura",
+        "Fruta Madura",
+        "Fruta Madura",
+        "Fruta Madura"
       ]
     }
   },

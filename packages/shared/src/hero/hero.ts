@@ -135,6 +135,11 @@ export interface Hero extends HeroCore {
    * Ausente, a magia está liberada. O site só guarda.
    */
   bloqueioDaMagia?: string;
+  /**
+   * Os animais do Caçador guardados (rodada 7b, `combat/animais.ts`): os
+   * domados que não cabem na equipe (lá seguem 2). Ausente, nenhum.
+   */
+  animais?: Companion[];
   /** Bênção de um NPC do mapa: bônus de esquiva que dura N combates inteiros (não turnos) — distinto de `HeroBuffs`, que zera a cada combate. Concedida por `npc-services.js`'s `blessing()`, consumida no início de cada combate. */
   npcBlessing?: { combats: number; dodge: number };
 }
@@ -665,6 +670,19 @@ export interface Companion {
    */
   especie?: string;
   estadoDoLacaio?: 'retaguarda' | 'ofensivo';
+  /**
+   * O animal domado pelo Caçador (rodada 7b, `combat/animais.ts`): um id que
+   * não muda (pra dar nome e achar ele), o nível e as batalhas que ele já
+   * acompanhou. A espécie fica em `especie`. Não ocupa vaga de recruta.
+   */
+  animal?: AnimalDoCompanheiro;
+}
+
+/** O que só o animal domado tem (rodada 7b). */
+export interface AnimalDoCompanheiro {
+  id: string;
+  nivel: number;
+  batalhas: number;
 }
 
 /** Por id da classe, não pelo nome — ver a nota em `catalog.ts`. */

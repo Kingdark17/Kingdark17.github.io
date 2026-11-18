@@ -57,6 +57,8 @@ namespace RPGLegend.Engine
         public double? Poderes;
         /// <summary>Chamado pelo chefe final: não dá ouro.</summary>
         public bool? Lacaio;
+        /// <summary>O Caçador o domou (rodada 7b): saiu da sala sem cair, com a vida em 0.</summary>
+        public bool? Domado;
         /// <summary>Chefe de andar 5: as mecânicas sorteadas dele (<see cref="MecanicasDoChefe"/>).</summary>
         public List<string> Mecanicas;
         /// <summary>Chefe: já passou da metade da vida (a segunda fase).</summary>
@@ -105,6 +107,7 @@ namespace RPGLegend.Engine
             target.Furia = Furia;
             target.Poderes = Poderes;
             target.Lacaio = Lacaio;
+            target.Domado = Domado;
             target.Mecanicas = Mecanicas;
             target.Fase2 = Fase2;
             target.Escuro = Escuro;
