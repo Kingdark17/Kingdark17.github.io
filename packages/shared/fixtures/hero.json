@@ -50585,6 +50585,1382 @@
     }
   },
   {
+    "name": "aljavaNoArco: arqueiro de arco e aljava paralisante",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "aljava_paralisante"
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) arqueiro de arco e aljava paralisante",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 13
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 5"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 1"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "🕸️ Paralisia em 5"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "🕸️ Paralisia em 1"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 5"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava paralisante, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "🕸️ Paralisia em 4"
+      ]
+    }
+  },
+  {
+    "name": "aljavaNoArco: arqueiro de arco e aljava explosiva",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "aljava_explosiva"
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) arqueiro de arco e aljava explosiva",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 13
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "💥 Cadeia em 10"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "💥 Cadeia em 6"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "💥 Cadeia em 5"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "💥 Cadeia em 1"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "💥 Cadeia em 10"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e aljava explosiva, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_explosiva"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme",
+        "💥 Cadeia em 9"
+      ]
+    }
+  },
+  {
+    "name": "aljavaNoArco: arqueiro de arco sem aljava",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) arqueiro de arco sem aljava",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco sem aljava, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "aljavaNoArco: arqueiro de cajado e aljava",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) arqueiro de cajado e aljava",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de cajado e aljava, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "aljavaNoArco: arqueiro de arco e escudo",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": null
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) arqueiro de arco e escudo",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: arqueiro de arco e escudo, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "escudo"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Mira firme"
+      ]
+    }
+  },
+  {
+    "name": "aljavaNoArco: guerreiro de arco e aljava",
+    "input": {
+      "fn": "aljavaNoArco",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "aljava_flamejante"
+    }
+  },
+  {
+    "name": "alcanceDoHeroi: (6b) guerreiro de arco e aljava",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 0 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 0,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 4 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 4,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 5 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 5,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 9 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 9,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 10 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 10,
+          "parado": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6b) textosDaClasse: guerreiro de arco e aljava, 11 flechadas",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_flamejante"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 11,
+          "parado": 180
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
     "name": "pecasDaClasse: arqueiro",
     "input": {
       "fn": "pecasDaClasse",

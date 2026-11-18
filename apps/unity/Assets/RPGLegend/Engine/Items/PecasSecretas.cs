@@ -24,6 +24,25 @@ namespace RPGLegend.Engine
         [JsName("RARIDADE_DAS_PECAS_SECRETAS")] public string Raridade;
         [JsName("ARMAS_DO_MONGE")] public List<string> ArmasDoMonge = new List<string>();
         [JsName("VIDA_COM_A_ARMA_DO_MONGE")] public double VidaComAArmaDoMonge;
+        [JsName("REGRAS_DAS_ALJAVAS")] public RegrasDasAljavas RegrasDasAljavas;
+        [JsName("ALJAVAS")] public List<string> Aljavas = new List<string>();
+    }
+
+    /// <summary>TS: REGRAS_DAS_ALJAVAS — as aljavas na luta do app (rodada 6b).</summary>
+    public sealed class RegrasDasAljavas
+    {
+        public double Alcance;
+        public double ParalisiaACada;
+        public double Paralisia;
+        public double Fraqueza;
+        public double GolpesFracos;
+        public double IncendioACada;
+        public double Incendio;
+        public double IncendioPorSegundo;
+        public double RaioDaExplosao;
+        public double CadeiaACada;
+        public double EmpurraoDaExplosao;
+        public double EstourosPorInimigo;
     }
 
     public static partial class GameData
@@ -50,6 +69,16 @@ namespace RPGLegend.Engine
         public static string ChapeuDoEspadachim => D.ChapeuDoEspadachim;
         public static double ChanceDoChapeu => D.ChanceDoChapeu;
         public static string Raridade => D.Raridade;
+        public static RegrasDasAljavas RegrasDasAljavas => D.RegrasDasAljavas;
+
+        /// <summary>TS: aljavaNoArco — a aljava ao lado do arco: o modelo dela, com o arco na mão e uma aljava na secundária; senão null.</summary>
+        public static string AljavaNoArco(string arma, string secundaria)
+        {
+            if (arma != "arco") return null;
+            return secundaria != null && D.Aljavas.Contains(secundaria) ? secundaria : null;
+        }
+
+        public static string AljavaNoArco(Hero hero) => AljavaNoArco(hero.Equip?.Get("arma")?.TemplateId, hero.Equip?.Get("secundaria")?.TemplateId);
 
         /// <summary>TS: pecaSecreta.</summary>
         public static PecaSecreta PorId(string id)

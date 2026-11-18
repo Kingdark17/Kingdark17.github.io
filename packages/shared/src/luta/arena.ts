@@ -78,6 +78,7 @@ import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepara
 import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
+import { aljavaNoArco, REGRAS_DAS_ALJAVAS } from '../items/pecas-secretas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import {
   criarLacaio,
@@ -304,10 +305,14 @@ export interface MonstroNaArena {
   noLacaio?: number;
   /** Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim. */
   preso?: number;
-  /** O Vento do Mago o acertou (rodada 5c): ele golpeia de 1 bloco mais perto até o fim da luta. */
+  /** O Vento do Mago (rodada 5c) ou a aljava paralisante (6b) o acertou: ele golpeia de 1 bloco mais perto até o fim da luta. */
   encurtado?: boolean;
   /** O redemoinho da Água (rodada 5c): os passos que ainda anda mais devagar. */
   lerdo?: number;
+  /** A aljava flamejante (rodada 6b): os próximos golpes dele que ainda saem mais fracos. */
+  fraco?: number;
+  /** A aljava flamejante (rodada 6b): incendiado, os passos que faltam e o dano de cada segundo. */
+  incendio?: { tempo: number; dano: number };
 }
 
 /** A área de escuridão do Mago (rodada 5c): o meio dela, em unidades da sala, e os passos que ainda dura. */
@@ -1366,6 +1371,8 @@ function golpear(l: Luta): void {
   if (estilo === 'raizes' && golpeQuePrende(golpeDoDruida) && !l.fim) prender(l, alvo);
   // Os elementos do Mago (rodada 5c), no disparo que acertou.
   if (disparo && !l.fim) elementoNoGolpe(l, indice, acerto.dano, golpeDoDruida, estilo as string);
+  // A aljava ao lado do arco (rodada 6b), na flecha que acertou.
+  if (!l.fim) flechaComAljava(l, indice, acerto.dano);
   if (paladino && !l.fim && alvo.fase !== 'caido') empurrar(l, alvo, l.arena.heroi, REGRAS_DO_PALADINO.empurrao);
 }
 
@@ -2404,6 +2411,93 @@ function naEscuridao(l: Luta, m: MonstroNaArena | undefined): boolean {
   return Math.abs(m.corpoX - e.x) <= meio && Math.abs(m.corpoY - e.y) <= meio;
 }
 
+// ---------- as aljavas do Arqueiro (rodada 6b: paralisante, flamejante, explosiva) ----------
+
+/**
+ * A flecha com a aljava ao lado do arco acertou o monstro `indice` (com este
+ * `dano`): conta a flechada e faz o efeito da aljava. O que mexe no monstro
+ * (o encurtar, a paralisia, a fraqueza, o incêndio, o empurrão) é do
+ * anfitrião, como sempre; o dano da explosão, não.
+ */
+function flechaComAljava(l: Luta, indice: number, dano: number): void {
+  const aljava = aljavaNoArco(masmorra(l).hero);
+  if (!aljava) return;
+  const r = REGRAS_DAS_ALJAVAS;
+  const flechada = (contadores(l).flechadas ?? 0) + 1;
+  l.arena.classe = { ...contadores(l), flechadas: flechada };
+  const alvo = l.arena.monstros[indice] as MonstroNaArena;
+  switch (aljava) {
+    case 'aljava_paralisante':
+      if (alvo.fase === 'caido' || noEspelho(l)) return;
+      if (!alvo.encurtado) {
+        alvo.encurtado = true;
+        contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🕸️', tom: 'erro' });
+      }
+      if (aCadaGolpe(flechada, r.paralisiaACada) && !monstroNo(l, indice).isBoss) {
+        contar(l, { tipo: 'aviso', texto: '🕸️ Paralisia' });
+        atordoar(l, alvo, r.paralisia);
+      }
+      return;
+    case 'aljava_flamejante':
+      if (alvo.fase === 'caido' || noEspelho(l)) return;
+      if (!alvo.fraco) contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Fraco', tom: 'erro' });
+      alvo.fraco = r.golpesFracos;
+      if (aCadaGolpe(flechada, r.incendioACada)) incendiar(l, alvo, dano);
+      return;
+    case 'aljava_explosiva':
+      explodirFlecha(l, indice, dano, aCadaGolpe(flechada, r.cadeiaACada));
+      return;
+    default:
+  }
+}
+
+/** A aljava flamejante: o monstro fica incendiado 10 s, levando metade do dano da flechada a cada segundo (o incêndio novo fica com o dano maior). */
+function incendiar(l: Luta, m: MonstroNaArena, dano: number): void {
+  const r = REGRAS_DAS_ALJAVAS;
+  const porSegundo = Math.max(1, Math.trunc((dano * r.incendioPorSegundo) / 100));
+  m.incendio = { tempo: r.incendio, dano: Math.max(porSegundo, m.incendio?.dano ?? 0) };
+  contar(l, { tipo: 'aviso', texto: '🔥 Incêndio' });
+}
+
+/**
+ * A aljava explosiva: o monstro `origem` explode, e quem está de pé a até 2
+ * blocos dele leva o mesmo dano (direto na vida: sem resistência nem escudo)
+ * e é empurrado 1 bloco pra longe. Em cadeia, quem a explosão pega também
+ * explode, mesmo caindo: cada um explode uma vez só e leva no máximo 2
+ * estouros (o alvo da flecha já conta um).
+ */
+function explodirFlecha(l: Luta, origem: number, dano: number, emCadeia: boolean): void {
+  const r = REGRAS_DAS_ALJAVAS;
+  const raio = r.raioDaExplosao * TILE_UNITS + TILE_UNITS / 2;
+  const estouros: Record<number, number> = { [origem]: 1 };
+  const naFila: Record<number, boolean> = { [origem]: true };
+  const fila = [origem];
+  if (emCadeia) contar(l, { tipo: 'aviso', texto: '💥 Explosão em cadeia' });
+  for (let k = 0; k < fila.length; k++) {
+    if (l.fim) return;
+    const quem = fila[k] as number;
+    const centro = lugarDe(l, quem);
+    contar(l, { tipo: 'numero', onde: 'monstro', indice: quem, texto: '💥', tom: 'erro' });
+    const pegos: MonstroNaArena[] = [];
+    for (const m of l.arena.monstros) {
+      if (m.indice === quem || m.fase === 'caido' || (estouros[m.indice] ?? 0) >= r.estourosPorInimigo) continue;
+      const dx = m.corpoX - centro.x;
+      const dy = m.corpoY - centro.y;
+      if (dx * dx + dy * dy <= raio * raio) pegos.push(m);
+    }
+    for (const m of pegos) {
+      if (l.fim) return;
+      if (m.fase === 'caido') continue;
+      estouros[m.indice] = (estouros[m.indice] ?? 0) + 1;
+      if (!ferirComDano(l, m.indice, dano, `💥-${dano}`)) empurrar(l, m, centro, r.empurraoDaExplosao);
+      if (emCadeia && !naFila[m.indice]) {
+        naFila[m.indice] = true;
+        fila.push(m.indice);
+      }
+    }
+  }
+}
+
 /**
  * O Florescimento planta uma flor em (x, y), a até `plantio` blocos do herói:
  * no máximo `maximo` no chão, e a nova tira a mais antiga. O botão espera a
@@ -2762,6 +2856,14 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
 }
 
 function agirMonstro(l: Luta, m: MonstroNaArena): void {
+  // Incendiado pela aljava flamejante (rodada 6b): queima a cada segundo.
+  if (m.incendio) {
+    const tempo = m.incendio.tempo - 1;
+    const dano = m.incendio.dano;
+    if (tempo > 0) m.incendio = { tempo, dano };
+    else delete m.incendio;
+    if (tempo % 60 === 0 && (ferirComDano(l, m.indice, dano, `🔥-${dano}`) || l.fim)) return;
+  }
   // Preso pelas Raízes (rodada 5b): o tempo corre aqui.
   if (m.preso !== undefined) {
     if (m.preso > 1) m.preso -= 1;
@@ -2912,10 +3014,17 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
   m.fase = 'avisando';
   m.tempo = jeito.aviso;
   m.forca = inicio.attackMult;
+  // Fraco pela aljava flamejante (rodada 6b): este golpe sai mais fraco, e gasta um.
+  const fraco = m.fraco ?? 0;
+  if (fraco > 0) {
+    m.forca = (m.forca * (100 - REGRAS_DAS_ALJAVAS.fraqueza)) / 100;
+    if (fraco > 1) m.fraco = fraco - 1;
+    else delete m.fraco;
+  }
   if (solta) {
     m.poder = poder;
     m.alvo = -1;
-    if (poder === 'devastador') m.forca = inicio.attackMult * FORCA_DO_DEVASTADOR;
+    if (poder === 'devastador') m.forca = m.forca * FORCA_DO_DEVASTADOR;
     const { nome, icone } = PODERES_DO_CHEFE[poder];
     contar(l, { tipo: 'aviso', texto: `${icone} ${monstro.name}: ${nome}!` });
   } else {

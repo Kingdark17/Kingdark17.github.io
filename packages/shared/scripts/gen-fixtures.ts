@@ -999,6 +999,23 @@ for (const cls of ['monge', 'mago', 'necromante']) {
   for (const [golpe, n] of [[0, 5], [5, 5], [6, 5], [10, 5], [10, 10], [8, 8], [16, 8], [7, 8]]) {
     caso(`aCadaGolpe: ${golpe} a cada ${n}`, 'aCadaGolpe', { golpe, n }, (a) => E.aCadaGolpe(a.golpe, a.n));
   }
+  // As aljavas (rodada 6b): ao lado do arco, +1 de alcance e a linha da classe.
+  for (const [nome, arma, secundaria, classId] of [
+    ['arqueiro de arco e aljava paralisante', 'arco', 'aljava_paralisante', 'arqueiro'],
+    ['arqueiro de arco e aljava explosiva', 'arco', 'aljava_explosiva', 'arqueiro'],
+    ['arqueiro de arco sem aljava', 'arco', null, 'arqueiro'],
+    ['arqueiro de cajado e aljava', 'cajado', 'aljava_flamejante', 'arqueiro'],
+    ['arqueiro de arco e escudo', 'arco', 'escudo', 'arqueiro'],
+    ['guerreiro de arco e aljava', 'arco', 'aljava_flamejante', 'guerreiro'],
+  ] as const) {
+    const quem = { classId, equip: { arma: { templateId: arma }, secundaria: secundaria ? { templateId: secundaria } : null } };
+    caso(`aljavaNoArco: ${nome}`, 'aljavaNoArco', { quem }, (a) => E.aljavaNoArco(a.quem));
+    caso(`alcanceDoHeroi: (6b) ${nome}`, 'alcanceDoHeroi', { quem }, (a) => E.alcanceDoHeroi(a.quem));
+    for (const flechadas of [0, 4, 5, 9, 10, 11]) {
+      caso(`(6b) textosDaClasse: ${nome}, ${flechadas} flechadas`, 'textosDaClasse', { quem: { ...quem, hp: 10, maxHp: 10 }, c: { flechadas, parado: flechadas % 2 ? 180 : 0 }, extras: {} }, (a) =>
+        E.textosDaClasse(a.quem, a.c, a.extras));
+    }
+  }
   // As peças secretas (rodada 6a).
   for (const classId of ['arqueiro', 'monge', 'guerreiro', 'mago', 'cacador']) {
     caso(`pecasDaClasse: ${classId}`, 'pecasDaClasse', { quem: { classId } }, (a) => E.pecasDaClasse(a.quem));
@@ -6055,6 +6072,52 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       { seed: 900 },
     );
     simula('o Mago sem mana bate com o físico e não conta', montar('fogo', [forteZ()], [[4.5, 4.5]], PERTO, 4, { mp: 10 }), golpesNo(2, MEIO), { seed: 901 });
+
+    // As aljavas do Arqueiro (rodada 6b): o arco com a bolinha (toque no passo 40, um golpe a cada 90).
+    const EMBAIXO: Walker = { x: 4.5 * T, y: 7.5 * T, facing: 'N' };
+    const arqueiroCom = (aljava: string | null) => forte({ classe: 'arqueiro', arma: 'arco', equip: { secundaria: aljava ? item(aljava, 'raro') : null } });
+    const comAljava = (aljava: string | null, monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>, flechadas = 0) => {
+      const aberta = E.abrirLuta({ ...salaCom(monstros), hero: arqueiroCom(aljava) }, EMBAIXO).luta;
+      return {
+        ...aberta,
+        arena: {
+          ...aberta.arena,
+          ...(flechadas ? { classe: { flechadas } } : {}),
+          monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (corpos[i] as [number, number])[0] * T, corpoY: (corpos[i] as [number, number])[1] * T })),
+        },
+      };
+    };
+    const ALVO = { x: 4.5 * T, y: 3.5 * T };
+    const flechas = (n: number, cursor: { x: number; y: number } = ALVO) => golpesNo(n, cursor, 40, 90);
+    simula('a aljava paralisante encurta e paralisa no 5º acerto', comAljava('aljava_paralisante', [forteZ()], [[4.5, 3.5]], 3), [...flechas(3), ...parado(300)], { seed: 902 });
+    simula('a aljava paralisante não paralisa o chefe', comAljava('aljava_paralisante', [bicho('zumbi', { hp: 3000, maxHp: 3000, isBoss: true })], [[4.5, 3.5]], 4), [...flechas(1), ...parado(200)], { seed: 903 });
+    simula(
+      'a aljava flamejante enfraquece e incendeia na 6ª flechada',
+      comAljava('aljava_flamejante', [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })], [[4.5, 3.5]], 4),
+      [...flechas(2), ...parado(700)],
+      { seed: 904 },
+    );
+    simula('a aljava explosiva estoura em volta do alvo e empurra', comAljava('aljava_explosiva', [forteZ(), forteZ(), forteZ()], [[4.5, 3.5], [6.5, 3.5], [4.5, 1.5]]), [...flechas(2), ...parado(100)], {
+      seed: 905,
+    });
+    simula(
+      'a aljava explosiva em cadeia na 10ª, até dois estouros em cada um',
+      comAljava('aljava_explosiva', [forteZ(), forteZ(), forteZ()], [[2.5, 3.5], [4.5, 3.5], [6.5, 3.5]], 9),
+      [...flechas(1, { x: 2.5 * T, y: 3.5 * T }), ...parado(100)],
+      { seed: 906 },
+    );
+    simula('a aljava explosiva derruba e o caído também explode', comAljava('aljava_explosiva', [bicho('goblin', { hp: 5, maxHp: 50 }), forteZ(), forteZ()], [[2.5, 3.5], [4.5, 3.5], [6.5, 3.5]], 9), [...flechas(1, { x: 2.5 * T, y: 3.5 * T }), ...parado(60)], {
+      seed: 907,
+    });
+    simula('o arco sem aljava não conta flechadas', comAljava(null, [forteZ()], [[4.5, 3.5]]), flechas(2), { seed: 908 });
+    {
+      // O monstro fraco golpeia mais fraco, e cada golpe gasta um.
+      const aberta = comAljava(null, [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })], [[4.5, 6.5]]);
+      const fraco = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, fraco: 2 })) } };
+      simula('o monstro fraco golpeia mais fraco', fraco, parado(500), { seed: 909 });
+      const incendiado = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, incendio: { tempo: 130, dano: 7 } })) } };
+      simula('o monstro incendiado queima a cada segundo', incendiado, parado(200), { seed: 910 });
+    }
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.

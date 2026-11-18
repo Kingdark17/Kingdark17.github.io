@@ -241,6 +241,8 @@ namespace RPGLegend.Engine
         public double? Golpes;
         /// <summary>O Vento do Mago (rodada 5c): os passos que ainda faltam do passo mais ligeiro.</summary>
         public double? Ventania;
+        /// <summary>A aljava ao lado do arco (rodada 6b): as flechas que já acertaram nesta luta.</summary>
+        public double? Flechadas;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -296,7 +298,7 @@ namespace RPGLegend.Engine
         /// estilos do Monge (o chute vai longe, a concentração dá +1). <paramref name="estilo"/> é o estilo ativo
         /// (<see cref="Estilos.IdDoEstilo(Hero)"/>).
         /// </summary>
-        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null)
+        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null, string secundaria = null)
         {
             var id = Catalog.IdDaClasse(classId, className);
             arma = arma ?? "";
@@ -309,11 +311,12 @@ namespace RPGLegend.Engine
             // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
             if (estilo == "metamorfose") return Estilos.Metamorfose.Alcance;
             if (estilo == "florescimento") return Estilos.Florescimento.Alcance;
-            return classe.Alcance;
+            // A aljava ao lado do arco (rodada 6b) dá 1 bloco a mais.
+            return classe.Alcance + (PecasSecretas.AljavaNoArco(arma, secundaria) != null ? PecasSecretas.RegrasDasAljavas.Alcance : 0);
         }
 
         public static double AlcanceDoHeroi(Hero hero) =>
-            AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, Estilos.IdDoEstilo(hero));
+            AlcanceDoHeroi(hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, Estilos.IdDoEstilo(hero), hero.Equip?.Get("secundaria")?.TemplateId);
 
         /// <summary>
         /// TS: ataqueDasMaos — o ataque das mãos: só o Monge sem arma na mão principal; os outros, 0. Nível ausente
@@ -535,15 +538,23 @@ namespace RPGLegend.Engine
         /// TS: textosDaClasse — a linha da classe embaixo das barras, só na luta: os contadores, a mira firme do
         /// Arqueiro, o Poder da fé, a espera do Druida, e a moral do grupo de quem tiver. Sem nada a mostrar, vazia.
         /// </summary>
-        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, ExtrasDaClasse extras = null, string estilo = null)
+        public static System.Collections.Generic.List<string> TextosDaClasse(string classId, string className, double hp, double maxHp, ContadoresDaClasse c, ExtrasDaClasse extras = null, string estilo = null, string aljava = null)
         {
             extras = extras ?? new ExtrasDaClasse();
             var textos = new System.Collections.Generic.List<string>();
             switch (Catalog.IdDaClasse(classId, className))
             {
                 case "arqueiro":
+                {
                     textos.Add(Z(c.Parado) >= D.Arqueiro.Parado ? "🏹 Mira firme" : "🏹 Fique parado pra mirar");
+                    // A aljava (rodada 6b): quanto falta pra flechada da vez. `aljava` é a de PecasSecretas.AljavaNoArco.
+                    double flechadas = Z(c.Flechadas);
+                    var r = PecasSecretas.RegrasDasAljavas;
+                    if (aljava == "aljava_paralisante") textos.Add("🕸️ Paralisia em " + Js.NumberToString(FaltamPro(flechadas, r.ParalisiaACada)));
+                    else if (aljava == "aljava_flamejante") textos.Add("🔥 Incêndio em " + Js.NumberToString(FaltamPro(flechadas, r.IncendioACada)));
+                    else if (aljava == "aljava_explosiva") textos.Add("💥 Cadeia em " + Js.NumberToString(FaltamPro(flechadas, r.CadeiaACada)));
                     break;
+                }
                 case "clerigo":
                     if (Z(extras.Fe) > 0) textos.Add("✝️ Fé " + Tempo(extras.Fe.Value));
                     else textos.Add(Z(extras.RecargaDaFe) > 0 ? "✝️ Fé em " + Tempo(extras.RecargaDaFe.Value) : "✝️ Fé pronta");
@@ -635,7 +646,7 @@ namespace RPGLegend.Engine
         }
 
         public static System.Collections.Generic.List<string> TextosDaClasse(Hero hero, ContadoresDaClasse c, ExtrasDaClasse extras = null) =>
-            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras, Estilos.IdDoEstilo(hero));
+            TextosDaClasse(hero.ClassId, hero.ClassName, hero.Hp, hero.MaxHp, c ?? new ContadoresDaClasse(), extras, Estilos.IdDoEstilo(hero), PecasSecretas.AljavaNoArco(hero));
 
         // ---------- rodada 3b (2026-11-17): Arqueiro, Bardo, Clérigo e Druida ----------
 

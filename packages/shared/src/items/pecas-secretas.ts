@@ -95,3 +95,47 @@ export function vidaComAArma(
   if (!naMao.some((id) => !!id && ARMAS_DO_MONGE.includes(id))) return vida;
   return Math.round((vida * (100 + VIDA_COM_A_ARMA_DO_MONGE)) / 100);
 }
+
+/**
+ * As aljavas na luta do app (rodada 6b, decidido com o usuário): com uma
+ * delas ao lado do arco, o alcance tem 1 bloco a mais, e cada flecha que
+ * acerta faz o efeito da aljava, contando as flechadas da luta.
+ *
+ * - **Paralisante**: todo acerto encurta o monstro como o Vento do Mago (1
+ *   bloco, sem acumular, até o fim da luta); a cada `paralisiaACada`, o alvo
+ *   fica atordoado `paralisia` passos (5 s; o chefe não).
+ * - **Flamejante**: todo acerto deixa o monstro fraco (os próximos
+ *   `golpesFracos` golpes dele saem `fraqueza`% mais fracos); a cada
+ *   `incendioACada`, o alvo fica `incendio` passos (10 s) incendiado, levando
+ *   `incendioPorSegundo`% do dano daquela flechada a cada segundo.
+ * - **Explosiva**: o alvo explode, e quem está a até `raioDaExplosao` blocos
+ *   leva o mesmo dano da flechada, sem resistência nem escudo (a armadura),
+ *   e é empurrado `empurraoDaExplosao` bloco pra longe; a cada
+ *   `cadeiaACada`, quem a explosão pega também explode, em cadeia: cada um
+ *   explode uma vez só e leva no máximo `estourosPorInimigo` estouros (o alvo
+ *   da flecha já conta um).
+ */
+export const REGRAS_DAS_ALJAVAS = {
+  alcance: 1,
+  paralisiaACada: 5,
+  paralisia: 300,
+  fraqueza: 20,
+  golpesFracos: 3,
+  incendioACada: 6,
+  incendio: 600,
+  incendioPorSegundo: 50,
+  raioDaExplosao: 2,
+  cadeiaACada: 10,
+  empurraoDaExplosao: 1,
+  estourosPorInimigo: 2,
+} as const;
+
+/** As aljavas (as que só vão ao lado do arco). */
+export const ALJAVAS: readonly string[] = ['aljava_paralisante', 'aljava_flamejante', 'aljava_explosiva'];
+
+/** A aljava ao lado do arco: o modelo dela, se o herói tem o arco na mão e uma aljava na secundária; senão `null`. */
+export function aljavaNoArco(quem: { equip?: { arma?: { templateId?: string } | null; secundaria?: { templateId?: string } | null } | null }): string | null {
+  if (quem.equip?.arma?.templateId !== 'arco') return null;
+  const aljava = quem.equip?.secundaria?.templateId;
+  return aljava && ALJAVAS.includes(aljava) ? aljava : null;
+}

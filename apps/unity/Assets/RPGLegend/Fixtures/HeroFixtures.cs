@@ -39,7 +39,7 @@ namespace RPGLegend.Tests
             Fn(M, "alcanceDoHeroi", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, quem.Ativo));
+                return N(ClassesDeLuta.AlcanceDoHeroi(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, quem.Ativo, quem.Equip?.Get("secundaria")?.TemplateId));
             });
             Fn(M, "ataqueDasMaos", (a, c) =>
             {
@@ -87,7 +87,13 @@ namespace RPGLegend.Tests
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 var extras = a["extras"] != null && a["extras"].Type != JTokenType.Null ? R<ExtrasDaClasse>(a["extras"]) : null;
-                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras, quem.Ativo));
+                return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras, quem.Ativo,
+                    PecasSecretas.AljavaNoArco(quem.Equip?.Get("arma")?.TemplateId, quem.Equip?.Get("secundaria")?.TemplateId)));
+            });
+            Fn(M, "aljavaNoArco", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return W(PecasSecretas.AljavaNoArco(quem.Equip?.Get("arma")?.TemplateId, quem.Equip?.Get("secundaria")?.TemplateId));
             });
             Fn(M, "apoiaAliado", (a, c) =>
             {

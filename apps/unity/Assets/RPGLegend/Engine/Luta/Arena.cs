@@ -55,12 +55,23 @@ namespace RPGLegend.Engine
         public double? NoLacaio;
         /// <summary>Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim.</summary>
         public double? Preso;
-        /// <summary>O Vento do Mago o acertou (rodada 5c): ele golpeia de 1 bloco mais perto até o fim da luta.</summary>
+        /// <summary>O Vento do Mago (rodada 5c) ou a aljava paralisante (6b) o acertou: ele golpeia de 1 bloco mais perto até o fim da luta.</summary>
         public bool? Encurtado;
         /// <summary>O redemoinho da Água (rodada 5c): os passos que ainda anda mais devagar.</summary>
         public double? Lerdo;
+        /// <summary>A aljava flamejante (rodada 6b): os próximos golpes dele que ainda saem mais fracos.</summary>
+        public double? Fraco;
+        /// <summary>A aljava flamejante (rodada 6b): incendiado, os passos que faltam e o dano de cada segundo. Nunca muda no lugar (troca inteiro).</summary>
+        public IncendioNaArena Incendio;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
+    }
+
+    /// <summary>TS: o incendio do MonstroNaArena (rodada 6b).</summary>
+    public sealed class IncendioNaArena
+    {
+        public double Tempo;
+        public double Dano;
     }
 
     /// <summary>
@@ -1379,6 +1390,8 @@ namespace RPGLegend.Engine
             if (estiloAtivo == "raizes" && ClassesDeLuta.GolpeQuePrende(golpeDoDruida) && l.Fim == null) Prender(l, alvo);
             // Os elementos do Mago (rodada 5c), no disparo que acertou.
             if (disparo && l.Fim == null) ElementoNoGolpe(l, indice.Value, dano.Value, golpeDoDruida, estiloAtivo);
+            // A aljava ao lado do arco (rodada 6b), na flecha que acertou.
+            if (l.Fim == null) FlechaComAljava(l, indice.Value, dano.Value);
             if (paladino && l.Fim == null && alvo.Fase != "caido") Empurrar(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, CD.Paladino.Empurrao);
         }
 
@@ -1946,6 +1959,14 @@ namespace RPGLegend.Engine
 
         private static void AgirMonstro(Luta l, MonstroNaArena m)
         {
+            // Incendiado pela aljava flamejante (rodada 6b): queima a cada segundo.
+            if (m.Incendio != null)
+            {
+                double tempo = m.Incendio.Tempo - 1;
+                double danoDoFogo = m.Incendio.Dano;
+                m.Incendio = tempo > 0 ? new IncendioNaArena { Tempo = tempo, Dano = danoDoFogo } : null;
+                if (tempo % 60 == 0 && (FerirComDano(l, m.Indice, danoDoFogo, "🔥-" + Js.NumberToString(danoDoFogo)) || l.Fim != null)) return;
+            }
             // Preso pelas Raízes (rodada 5b): o tempo corre aqui.
             if (m.Preso != null) m.Preso = m.Preso.Value > 1 ? m.Preso.Value - 1 : (double?)null;
             if (m.Lerdo != null) m.Lerdo = m.Lerdo.Value > 1 ? m.Lerdo.Value - 1 : (double?)null;
@@ -2109,11 +2130,18 @@ namespace RPGLegend.Engine
             m.Fase = "avisando";
             m.Tempo = jeito.Aviso;
             m.Forca = inicio.AttackMult;
+            // Fraco pela aljava flamejante (rodada 6b): este golpe sai mais fraco, e gasta um.
+            double fraco = m.Fraco ?? 0;
+            if (fraco > 0)
+            {
+                m.Forca = m.Forca * (100 - PecasSecretas.RegrasDasAljavas.Fraqueza) / 100;
+                m.Fraco = fraco > 1 ? fraco - 1 : (double?)null;
+            }
             if (solta)
             {
                 m.Poder = poder;
                 m.Alvo = -1;
-                if (poder == ChefeFinal.Devastador) m.Forca = inicio.AttackMult * ChefeFinal.ForcaDoDevastador;
+                if (poder == ChefeFinal.Devastador) m.Forca = m.Forca * ChefeFinal.ForcaDoDevastador;
                 var def = ChefeFinal.Poder(poder);
                 Contar(l, Aviso(def.Icone + " " + Js.Str(monstro.Name) + ": " + def.Nome + "!"));
             }
@@ -3296,6 +3324,100 @@ namespace RPGLegend.Engine
             if (NoEspelho(l) || m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) return;
             m.Preso = passos ?? Estilos.Raizes.Preso;
             Contar(l, Numero("monstro", m.Indice, texto, "erro"));
+        }
+
+        // ---------- as aljavas do Arqueiro (rodada 6b: paralisante, flamejante, explosiva) ----------
+
+        /// <summary>
+        /// TS: flechaComAljava — a flecha com a aljava ao lado do arco acertou: conta a flechada e faz o efeito da
+        /// aljava. O que mexe no monstro é do anfitrião, como sempre; o dano da explosão, não.
+        /// </summary>
+        private static void FlechaComAljava(Luta l, double indice, double dano)
+        {
+            var aljava = PecasSecretas.AljavaNoArco(Masmorra(l).Hero);
+            if (aljava == null) return;
+            var r = PecasSecretas.RegrasDasAljavas;
+            double flechada = (Contadores(l).Flechadas ?? 0) + 1;
+            var c = Contadores(l).Clone();
+            c.Flechadas = flechada;
+            l.Arena.Classe = c;
+            var alvo = l.Arena.Monstros[(int)indice];
+            switch (aljava)
+            {
+                case "aljava_paralisante":
+                    if (alvo.Fase == "caido" || NoEspelho(l)) return;
+                    if (alvo.Encurtado != true)
+                    {
+                        alvo.Encurtado = true;
+                        Contar(l, Numero("monstro", indice, "🕸️", "erro"));
+                    }
+                    if (ClassesDeLuta.ACadaGolpe(flechada, r.ParalisiaACada) && !MonstroNo(l, indice).IsBoss)
+                    {
+                        Contar(l, Aviso("🕸️ Paralisia"));
+                        Atordoar(l, alvo, r.Paralisia);
+                    }
+                    return;
+                case "aljava_flamejante":
+                    if (alvo.Fase == "caido" || NoEspelho(l)) return;
+                    if ((alvo.Fraco ?? 0) == 0) Contar(l, Numero("monstro", indice, "Fraco", "erro"));
+                    alvo.Fraco = r.GolpesFracos;
+                    if (ClassesDeLuta.ACadaGolpe(flechada, r.IncendioACada)) Incendiar(l, alvo, dano);
+                    return;
+                case "aljava_explosiva":
+                    ExplodirFlecha(l, indice, dano, ClassesDeLuta.ACadaGolpe(flechada, r.CadeiaACada));
+                    return;
+            }
+        }
+
+        /// <summary>TS: incendiar — o monstro fica incendiado 10 s, levando metade do dano da flechada a cada segundo (o novo fica com o dano maior).</summary>
+        private static void Incendiar(Luta l, MonstroNaArena m, double dano)
+        {
+            var r = PecasSecretas.RegrasDasAljavas;
+            double porSegundo = Js.Max(1, Math.Truncate(dano * r.IncendioPorSegundo / 100));
+            m.Incendio = new IncendioNaArena { Tempo = r.Incendio, Dano = Js.Max(porSegundo, m.Incendio?.Dano ?? 0) };
+            Contar(l, Aviso("🔥 Incêndio"));
+        }
+
+        /// <summary>
+        /// TS: explodirFlecha — o monstro explode, e quem está de pé a até 2 blocos leva o mesmo dano (direto na vida)
+        /// e é empurrado 1 bloco. Em cadeia, quem a explosão pega também explode, mesmo caindo: cada um explode uma vez
+        /// só e leva no máximo 2 estouros (o alvo da flecha já conta um).
+        /// </summary>
+        private static void ExplodirFlecha(Luta l, double origem, double dano, bool emCadeia)
+        {
+            var r = PecasSecretas.RegrasDasAljavas;
+            double raio = r.RaioDaExplosao * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            var estouros = new Dictionary<double, double> { [origem] = 1 };
+            var naFila = new HashSet<double> { origem };
+            var fila = new List<double> { origem };
+            if (emCadeia) Contar(l, Aviso("💥 Explosão em cadeia"));
+            for (int k = 0; k < fila.Count; k++)
+            {
+                if (l.Fim != null) return;
+                double quem = fila[k];
+                var centro = LugarDe(l, quem);
+                Contar(l, Numero("monstro", quem, "💥", "erro"));
+                var pegos = new List<MonstroNaArena>();
+                foreach (var m in l.Arena.Monstros)
+                {
+                    if (m.Indice == quem || m.Fase == "caido" || (estouros.TryGetValue(m.Indice, out var ja) ? ja : 0) >= r.EstourosPorInimigo) continue;
+                    double dx = m.CorpoX - centro.X;
+                    double dy = m.CorpoY - centro.Y;
+                    if (dx * dx + dy * dy <= raio * raio) pegos.Add(m);
+                }
+                foreach (var m in pegos)
+                {
+                    if (l.Fim != null) return;
+                    if (m.Fase == "caido") continue;
+                    estouros[m.Indice] = (estouros.TryGetValue(m.Indice, out var antes) ? antes : 0) + 1;
+                    if (!FerirComDano(l, m.Indice, dano, "💥-" + Js.NumberToString(dano))) Empurrar(l, m, centro.X, centro.Y, r.EmpurraoDaExplosao);
+                    if (emCadeia && !naFila.Contains(m.Indice))
+                    {
+                        naFila.Add(m.Indice);
+                        fila.Add(m.Indice);
+                    }
+                }
+            }
         }
 
         // ---------- os elementos do Mago (rodada 5c: Fogo, Terra, Vento, Água, Arcano, Escuridão) ----------

@@ -713,8 +713,26 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   da API). A arte (ícone e camada do boneco grande) é do Claude, no estilo do
   Breno, nos dois lugares de sempre. Os efeitos das aljavas na luta ficam
   pra 6b, e os das armas do Monge, da lança e do chapéu pra 6c.
-  Falta, nesta ordem: os efeitos das aljavas (6b); os das armas do Monge, da
-  lança e do chapéu (6c); o Caçador.
+  Rodada 6b, **as aljavas na luta** (2026-11-18, decidido com o usuário;
+  regras em `REGRAS_DAS_ALJAVAS`, `items/pecas-secretas.ts`, o que junta na
+  luta em `luta/arena.ts`, `flechaComAljava`): com uma aljava ao lado do arco
+  (`aljavaNoArco`, de qualquer classe; só o Arqueiro compra) o alcance tem
+  +1 bloco (`alcanceDoHeroi`), e cada flecha que acerta conta
+  (`ContadoresDaClasse.flechadas`, na linha da classe). A **paralisante**
+  encurta o monstro como o Vento (`encurtado`, 1 bloco, sem acumular) e a
+  cada 5 acertos o atordoa 5 s (o chefe não). A **flamejante** deixa o
+  monstro fraco (`MonstroNaArena.fraco`: os próximos 3 golpes dele saem 20%
+  mais fracos, gastos em `comecarGolpe`) e a cada 6 o incendeia 10 s
+  (`incendio`: 50% do dano daquela flechada a cada segundo, em `agirMonstro`).
+  A **explosiva** estoura o alvo: quem está a até 2 blocos leva o mesmo dano
+  direto na vida (sem resistência nem escudo; a barreira do chefe continua) e
+  é empurrado 1 bloco; a cada 10, em cadeia (quem a explosão pega também
+  explode, mesmo caindo; cada um explode uma vez e leva no máximo 2
+  estouros, o alvo da flecha já conta um). No espelho, o que o convidado faz
+  nos monstros não passa pro anfitrião (o dano passa). No app, o incêndio
+  toca o fogo pequeno e quem explode, o estouro.
+  Falta, nesta ordem: os efeitos das armas do Monge, da lança e do chapéu
+  (6c); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

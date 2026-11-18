@@ -785,8 +785,11 @@ namespace RPGLegend.Game.Jogo
                 if (doeu)
                 {
                     string efeito = a.Tom == "critico" ? "golpe-critico" : "golpe";
-                    foreach (var (icone, nome) in EfeitosDoDano)
-                        if (Comeca(texto, icone)) { efeito = nome; break; }
+                    // o incêndio da aljava flamejante (rodada 6b) queima a cada segundo: o fogo pequeno
+                    if (Comeca(texto, "🔥-")) efeito = "fogo-pequeno";
+                    else
+                        foreach (var (icone, nome) in EfeitosDoDano)
+                            if (Comeca(texto, icone)) { efeito = nome; break; }
                     NoMonstro(efeito, mx, my - casa * 0.1, caiu);
                     if (Comeca(texto, "💫") && !caiu) NoMonstro("atordoado", mx, my - casa * 0.6, false);
                     if (caiu && _quedasTocadas.Add(indice)) _sala.TocarEfeito("queda", mx, my);
@@ -798,6 +801,8 @@ namespace RPGLegend.Game.Jogo
                     else if (texto == "🐌") NoMonstro("lento", mx, my - casa * 0.6, caiu);
                     else if (Comeca(texto, "🔥")) NoMonstro("fogo-pequeno", mx, my - casa * 0.1, caiu);
                     else if (Comeca(texto, "❄️")) NoMonstro("gelo-pequeno", mx, my - casa * 0.1, caiu);
+                    // a aljava explosiva (rodada 6b): o monstro que explode
+                    else if (texto == "💥") NoMonstro("estouro", mx, my - casa * 0.1, caiu);
                 }
                 return;
             }

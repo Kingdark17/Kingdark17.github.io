@@ -21,6 +21,7 @@
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
+import { aljavaNoArco, REGRAS_DAS_ALJAVAS } from '../items/pecas-secretas.js';
 import {
   idDoEstilo,
   REGRAS_DA_AGUA,
@@ -91,7 +92,7 @@ export function ataqueDasMaos(quem: QuemLuta & { level?: number }): number {
 }
 
 export interface QuemLuta extends QuemTemEstilo {
-  equip?: { arma?: { templateId: string } | null } | null;
+  equip?: { arma?: { templateId: string } | null; secundaria?: { templateId: string } | null } | null;
 }
 
 /** Os números da classe do herói; sem classe (ou uma que o texto não traz), os do padrão. */
@@ -113,7 +114,8 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
   // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
   if (estilo === 'metamorfose') return REGRAS_DA_METAMORFOSE.alcance;
   if (estilo === 'florescimento') return REGRAS_DO_FLORESCIMENTO.alcance;
-  return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance;
+  // A aljava ao lado do arco (rodada 6b) dá 1 bloco a mais.
+  return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance + (aljavaNoArco(quem) ? REGRAS_DAS_ALJAVAS.alcance : 0);
 }
 
 /** A mana máxima com a classe: a de sempre vezes a % dela, arredondada (o Mago guarda +20%). */
@@ -489,6 +491,8 @@ export interface ContadoresDaClasse {
   golpes?: number;
   /** O Vento do Mago (rodada 5c): os passos que ainda faltam do passo mais ligeiro. */
   ventania?: number;
+  /** A aljava ao lado do arco (rodada 6b): as flechas que já acertaram nesta luta. */
+  flechadas?: number;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -756,8 +760,17 @@ export function textosDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: n
 
 function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse): string[] {
   switch (idDaClasse(quem)) {
-    case 'arqueiro':
-      return [(c.parado ?? 0) >= REGRAS_DO_ARQUEIRO.parado ? '🏹 Mira firme' : '🏹 Fique parado pra mirar'];
+    case 'arqueiro': {
+      const textos = [(c.parado ?? 0) >= REGRAS_DO_ARQUEIRO.parado ? '🏹 Mira firme' : '🏹 Fique parado pra mirar'];
+      // A aljava (rodada 6b): quanto falta pra flechada da vez.
+      const flechadas = c.flechadas ?? 0;
+      const r = REGRAS_DAS_ALJAVAS;
+      const aljava = aljavaNoArco(quem as QuemLuta);
+      if (aljava === 'aljava_paralisante') textos.push(`🕸️ Paralisia em ${faltamPro(flechadas, r.paralisiaACada)}`);
+      else if (aljava === 'aljava_flamejante') textos.push(`🔥 Incêndio em ${faltamPro(flechadas, r.incendioACada)}`);
+      else if (aljava === 'aljava_explosiva') textos.push(`💥 Cadeia em ${faltamPro(flechadas, r.cadeiaACada)}`);
+      return textos;
+    }
     case 'clerigo':
       if ((extras.fe ?? 0) > 0) return [`✝️ Fé ${tempo(extras.fe as number)}`];
       return [(extras.recargaDaFe ?? 0) > 0 ? `✝️ Fé em ${tempo(extras.recargaDaFe as number)}` : '✝️ Fé pronta'];
