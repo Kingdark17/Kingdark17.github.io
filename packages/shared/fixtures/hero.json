@@ -34017,7 +34017,52 @@
       }
     },
     "expected": {
-      "result": []
+      "result": [
+        {
+          "id": "fogo",
+          "classe": "mago",
+          "nome": "Fogo",
+          "icone": "🔥",
+          "desc": "Todo disparo queima o alvo por 1 turno (5% da vida dele). A cada 5 disparos, a bola de fogo queima todos em volta do alvo (3 × 3) por 2 turnos."
+        },
+        {
+          "id": "terra",
+          "classe": "mago",
+          "nome": "Terra",
+          "icone": "🪨",
+          "desc": "Disparos de rocha com +30% de dano. Do 20º disparo da luta em diante, o revestimento de pedra segura 20% do dano."
+        },
+        {
+          "id": "vento",
+          "classe": "mago",
+          "nome": "Vento",
+          "icone": "🌀",
+          "desc": "O monstro atingido golpeia de 1 bloco mais perto pelo resto da luta, e você anda 15% mais rápido por 3 s. A cada 5 disparos, o vento empurra o alvo 2 blocos; se ele bater em algo, cai atordoado por 5 s (o chefe não)."
+        },
+        {
+          "id": "agua",
+          "classe": "mago",
+          "nome": "Água",
+          "icone": "💧",
+          "desc": "O jato acerta todos no caminho até o alvo. A cada 10 disparos, um redemoinho no alvo puxa quem está a até 5 blocos (até 3 blocos), prende 2 s e deixa 25% mais lento por 5 s (o chefe não)."
+        },
+        {
+          "id": "arcano",
+          "classe": "mago",
+          "nome": "Arcano",
+          "icone": "✨",
+          "raro": 8,
+          "desc": "Disparos com +35% de dano que deixam o alvo 20% mais lento. A cada 5, os Grilhões Arcanos prendem o alvo 4 s (o chefe não) e batem +30%. Do 15º disparo da luta em diante, cada um dá 10 de mana e soma +10% de dano."
+        },
+        {
+          "id": "escuridao",
+          "classe": "mago",
+          "nome": "Escuridão",
+          "icone": "🌑",
+          "raro": 10,
+          "desc": "A orbe sombria bate +15%. A cada 8 disparos, a escuridão cobre 5 × 5 em volta do alvo por 10 s: quem está nela bate 20% mais fraco e acerta 25% menos. Do 24º disparo da luta em diante, cada um engole 15% da vida que resta do alvo (até 300 no chefe)."
+        }
+      ]
     }
   },
   {
@@ -34032,7 +34077,7 @@
       }
     },
     "expected": {
-      "result": 0
+      "result": 10
     }
   },
   {
@@ -34252,8 +34297,8 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": "vento",
+      "rngCalls": 3
     }
   },
   {
@@ -34274,8 +34319,8 @@
       }
     },
     "expected": {
-      "result": null,
-      "rngCalls": 0
+      "result": "arcano",
+      "rngCalls": 1
     }
   },
   {
@@ -40535,6 +40580,9960 @@
     },
     "expected": {
       "result": 199
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: sem elemento",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        {
+          "id": "fogo",
+          "classe": "mago",
+          "nome": "Fogo",
+          "icone": "🔥",
+          "desc": "Todo disparo queima o alvo por 1 turno (5% da vida dele). A cada 5 disparos, a bola de fogo queima todos em volta do alvo (3 × 3) por 2 turnos."
+        },
+        {
+          "id": "terra",
+          "classe": "mago",
+          "nome": "Terra",
+          "icone": "🪨",
+          "desc": "Disparos de rocha com +30% de dano. Do 20º disparo da luta em diante, o revestimento de pedra segura 20% do dano."
+        },
+        {
+          "id": "vento",
+          "classe": "mago",
+          "nome": "Vento",
+          "icone": "🌀",
+          "desc": "O monstro atingido golpeia de 1 bloco mais perto pelo resto da luta, e você anda 15% mais rápido por 3 s. A cada 5 disparos, o vento empurra o alvo 2 blocos; se ele bater em algo, cai atordoado por 5 s (o chefe não)."
+        },
+        {
+          "id": "agua",
+          "classe": "mago",
+          "nome": "Água",
+          "icone": "💧",
+          "desc": "O jato acerta todos no caminho até o alvo. A cada 10 disparos, um redemoinho no alvo puxa quem está a até 5 blocos (até 3 blocos), prende 2 s e deixa 25% mais lento por 5 s (o chefe não)."
+        },
+        {
+          "id": "arcano",
+          "classe": "mago",
+          "nome": "Arcano",
+          "icone": "✨",
+          "raro": 8,
+          "desc": "Disparos com +35% de dano que deixam o alvo 20% mais lento. A cada 5, os Grilhões Arcanos prendem o alvo 4 s (o chefe não) e batem +30%. Do 15º disparo da luta em diante, cada um dá 10 de mana e soma +10% de dano."
+        },
+        {
+          "id": "escuridao",
+          "classe": "mago",
+          "nome": "Escuridão",
+          "icone": "🌑",
+          "raro": 10,
+          "desc": "A orbe sombria bate +15%. A cada 8 disparos, a escuridão cobre 5 × 5 em volta do alvo por 10 s: quem está nela bate 20% mais fraco e acerta 25% menos. Do 24º disparo da luta em diante, cada um engole 15% da vida que resta do alvo (até 300 no chefe)."
+        }
+      ]
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: sem elemento",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "estiloUnico: sem elemento",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: sem elemento, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: sem elemento, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: sem elemento, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: sem elemento, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: sem elemento, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: sem elemento, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": []
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: sem elemento, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": "arcano",
+      "rngCalls": 1
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: sem elemento, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": "escuridao",
+      "rngCalls": 2
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: sem elemento, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": "agua",
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: sem elemento, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": "fogo",
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: sem elemento, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": []
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: sem elemento, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: sem elemento, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: fogo",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: fogo",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: fogo",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ],
+        "estilo": "fogo"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 4"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 4"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 2"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: fogo, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "estilo": "fogo",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🔥 Bola de fogo em 5"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: terra",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: terra",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: terra",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: terra, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: terra, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: terra, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: terra, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: terra, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: terra, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "terra"
+        ],
+        "estilo": "terra"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: terra, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: terra, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: terra, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: terra, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 0/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 1/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 4/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 5/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 9/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 10/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 14/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 15/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 16/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Pedra 19/20"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Revestimento de pedra"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Revestimento de pedra"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Revestimento de pedra"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: terra, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: terra, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: terra, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "terra"
+          ],
+          "estilo": "terra",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🪨 Revestimento de pedra"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: vento",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: vento",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: vento",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: vento, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: vento, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: vento, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: vento, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: vento, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: vento, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "vento"
+        ],
+        "estilo": "vento"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: vento, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: vento, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: vento, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: vento, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 4 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 1 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 4"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 1 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 2 · ventania"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: vento, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: vento, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: vento, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "vento"
+          ],
+          "estilo": "vento",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌀 Empurrão em 5"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: água",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: água",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: água",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: água, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: água, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: água, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: água, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: água, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: água, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "agua"
+        ],
+        "estilo": "agua"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: água, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: água, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: água, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: água, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 10"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 9"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 6"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 10"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 6"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 5"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 4"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 1"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 10"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 7"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 6"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: água, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: água, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: água, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "agua"
+          ],
+          "estilo": "agua",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "💧 Redemoinho em 10"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: arcano",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: arcano",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: arcano",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: arcano, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: arcano, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: arcano, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: arcano, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: arcano, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: arcano, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "arcano"
+        ],
+        "estilo": "arcano"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: arcano, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: arcano, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: arcano, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: arcano, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 35
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 5 · 0/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 35
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 4 · 1/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 35
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 1 · 4/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 65
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 5 · 5/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 35
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 1 · 9/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 65
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 5 · 10/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 35
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Grilhões em 1 · 14/15"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 65
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +0%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +10%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 75
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +40%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 115
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +50%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 115
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +80%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 125
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +90%"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: arcano, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 215
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: arcano, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: arcano, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "arcano"
+          ],
+          "estilo": "arcano",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "✨ Arcano +150%"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: escuridão",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: escuridão",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: escuridão",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: escuridão, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: escuridão, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: escuridão, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: escuridão, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: escuridão, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: escuridão, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "escuridao"
+        ],
+        "estilo": "escuridao"
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: escuridão, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: escuridão, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: escuridão, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: escuridão, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 8 · 0/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 7 · 1/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 4 · 4/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 3 · 5/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 7 · 9/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 6 · 10/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 2 · 14/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 1 · 15/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 8 · 16/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 5 · 19/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 4 · 20/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Escuridão em 1 · 23/24"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Fome da escuridão"
+      ]
+    }
+  },
+  {
+    "name": "danoDoMago: escuridão, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao"
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 15
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: escuridão, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: escuridão, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "escuridao"
+          ],
+          "estilo": "escuridao",
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🌑 Fome da escuridão"
+      ]
+    }
+  },
+  {
+    "name": "(5c) estilosQueFaltam: fogo sem estar ativo",
+    "input": {
+      "fn": "estilosQueFaltam",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(5c) chanceDoMestre: fogo sem estar ativo",
+    "input": {
+      "fn": "chanceDoMestre",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "estiloUnico: fogo sem estar ativo",
+    "input": {
+      "fn": "estiloUnico",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo sem estar ativo, agua",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "id": "agua"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo sem estar ativo, arcano",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "id": "arcano"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) aprenderEstilo: fogo sem estar ativo, fogo",
+    "input": {
+      "fn": "aprenderEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo sem estar ativo, fogo",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "id": "fogo"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo sem estar ativo, terra",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "id": "terra"
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) trocarEstilo: fogo sem estar ativo, nenhum",
+    "input": {
+      "fn": "trocarEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "classId": "mago",
+        "estilos": [
+          "fogo"
+        ]
+      }
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo sem estar ativo, 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo sem estar ativo, 0.5 0.05",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.05
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo sem estar ativo, 0.5 0.5 0.9",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.9
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "(5c) sortearEstilo: fogo sem estar ativo, 0.5 0.5 0.1",
+    "input": {
+      "fn": "sortearEstilo",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        }
+      },
+      "rng": {
+        "sequence": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      }
+    },
+    "expected": {
+      "result": null,
+      "rngCalls": 0
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 0",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 0
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 0",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 0",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 0
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 1",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 1
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 1",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 1",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 1,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 4",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 4
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 4",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 4",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 4
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 5",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 5
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 5",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 5",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 5,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 9",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 9
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 9",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 9",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 9,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 10",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 10
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 10",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 10",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 10
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 14",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 14
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 14",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 14",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 14
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 15",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 15
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 15",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 15",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 15,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 16",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 16
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 16",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 16",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 16
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 19",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 19
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 19",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 19",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 19,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 20",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 20
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 20",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 20",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 20
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 23",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 23
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 23",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 23",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 23,
+          "ventania": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 24",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 24
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 24",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 24",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 24
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "danoDoMago: fogo sem estar ativo, disparo 30",
+    "input": {
+      "fn": "danoDoMago",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ]
+        },
+        "golpe": 30
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) resistenciaDaClasse: fogo sem estar ativo, disparo 30",
+    "input": {
+      "fn": "resistenciaDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(5c) textosDaClasse: fogo sem estar ativo, disparo 30",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "estilos": [
+            "fogo"
+          ],
+          "hp": 50,
+          "maxHp": 100
+        },
+        "c": {
+          "golpes": 30
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "aCadaGolpe: 0 a cada 5",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 0,
+        "n": 5
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "aCadaGolpe: 5 a cada 5",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 5,
+        "n": 5
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "aCadaGolpe: 6 a cada 5",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 6,
+        "n": 5
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "aCadaGolpe: 10 a cada 5",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 10,
+        "n": 5
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "aCadaGolpe: 10 a cada 10",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 10,
+        "n": 10
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "aCadaGolpe: 8 a cada 8",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 8,
+        "n": 8
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "aCadaGolpe: 16 a cada 8",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 16,
+        "n": 8
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "aCadaGolpe: 7 a cada 8",
+    "input": {
+      "fn": "aCadaGolpe",
+      "args": {
+        "golpe": 7,
+        "n": 8
+      }
+    },
+    "expected": {
+      "result": false
     }
   },
   {

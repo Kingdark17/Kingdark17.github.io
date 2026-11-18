@@ -320,3 +320,83 @@ describe('os estilos do Druida', () => {
     expect(rodar(luta, 100, NUNCA).luta.arena.monstros[0]?.corpoY).not.toBe(m.corpoY);
   });
 });
+
+// Os elementos do Mago (rodada 5c, 2026-11-17): um só e pra sempre.
+
+describe('os elementos do Mago', () => {
+  const MAGO = (estilo: string, extra: Partial<Hero> = {}) => ({ ...COM('mago', estilo), mp: 300, maxMp: 300, ...extra });
+  const comGolpes = (luta: LutaEmTempoReal, golpes: number) => ({ ...luta, arena: { ...luta.arena, classe: { golpes } } });
+  const montar = (estilo: string, monstros: MonsterInstance[], corpos: Array<[number, number]>, heroiEm: Walker = PERTO, extra: Partial<Hero> = {}) => {
+    const aberta = abrirLuta(naSala('mago', 'Mago', monstros, MAGO(estilo, extra)), heroiEm).luta;
+    return { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: corpos[i]![0] * T, corpoY: corpos[i]![1] * T })) } };
+  };
+
+  it('o Mago aprende um elemento só, pra sempre; os raros saem primeiro, na chance deles', () => {
+    const comFogo = { classId: 'mago', estilos: ['fogo'], estilo: 'fogo' };
+    expect(estilosQueFaltam(comFogo)).toEqual([]);
+    expect(chanceDoMestre(comFogo)).toBe(0);
+    expect(aprenderEstilo(comFogo, 'agua')).toBe(comFogo);
+    expect(trocarEstilo(comFogo, undefined)).toBe(comFogo);
+    expect(sortearEstilo({ classId: 'mago' }, () => 0.05)).toBe('arcano');
+    expect(sortearEstilo({ classId: 'mago' }, () => 0.5)).toBe('vento');
+    expect(chanceDoMestre({ classId: 'mago' })).toBe(10);
+  });
+
+  it('o Fogo queima o alvo 1 turno; a bola de fogo, todos em volta por 2', () => {
+    const r = golpeNoMeio(montar('fogo', [monstro()], [[4.5, 4.5]]), { cursor: MEIO });
+    expect(statusDoMonstro(r.luta)?.queimadura).toEqual({ turns: 1, dmg: 200 });
+    const bola = golpeNoMeio(comGolpes(montar('fogo', [monstro(), monstro()], [[4.5, 4.5], [5.5, 4.5]]), 4), { cursor: MEIO });
+    expect(avisos(bola)).toContain('🔥 Bola de fogo');
+    expect(statusDoMonstro(bola.luta, 0)?.queimadura?.turns).toBe(2);
+    expect(statusDoMonstro(bola.luta, 1)?.queimadura?.turns).toBe(2);
+  });
+
+  it('a Terra bate +30% e, do 20º disparo em diante, segura 20% do dano', () => {
+    const dano = (estilo: string) => 4000 - vidaDoMonstro(golpeNoMeio(montar(estilo, [monstro()], [[4.5, 4.5]]), { cursor: MEIO }).luta);
+    expect(Math.abs(dano('terra') / dano('fogo') - 1.3)).toBeLessThan(0.05);
+    const pedra = golpeNoMeio(comGolpes(montar('terra', [monstro()], [[4.5, 4.5]]), 19), { cursor: MEIO });
+    expect(avisos(pedra)).toContain('🪨 Revestimento de pedra!');
+    expect(pedra.luta.arena.classe?.golpes).toBe(20);
+  });
+
+  it('o Vento encurta o monstro, dá a ventania e, no 5º, empurra; batendo na parede, atordoa', () => {
+    const r = golpeNoMeio(montar('vento', [monstro()], [[4.5, 4.5]]), { cursor: MEIO });
+    expect(r.luta.arena.monstros[0]?.encurtado).toBe(true);
+    const naParede = montar('vento', [monstro()], [[7.5, 4.5]], { x: 5.5 * T, y: 4.5 * T, facing: 'E' });
+    const quinto = passoDaLuta(comGolpes(naParede, 4), { ...PARADO, atacar: true, cursor: { x: 7.5 * T, y: 4.5 * T } }, NUNCA, AGORA);
+    const fim = rodar(quinto.luta, DURACAO_DA_BARRA / 2 + 2, NUNCA, (i) => (i === DURACAO_DA_BARRA / 2 - 1 ? { ...PARADO, tocar: true } : PARADO));
+    expect(fim.luta.arena.monstros[0]?.fase).toBe('atordoado');
+    expect(fim.luta.arena.classe?.ventania).toBeGreaterThan(0);
+  });
+
+  it('o jato da Água acerta quem está no caminho; o redemoinho do 10º prende e deixa lerdo', () => {
+    const debaixo: Walker = { x: 4.5 * T, y: 7.5 * T, facing: 'N' };
+    const linha = montar('agua', [monstro(), monstro()], [[4.5, 3.5], [4.5, 5.5]], debaixo);
+    const r = golpeNoMeio(linha, { cursor: { x: 4.5 * T, y: 3.5 * T } });
+    expect(vidaDoMonstro(r.luta, 0)).toBeLessThan(4000);
+    expect(vidaDoMonstro(r.luta, 1)).toBe(vidaDoMonstro(r.luta, 0));
+    const decimo = golpeNoMeio(comGolpes(montar('agua', [monstro(), monstro()], [[4.5, 4.5], [7.5, 1.5]]), 9), { cursor: MEIO });
+    expect(avisos(decimo)).toContain('💧 Redemoinho');
+    expect(decimo.luta.arena.monstros[1]?.lerdo).toBeGreaterThan(0);
+  });
+
+  it('o Arcano deixa lento, prende no 5º e, do 15º em diante, dá mana e soma dano', () => {
+    const r = golpeNoMeio(montar('arcano', [monstro()], [[4.5, 4.5]], PERTO, { mp: 50 }), { cursor: MEIO });
+    expect(statusDoMonstro(r.luta)?.lento?.amount).toBe(0.2);
+    expect(heroi(r.luta).mp).toBe(10);
+    const quinto = golpeNoMeio(comGolpes(montar('arcano', [monstro()], [[4.5, 4.5]]), 4), { cursor: MEIO });
+    expect(numeros(quinto)).toContain('⛓️ Preso');
+    const desperto = golpeNoMeio(comGolpes(montar('arcano', [monstro()], [[4.5, 4.5]], PERTO, { mp: 50 }), 14), { cursor: MEIO });
+    expect(avisos(desperto)).toContain('✨ O arcano desperta!');
+    expect(heroi(desperto.luta).mp).toBe(20);
+  });
+
+  it('a Escuridão cobre 5 × 5 por 10 s no 8º disparo e, do 24º em diante, engole a vida que resta', () => {
+    const oitavo = golpeNoMeio(comGolpes(montar('escuridao', [monstro()], [[4.5, 4.5]]), 7), { cursor: MEIO });
+    expect(oitavo.luta.arena.escuridao).toMatchObject({ x: MEIO.x, y: MEIO.y });
+    expect(rodar(oitavo.luta, 600, NUNCA).luta.arena.escuridao).toBeUndefined();
+    const fome = golpeNoMeio(comGolpes(montar('escuridao', [monstro()], [[4.5, 4.5]]), 23), { cursor: MEIO });
+    expect(avisos(fome)).toContain('🌑 A escuridão tem fome!');
+    expect(numeros(fome).some((n) => n.startsWith('🌑-'))).toBe(true);
+  });
+});

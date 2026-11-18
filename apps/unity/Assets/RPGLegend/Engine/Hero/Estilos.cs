@@ -89,6 +89,68 @@ namespace RPGLegend.Engine
         public double Velocidade;
     }
 
+    public sealed class RegrasDoFogo
+    {
+        public double Turnos;
+        public double Queimadura;
+        public double BolaACada;
+        public double LadoDaBola;
+        public double TurnosDaBola;
+    }
+
+    public sealed class RegrasDaTerra
+    {
+        public double Dano;
+        public double GolpesDaPedra;
+        public double Resistencia;
+    }
+
+    public sealed class RegrasDoVento
+    {
+        public double Encurta;
+        public double Velocidade;
+        public double Ventania;
+        public double EmpurraACada;
+        public double Empurrao;
+        public double Atordoa;
+    }
+
+    public sealed class RegrasDaAgua
+    {
+        public double Largura;
+        public double RedemoinhoACada;
+        public double Raio;
+        public double Puxa;
+        public double Preso;
+        public double Lento;
+        public double Lerdo;
+    }
+
+    public sealed class RegrasDoArcano
+    {
+        public double Dano;
+        public double Lento;
+        public double GrilhoesACada;
+        public double Preso;
+        public double DanoDosGrilhoes;
+        public double GolpesDoArcano;
+        public double Mana;
+        public double PorGolpe;
+    }
+
+    public sealed class RegrasDaEscuridao
+    {
+        public double Dano;
+        public double AreaACada;
+        public double Lado;
+        public double Duracao;
+        public double Fraqueza;
+        public double Erra;
+        public double GolpesDaFome;
+        public double Engole;
+        public double TetoNoChefe;
+    }
+
     /// <summary>TS: o retorno de quemEnsina — quem ensina o estilo na sala, com o ícone e as falas.</summary>
     public sealed class QuemEnsinaEstilo
     {
@@ -104,6 +166,7 @@ namespace RPGLegend.Engine
     public sealed class EstilosData
     {
         [JsName("ESTILOS")] public List<EstiloDef> Estilos = new List<EstiloDef>();
+        [JsName("ESTILO_UNICO")] public List<string> EstiloUnico = new List<string>();
         [JsName("CHANCE_DO_MESTRE")] public OrderedMap<double> ChanceDoMestre = new OrderedMap<double>();
         [JsName("REGRAS_DO_ESPADACHIM")] public RegrasDoEspadachim Espadachim;
         [JsName("REGRAS_DO_CAVALEIRO")] public RegrasDoCavaleiro Cavaleiro;
@@ -113,6 +176,12 @@ namespace RPGLegend.Engine
         [JsName("REGRAS_DA_METAMORFOSE")] public RegrasDaMetamorfose Metamorfose;
         [JsName("REGRAS_DO_FLORESCIMENTO")] public RegrasDoFlorescimento Florescimento;
         [JsName("REGRAS_DAS_RAIZES")] public RegrasDasRaizes Raizes;
+        [JsName("REGRAS_DO_FOGO")] public RegrasDoFogo Fogo;
+        [JsName("REGRAS_DA_TERRA")] public RegrasDaTerra Terra;
+        [JsName("REGRAS_DO_VENTO")] public RegrasDoVento Vento;
+        [JsName("REGRAS_DA_AGUA")] public RegrasDaAgua Agua;
+        [JsName("REGRAS_DO_ARCANO")] public RegrasDoArcano Arcano;
+        [JsName("REGRAS_DA_ESCURIDAO")] public RegrasDaEscuridao Escuridao;
     }
 
     public static partial class GameData
@@ -144,6 +213,15 @@ namespace RPGLegend.Engine
         public static RegrasDaMetamorfose Metamorfose => D.Metamorfose;
         public static RegrasDoFlorescimento Florescimento => D.Florescimento;
         public static RegrasDasRaizes Raizes => D.Raizes;
+        public static RegrasDoFogo Fogo => D.Fogo;
+        public static RegrasDaTerra Terra => D.Terra;
+        public static RegrasDoVento Vento => D.Vento;
+        public static RegrasDaAgua Agua => D.Agua;
+        public static RegrasDoArcano Arcano => D.Arcano;
+        public static RegrasDaEscuridao Escuridao => D.Escuridao;
+
+        /// <summary>TS: estiloUnico — a classe aprende um estilo só, pra sempre (o Mago, rodada 5c).</summary>
+        public static bool EstiloUnico(string classId, string className) => D.EstiloUnico.Contains(Catalog.IdDaClasse(classId, className) ?? "");
 
         /// <summary>TS: quemEnsina — o mestre de estilo, ou, pros do Druida, um espírito ancestral (rodada 5b).</summary>
         public static QuemEnsinaEstilo QuemEnsina(string estilo)
@@ -214,7 +292,10 @@ namespace RPGLegend.Engine
         public static List<EstiloDef> QueFaltam(string classId, string className, IReadOnlyList<string> estilos)
         {
             var faltam = new List<EstiloDef>();
-            foreach (var e in DaClasse(classId, className))
+            var daClasse = DaClasse(classId, className);
+            // O Mago aprende um só (rodada 5c): com um, não falta mais nada.
+            if (EstiloUnico(classId, className) && estilos != null && daClasse.Exists(e => Contem(estilos, e.Id))) return faltam;
+            foreach (var e in daClasse)
                 if (estilos == null || !Contem(estilos, e.Id)) faltam.Add(e);
             return faltam;
         }
@@ -238,6 +319,8 @@ namespace RPGLegend.Engine
         {
             var e = PorId(id);
             if (e == null || e.Classe != Catalog.IdDaClasse(classId, className) || (estilos != null && Contem(estilos, id))) return null;
+            // O Mago que já tem o dele não aprende outro.
+            if (EstiloUnico(classId, className) && QueFaltam(classId, className, estilos).Count == 0) return null;
             var novos = estilos != null ? new List<string>(estilos) : new List<string>();
             novos.Add(id);
             return novos;
@@ -257,6 +340,8 @@ namespace RPGLegend.Engine
         /// <summary>TS: trocarEstilo — o ativo entre os que tem; null volta a lutar sem estilo. Nada muda: o mesmo herói.</summary>
         public static Hero Trocar(Hero hero, string id)
         {
+            // O do Mago é pra sempre: a guilda não troca nem tira.
+            if (EstiloUnico(hero.ClassId, hero.ClassName)) return hero;
             if (id == null)
             {
                 var sem = hero.Clone();

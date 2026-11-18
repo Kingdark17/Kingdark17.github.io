@@ -969,6 +969,36 @@ for (const cls of ['monge', 'mago', 'necromante']) {
   for (const [hp, maxHp] of [[50, 150], [149, 150], [0, 999]]) {
     caso(`(5b) curaDoApoio: purificar +10, vida ${hp}/${maxHp}`, 'curaDoApoio', { tipo: 'purificar', vida: { hp, maxHp }, mais: 10 }, (a) => E.curaDoApoio(a.tipo, a.vida, a.mais));
   }
+  // Os elementos do Mago (rodada 5c): um só, pra sempre.
+  for (const [nome, quem] of [
+    ['sem elemento', COM('mago')],
+    ['fogo', COM('mago', 'fogo')],
+    ['terra', COM('mago', 'terra')],
+    ['vento', COM('mago', 'vento')],
+    ['água', COM('mago', 'agua')],
+    ['arcano', COM('mago', 'arcano')],
+    ['escuridão', COM('mago', 'escuridao')],
+    ['fogo sem estar ativo', { classId: 'mago', estilos: ['fogo'] }],
+  ] as const) {
+    caso(`(5c) estilosQueFaltam: ${nome}`, 'estilosQueFaltam', { quem }, (a) => E.estilosQueFaltam(a.quem));
+    caso(`(5c) chanceDoMestre: ${nome}`, 'chanceDoMestre', { quem }, (a) => E.chanceDoMestre(a.quem));
+    caso(`estiloUnico: ${nome}`, 'estiloUnico', { quem }, (a) => E.estiloUnico(a.quem));
+    for (const id of ['agua', 'arcano', 'fogo']) caso(`(5c) aprenderEstilo: ${nome}, ${id}`, 'aprenderEstilo', { quem, id }, (a) => E.aprenderEstilo(a.quem, a.id));
+    for (const id of ['fogo', 'terra']) caso(`(5c) trocarEstilo: ${nome}, ${id}`, 'trocarEstilo', { quem, id }, (a) => E.trocarEstilo(a.quem, a.id));
+    caso(`(5c) trocarEstilo: ${nome}, nenhum`, 'trocarEstilo', { quem }, (a) => E.trocarEstilo(a.quem, undefined));
+    for (const sequencia of [[0.05], [0.5, 0.05], [0.5, 0.5, 0.9], [0.5, 0.5, 0.1]]) {
+      caso(`(5c) sortearEstilo: ${nome}, ${sequencia.join(' ')}`, 'sortearEstilo', { quem }, (a, ctx) => E.sortearEstilo(a.quem, ctx.rng), { rng: { sequence: sequencia } });
+    }
+    for (const golpe of [0, 1, 4, 5, 9, 10, 14, 15, 16, 19, 20, 23, 24, 30]) {
+      caso(`danoDoMago: ${nome}, disparo ${golpe}`, 'danoDoMago', { quem, golpe }, (a) => E.danoDoMago(a.quem, a.golpe));
+      caso(`(5c) resistenciaDaClasse: ${nome}, disparo ${golpe}`, 'resistenciaDaClasse', { quem: { ...quem, hp: 50, maxHp: 100 }, c: { golpes: golpe } }, (a) => E.resistenciaDaClasse(a.quem, a.c));
+      caso(`(5c) textosDaClasse: ${nome}, disparo ${golpe}`, 'textosDaClasse', { quem: { ...quem, hp: 50, maxHp: 100 }, c: { golpes: golpe, ...(golpe % 2 ? { ventania: 30 } : {}) }, extras: {} }, (a) =>
+        E.textosDaClasse(a.quem, a.c, a.extras));
+    }
+  }
+  for (const [golpe, n] of [[0, 5], [5, 5], [6, 5], [10, 5], [10, 10], [8, 8], [16, 8], [7, 8]]) {
+    caso(`aCadaGolpe: ${golpe} a cada ${n}`, 'aCadaGolpe', { golpe, n }, (a) => E.aCadaGolpe(a.golpe, a.n));
+  }
   caso('derivedStats: o Cavaleiro com 40% de vida', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, classId: 'guerreiro', estilos: ['cavaleiro'], estilo: 'cavaleiro' } }, (a) => E.derivedStats(a.hero as never));
 }
 
@@ -3556,6 +3586,12 @@ entrar('aprendiz não encontra professor', naCidade(saveNovo({ classe: null, ext
   const aprendeu = E.aprenderComMestre(naSalaDoMestre);
   caso('aprenderComMestre: na sala dele', 'aprenderComMestre', { estado: naSalaDoMestre }, (a) => E.aprenderComMestre(a.estado));
   caso('abrirMestreDeEstilo: depois de ensinar', 'abrirMestreDeEstilo', { estado: aprendeu.estado }, (a) => E.abrirMestreDeEstilo(a.estado));
+  {
+    // O Mago aprende o elemento dele, pra sempre (rodada 5c).
+    const salaDoMago = { ...(E.celulaAtual(naSalaDoMestre) as DungeonCell), mestreDeEstilo: { estilo: 'fogo' } };
+    const mago = E.substituirCelulaAtual({ ...naSalaDoMestre, hero: { ...naSalaDoMestre.hero, classId: 'mago', className: 'Mago' } }, salaDoMago);
+    caso('aprenderComMestre: o Mago, pra sempre', 'aprenderComMestre', { estado: mago }, (a) => E.aprenderComMestre(a.estado));
+  }
   const guilda = E.abrirGuilda({ ...aprendeu.estado, hero: { ...aprendeu.estado.hero, estilos: ['espadachim', 'cavaleiro'] } });
   for (const id of ['espadachim', 'cavaleiro', 'chute', undefined]) {
     caso(`trocarEstiloNaGuilda: ${id ?? 'nenhum'}`, 'trocarEstiloNaGuilda', { guilda, ...(id ? { id } : {}) }, (a) => E.trocarEstiloNaGuilda(a.guilda as never, (a as { id?: string }).id));
@@ -5869,6 +5905,43 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       const preso = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, preso: 150 })) } };
       simula('o goblin preso não sai do lugar nem investe', preso, parado(300), { seed: 894 });
     }
+
+    // Os elementos do Mago (rodada 5c).
+    const mago = (estilo: string, extra: Record<string, unknown> = {}) => ({ ...comEstilo('mago', estilo), mp: 600, maxMp: 600, ...extra });
+    const montar = (estilo: string, monstros: ReturnType<typeof bicho>[], corpos: Array<[number, number]>, heroi: Walker = PERTO, golpes = 0, extra: Record<string, unknown> = {}) => {
+      const aberta = E.abrirLuta({ ...salaCom(monstros), hero: mago(estilo, extra) }, heroi).luta;
+      return {
+        ...aberta,
+        arena: {
+          ...aberta.arena,
+          ...(golpes ? { classe: { golpes } } : {}),
+          monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (corpos[i] as [number, number])[0] * T, corpoY: (corpos[i] as [number, number])[1] * T })),
+        },
+      };
+    };
+    const forteZ = () => bicho('zumbi', { hp: 3000, maxHp: 3000 });
+    simula('o Fogo queima e a bola de fogo pega em volta', montar('fogo', [forteZ(), forteZ()], [[4.5, 4.5], [5.5, 4.5]], PERTO, 3), [...golpesNo(3, MEIO), ...parado(200)], { seed: 895 });
+    simula('a Terra bate mais e acende a pedra no 20º', montar('terra', [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })], [[4.5, 4.5]], PERTO, 18), [...golpesNo(3, MEIO), ...parado(200)], { seed: 896 });
+    simula(
+      'o Vento encurta, dá a ventania e empurra na parede',
+      montar('vento', [forteZ()], [[7.5, 4.5]], { x: 5.5 * T, y: 4.5 * T, facing: 'E' }, 3),
+      [...golpesNo(2, { x: 7.5 * T, y: 4.5 * T }), ...rodando(140)],
+      { seed: 897 },
+    );
+    simula(
+      'o jato da Água e o redemoinho',
+      montar('agua', [forteZ(), forteZ(), forteZ()], [[4.5, 3.5], [4.5, 5.5], [7.5, 1.5]], { x: 4.5 * T, y: 7.5 * T, facing: 'N' }, 8),
+      [...golpesNo(2, { x: 4.5 * T, y: 3.5 * T }), ...parado(300)],
+      { seed: 898 },
+    );
+    simula('o Arcano prende no 5º e desperta no 15º', montar('arcano', [forteZ()], [[4.5, 4.5]], PERTO, 13, { mp: 90 }), [...golpesNo(3, MEIO), ...parado(100)], { seed: 899 });
+    simula(
+      'a Escuridão cobre a área, enfraquece quem está nela e engole no 24º',
+      montar('escuridao', [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 }), forteZ()], [[4.5, 4.5], [6.5, 6.5]], PERTO, 22),
+      [...golpesNo(3, MEIO), ...parado(700)],
+      { seed: 900 },
+    );
+    simula('o Mago sem mana bate com o físico e não conta', montar('fogo', [forteZ()], [[4.5, 4.5]], PERTO, 4, { mp: 10 }), golpesNo(2, MEIO), { seed: 901 });
   }
 
   // O cajado no PC: as letras saem dos primeiros sorteios da luta, os do aperto; a tecla da última fecha o evento.

@@ -665,9 +665,34 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   chefe não), e do 18º em diante o veneno tira 15% da vida que resta e o
   Druida anda 10% mais rápido. No espelho, o preso das Raízes do convidado
   não passa pro anfitrião (o dano passa).
-  Falta, nesta ordem: os elementos do Mago (5c);
-  mercadores secretos e itens novos (a arte das armas novas é o Claude que
-  desenha, no estilo do Breno); o Caçador.
+  Rodada 5c, **os elementos do Mago** (2026-11-17, decidido com o usuário;
+  regras em `hero/estilos.ts`, o que junta na luta em `luta/arena.ts`): **um
+  elemento só, pra sempre** (`ESTILO_UNICO`, `estiloUnico`: com um, nada
+  mais falta, o mestre do Mago não aparece mais, a guilda só mostra, e a tela
+  do mestre avisa; recusar deixa outro aparecer mais adiante). Os raros entram
+  no sorteio antes (Arcano 1 em 8, Escuridão 1 em 10). Só os disparos mágicos
+  contam (`golpes`) e levam o elemento; sem os 40 de mana, o golpe físico não
+  conta. **Fogo**: todo disparo queima o alvo 1 turno (5% da vida máxima
+  dele); o 5º, a bola de fogo, queima o 3 × 3 em volta dele por 2 turnos, sem
+  dano a mais. **Terra**: +30%, e do 20º disparo em diante o revestimento de
+  pedra segura 20%. **Vento**: o monstro atingido golpeia de 1 bloco mais
+  perto até o fim da luta, sem acumular (`MonstroNaArena.encurtado`, até meio
+  bloco), o Mago anda 15% mais rápido por 3 s (`ventania`), e o 5º empurra o
+  alvo 2 blocos: batendo na parede ou noutro monstro, 5 s atordoado (o chefe
+  não). **Água**: o jato dá o dano inteiro em todos na linha até o alvo (1
+  casa de largura); o 10º, o redemoinho, puxa quem está a até 5 blocos (até 3
+  blocos), prende 2 s e deixa 25% mais lento por 5 s (`lerdo`; o chefe não).
+  **Arcano**: +35% e o alvo 20% mais lento; o 5º, os Grilhões, prende 4 s (o
+  chefe não) e bate +30%; do 15º em diante, cada disparo dá 10 de mana e soma
+  +10% (o 16º +10%, o 17º +20%…, sem teto). **Escuridão**: +15%; o 8º cobre 5
+  × 5 em volta do alvo por 10 s (`Arena.escuridao`, desenhada no chão), e
+  quem está nela bate 20% mais fraco e acerta 25% menos (a esquiva do herói
+  sobe 25 contra ele); do 24º em diante, cada disparo engole 15% da vida que
+  resta do alvo (até 300 no chefe). No espelho, o que o convidado faz nos
+  monstros (a queimadura, o empurrão, o preso, o encurtar) não passa pro
+  anfitrião (o dano passa), e a escuridão dele só protege ele.
+  Falta, nesta ordem: mercadores secretos e itens novos (a arte das armas
+  novas é o Claude que desenha, no estilo do Breno); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

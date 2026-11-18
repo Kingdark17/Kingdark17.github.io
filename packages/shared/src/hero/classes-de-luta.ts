@@ -23,8 +23,14 @@
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
 import {
   idDoEstilo,
+  REGRAS_DA_AGUA,
   REGRAS_DA_CONCENTRACAO,
+  REGRAS_DA_ESCURIDAO,
   REGRAS_DA_METAMORFOSE,
+  REGRAS_DA_TERRA,
+  REGRAS_DO_ARCANO,
+  REGRAS_DO_FOGO,
+  REGRAS_DO_VENTO,
   REGRAS_DAS_RAIZES,
   REGRAS_DO_CAVALEIRO,
   REGRAS_DO_CHUTE,
@@ -479,8 +485,10 @@ export interface ContadoresDaClasse {
   imune?: number;
   cargas?: number;
   semGolpe?: number;
-  /** Os estilos do Druida (rodada 5b): quantos ataques ele já deu nesta luta (a aura da Metamorfose, as Raízes). */
+  /** Os estilos do Druida (rodada 5b) e do Mago (5c): quantos ataques (os disparos, no Mago) ele já deu nesta luta. */
   golpes?: number;
+  /** O Vento do Mago (rodada 5c): os passos que ainda faltam do passo mais ligeiro. */
+  ventania?: number;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -553,6 +561,36 @@ export function danoDoDruida(quem: QuemTemEstilo, golpe: number): number {
   }
 }
 
+/** O golpe de número `golpe` é o da vez de quem age a cada `n` (o 5º, o 10º…). */
+export function aCadaGolpe(golpe: number, n: number): boolean {
+  return golpe > 0 && golpe % n === 0;
+}
+
+/**
+ * O dano a mais (%) do disparo do Mago com elemento (rodada 5c), no disparo
+ * de número `golpe` da luta: a rocha da Terra, o Arcano (com os Grilhões e o
+ * que soma do 15º em diante) e a orbe da Escuridão.
+ */
+export function danoDoMago(quem: QuemTemEstilo, golpe: number): number {
+  switch (idDoEstilo(quem)) {
+    case 'terra':
+      return REGRAS_DA_TERRA.dano;
+    case 'arcano': {
+      const r = REGRAS_DO_ARCANO;
+      return r.dano + (aCadaGolpe(golpe, r.grilhoesACada) ? r.danoDosGrilhoes : 0) + Math.max(0, golpe - r.golpesDoArcano) * r.porGolpe;
+    }
+    case 'escuridao':
+      return REGRAS_DA_ESCURIDAO.dano;
+    default:
+      return 0;
+  }
+}
+
+/** Quantos disparos faltam pro próximo de número múltiplo de `n` (o 5º, o 10º…): no múltiplo, `n`. */
+function faltamPro(golpes: number, n: number): number {
+  return n - (golpes % n);
+}
+
 /** A aura de fera da Metamorfose está acesa (do golpe `golpesDaAura` da luta em diante). */
 export function auraDeFera(golpes: number): boolean {
   return golpes >= REGRAS_DA_METAMORFOSE.golpesDaAura;
@@ -590,6 +628,9 @@ export function resistenciaDaClasse(quem: QuemTemEstilo & { hp: number; maxHp: n
     case 'druida':
       // A aura de fera da Metamorfose (rodada 5b).
       return idDoEstilo(quem) === 'metamorfose' && auraDeFera(c.golpes ?? 0) ? REGRAS_DA_METAMORFOSE.resistencia : 0;
+    case 'mago':
+      // O revestimento de pedra da Terra (rodada 5c).
+      return idDoEstilo(quem) === 'terra' && (c.golpes ?? 0) >= REGRAS_DA_TERRA.golpesDaPedra ? REGRAS_DA_TERRA.resistencia : 0;
     case 'guerreiro': {
       if (!(quem.maxHp > 0)) return 0;
       const falta = Math.max(0, quem.maxHp - quem.hp);
@@ -735,6 +776,34 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
       const textos = [`☯️ Ki ${extras.ki ?? 0}/${REGRAS_DO_MONGE.tetoDoKi}${extras.revestido ? ' · Revestido' : ''}`];
       if (idDoEstilo(quem as QuemTemEstilo) === 'concentracao') textos.push(`🧘 Cargas ${c.cargas ?? 0}/${REGRAS_DA_CONCENTRACAO.tetoDeCargas}`);
       return textos;
+    }
+    case 'mago': {
+      // Os elementos (rodada 5c): quanto falta pro disparo da vez, e o que já acendeu.
+      const golpes = c.golpes ?? 0;
+      switch (idDoEstilo(quem as QuemTemEstilo)) {
+        case 'fogo':
+          return [`🔥 Bola de fogo em ${faltamPro(golpes, REGRAS_DO_FOGO.bolaACada)}`];
+        case 'terra':
+          return [golpes >= REGRAS_DA_TERRA.golpesDaPedra ? '🪨 Revestimento de pedra' : `🪨 Pedra ${golpes}/${REGRAS_DA_TERRA.golpesDaPedra}`];
+        case 'vento':
+          return [`🌀 Empurrão em ${faltamPro(golpes, REGRAS_DO_VENTO.empurraACada)}${(c.ventania ?? 0) > 0 ? ' · ventania' : ''}`];
+        case 'agua':
+          return [`💧 Redemoinho em ${faltamPro(golpes, REGRAS_DA_AGUA.redemoinhoACada)}`];
+        case 'arcano': {
+          const r = REGRAS_DO_ARCANO;
+          return [
+            golpes >= r.golpesDoArcano
+              ? `✨ Arcano +${Math.max(0, golpes - r.golpesDoArcano) * r.porGolpe}%`
+              : `✨ Grilhões em ${faltamPro(golpes, r.grilhoesACada)} · ${golpes}/${r.golpesDoArcano}`,
+          ];
+        }
+        case 'escuridao': {
+          const r = REGRAS_DA_ESCURIDAO;
+          return [golpes >= r.golpesDaFome ? '🌑 Fome da escuridão' : `🌑 Escuridão em ${faltamPro(golpes, r.areaACada)} · ${golpes}/${r.golpesDaFome}`];
+        }
+        default:
+          return [];
+      }
     }
     case 'necromante':
       if (extras.magiaSelada) return ['☠️ Magia selada'];

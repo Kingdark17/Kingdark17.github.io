@@ -14,7 +14,10 @@
  * Rodada 5a: os do Guerreiro (Espadachim, Cavaleiro) e os do Monge
  * (Empurrão, Dash/chute, Concentração). Rodada 5b: os do Druida
  * (Metamorfose, Florescimento, Raízes Ocultas), que um espírito ancestral
- * ensina.
+ * ensina. Rodada 5c: os elementos do Mago (Fogo, Terra, Vento, Água, e os
+ * raros Arcano e Escuridão), **um só e pra sempre** (o doc do Breno; decisão
+ * do usuário): depois do primeiro, o mestre do Mago não aparece mais e a
+ * guilda não troca.
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
@@ -63,7 +66,48 @@ export const ESTILOS: readonly EstiloDef[] = [
     icone: '🌱',
     desc: 'As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido.',
   },
+  {
+    id: 'fogo',
+    classe: 'mago',
+    nome: 'Fogo',
+    icone: '🔥',
+    desc: 'Todo disparo queima o alvo por 1 turno (5% da vida dele). A cada 5 disparos, a bola de fogo queima todos em volta do alvo (3 × 3) por 2 turnos.',
+  },
+  { id: 'terra', classe: 'mago', nome: 'Terra', icone: '🪨', desc: 'Disparos de rocha com +30% de dano. Do 20º disparo da luta em diante, o revestimento de pedra segura 20% do dano.' },
+  {
+    id: 'vento',
+    classe: 'mago',
+    nome: 'Vento',
+    icone: '🌀',
+    desc: 'O monstro atingido golpeia de 1 bloco mais perto pelo resto da luta, e você anda 15% mais rápido por 3 s. A cada 5 disparos, o vento empurra o alvo 2 blocos; se ele bater em algo, cai atordoado por 5 s (o chefe não).',
+  },
+  {
+    id: 'agua',
+    classe: 'mago',
+    nome: 'Água',
+    icone: '💧',
+    desc: 'O jato acerta todos no caminho até o alvo. A cada 10 disparos, um redemoinho no alvo puxa quem está a até 5 blocos (até 3 blocos), prende 2 s e deixa 25% mais lento por 5 s (o chefe não).',
+  },
+  {
+    id: 'arcano',
+    classe: 'mago',
+    nome: 'Arcano',
+    icone: '✨',
+    raro: 8,
+    desc: 'Disparos com +35% de dano que deixam o alvo 20% mais lento. A cada 5, os Grilhões Arcanos prendem o alvo 4 s (o chefe não) e batem +30%. Do 15º disparo da luta em diante, cada um dá 10 de mana e soma +10% de dano.',
+  },
+  {
+    id: 'escuridao',
+    classe: 'mago',
+    nome: 'Escuridão',
+    icone: '🌑',
+    raro: 10,
+    desc: 'A orbe sombria bate +15%. A cada 8 disparos, a escuridão cobre 5 × 5 em volta do alvo por 10 s: quem está nela bate 20% mais fraco e acerta 25% menos. Do 24º disparo da luta em diante, cada um engole 15% da vida que resta do alvo (até 300 no chefe).',
+  },
 ];
+
+/** As classes que aprendem um estilo só, pra sempre (o Mago, rodada 5c). */
+export const ESTILO_UNICO: readonly string[] = ['mago'];
 
 /** A chance (%) de um andar trazer o mestre, por classe (depois de zerar a Floresta). */
 export const CHANCE_DO_MESTRE: Readonly<Record<string, number>> = { guerreiro: 15, monge: 15, druida: 15, mago: 10 };
@@ -173,6 +217,74 @@ export function quemEnsina(estilo: string | undefined): { nome: string; icone: s
   };
 }
 
+export const REGRAS_DO_FOGO = {
+  /** Todo disparo queima o alvo `turnos` turnos, com `queimadura` (%) da vida máxima dele por turno; o disparo de número múltiplo de `bolaACada` queima o 3 × 3 em volta dele por `turnosDaBola`. */
+  turnos: 1,
+  queimadura: 5,
+  bolaACada: 5,
+  ladoDaBola: 3,
+  turnosDaBola: 2,
+} as const;
+
+export const REGRAS_DA_TERRA = {
+  /** O dano a mais (%), e do disparo `golpesDaPedra` da luta em diante a resistência (%). */
+  dano: 30,
+  golpesDaPedra: 20,
+  resistencia: 20,
+} as const;
+
+export const REGRAS_DO_VENTO = {
+  /** O monstro atingido golpeia de `encurta` blocos mais perto (até o mínimo de meio bloco); o Mago anda `velocidade` (%) mais rápido por `ventania` passos. */
+  encurta: 1,
+  velocidade: 15,
+  ventania: 180,
+  /** O disparo múltiplo de `empurraACada` empurra o alvo `empurrao` blocos; se bater em algo, `atordoa` passos atordoado (o chefe não). */
+  empurraACada: 5,
+  empurrao: 2,
+  atordoa: 300,
+} as const;
+
+export const REGRAS_DA_AGUA = {
+  /** O jato: `largura` casas de largura do Mago ao alvo. */
+  largura: 1,
+  /** O disparo múltiplo de `redemoinhoACada`: puxa quem está a até `raio` blocos do alvo, até `puxa` blocos, prende `preso` passos e deixa `lento` (%) mais lento por `lerdo` passos depois (o chefe não). */
+  redemoinhoACada: 10,
+  raio: 5,
+  puxa: 3,
+  preso: 120,
+  lento: 25,
+  lerdo: 300,
+} as const;
+
+export const REGRAS_DO_ARCANO = {
+  /** O dano a mais (%) e a lentidão (%) do disparo. */
+  dano: 35,
+  lento: 20,
+  /** Os Grilhões: o disparo múltiplo de `grilhoesACada` prende `preso` passos (o chefe não) e bate `danoDosGrilhoes` (%) a mais. */
+  grilhoesACada: 5,
+  preso: 240,
+  danoDosGrilhoes: 30,
+  /** Do disparo `golpesDoArcano` da luta em diante: cada um dá `mana` e soma `porGolpe` (%) de dano por disparo depois dele. */
+  golpesDoArcano: 15,
+  mana: 10,
+  porGolpe: 10,
+} as const;
+
+export const REGRAS_DA_ESCURIDAO = {
+  /** O dano a mais (%) da orbe. */
+  dano: 15,
+  /** O disparo múltiplo de `areaACada` cobre `lado` × `lado` casas em volta do alvo por `duracao` passos: quem está dentro bate `fraqueza` (%) mais fraco e acerta `erra` (%) menos. */
+  areaACada: 8,
+  lado: 5,
+  duracao: 600,
+  fraqueza: 20,
+  erra: 25,
+  /** Do disparo `golpesDaFome` da luta em diante, cada um engole `engole` (%) da vida que resta do alvo (no chefe, no máximo `tetoNoChefe`). */
+  golpesDaFome: 24,
+  engole: 15,
+  tetoNoChefe: 300,
+} as const;
+
 /** O estilo pelo id. */
 export function estiloPorId(id: string | undefined): EstiloDef | null {
   return ESTILOS.find((e) => e.id === id) ?? null;
@@ -204,7 +316,15 @@ export function idDoEstilo(quem: QuemTemEstilo): string | undefined {
 /** Os estilos da classe que o herói ainda não aprendeu. */
 export function estilosQueFaltam(quem: QuemTemEstilo): EstiloDef[] {
   const tem = quem.estilos ?? [];
-  return estilosDaClasse(quem).filter((e) => !tem.includes(e.id));
+  const daClasse = estilosDaClasse(quem);
+  // O Mago aprende um só (rodada 5c): com um, não falta mais nada.
+  if (estiloUnico(quem) && daClasse.some((e) => tem.includes(e.id))) return [];
+  return daClasse.filter((e) => !tem.includes(e.id));
+}
+
+/** A classe aprende um estilo só, pra sempre (o Mago). */
+export function estiloUnico(quem: QuemTemEstilo): boolean {
+  return ESTILO_UNICO.includes(idDaClasse(quem) ?? '');
 }
 
 /**
@@ -227,11 +347,15 @@ export function sortearEstilo(quem: QuemTemEstilo, rng: Rng): string | null {
 export function aprenderEstilo<T extends QuemTemEstilo>(quem: T, id: string): T {
   const estilo = estiloPorId(id);
   if (!estilo || estilo.classe !== idDaClasse(quem) || (quem.estilos ?? []).includes(id)) return quem;
+  // O Mago que já tem o dele não aprende outro.
+  if (estiloUnico(quem) && estilosQueFaltam(quem).length === 0) return quem;
   return { ...quem, estilos: [...(quem.estilos ?? []), id], estilo: id };
 }
 
 /** Escolhe o estilo ativo na guilda, entre os que o herói tem; `undefined` volta a lutar sem estilo. */
 export function trocarEstilo<T extends QuemTemEstilo>(quem: T, id: string | undefined): T {
+  // O do Mago é pra sempre: a guilda não troca nem tira.
+  if (estiloUnico(quem)) return quem;
   if (id === undefined) {
     const { estilo: _e, ...resto } = quem;
     return resto as T;

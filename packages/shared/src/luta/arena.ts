@@ -101,6 +101,8 @@ import {
   contarGolpeLevado,
   contarParado,
   auraDeFera,
+  aCadaGolpe,
+  danoDoMago,
   golpeQuePrende,
   raizesFundas,
   golpeForte,
@@ -134,8 +136,14 @@ import {
 import { idDaClasse } from '../hero/catalog.js';
 import {
   idDoEstilo,
+  REGRAS_DA_AGUA,
   REGRAS_DA_CONCENTRACAO,
+  REGRAS_DA_ESCURIDAO,
   REGRAS_DA_METAMORFOSE,
+  REGRAS_DA_TERRA,
+  REGRAS_DO_ARCANO,
+  REGRAS_DO_FOGO,
+  REGRAS_DO_VENTO,
   REGRAS_DAS_RAIZES,
   REGRAS_DO_CHUTE,
   REGRAS_DO_EMPURRAO,
@@ -296,6 +304,17 @@ export interface MonstroNaArena {
   noLacaio?: number;
   /** Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim. */
   preso?: number;
+  /** O Vento do Mago o acertou (rodada 5c): ele golpeia de 1 bloco mais perto até o fim da luta. */
+  encurtado?: boolean;
+  /** O redemoinho da Água (rodada 5c): os passos que ainda anda mais devagar. */
+  lerdo?: number;
+}
+
+/** A área de escuridão do Mago (rodada 5c): o meio dela, em unidades da sala, e os passos que ainda dura. */
+export interface EscuridaoNaSala {
+  x: number;
+  y: number;
+  tempo: number;
 }
 
 /**
@@ -504,6 +523,8 @@ export interface Arena {
   /** O Florescimento (rodada 5b): as flores que o herói daqui plantou (a mais antiga primeiro), e os passos dentro de uma até a próxima cura. */
   flores?: FlorNaSala[];
   relogioDaFlor?: number;
+  /** A área de escuridão do Mago (rodada 5c). */
+  escuridao?: EscuridaoNaSala;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -1315,8 +1336,11 @@ function golpear(l: Luta): void {
     }
     l.arena.classe = { ...contadores(l), recargaDoEstilo: REGRAS_DO_ESPADACHIM.recarga };
   }
-  // O Druida com estilo conta os ataques da luta (a aura da Metamorfose, as Raízes).
-  const golpeDoDruida = idDaClasse(heroDoGolpe) === 'druida' && estilo ? contarGolpeDoDruida(l, estilo) : 0;
+  // O Druida com estilo conta os ataques da luta (a aura da Metamorfose, as Raízes); o Mago com elemento, os disparos (rodada 5c).
+  const classeDoGolpe = idDaClasse(heroDoGolpe);
+  const conta = !!estilo && (classeDoGolpe === 'druida' || (classeDoGolpe === 'mago' && aberto.estilo === 'magic'));
+  const golpeDoDruida = conta ? contarGolpeDoEstilo(l, estilo as string) : 0;
+  const disparo = classeDoGolpe === 'mago' && conta;
   // O chute erra 1 vez em 10.
   if (estilo === 'chute' && l.rng() * 100 < REGRAS_DO_CHUTE.erro) {
     contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: 'Errou', tom: 'erro' });
@@ -1327,6 +1351,8 @@ function golpear(l: Luta): void {
   const acerto = acertarMonstro(l, l.arena.monstros[indice] as MonstroNaArena, dado, leitura, aberto.estilo);
   // A Concentração gasta as cargas no golpe, acertando ou não.
   if (estilo === 'concentracao' && l.arena.classe) l.arena.classe = { ...l.arena.classe, cargas: 0, semGolpe: 0 };
+  // O Arcano desperto dá mana a cada disparo, acertando ou não.
+  if (disparo && estilo === 'arcano' && golpeDoDruida >= REGRAS_DO_ARCANO.golpesDoArcano) manaDoArcano(l);
   if (!acerto || l.fim) return;
   // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
   apoiarAqui(l);
@@ -1338,6 +1364,8 @@ function golpear(l: Luta): void {
   if (atordoarDepois && !l.fim && alvo.fase !== 'caido') atordoar(l, alvo, REGRAS_DO_ESPADACHIM.atordoa);
   // Todo 9º golpe das Raízes prende o alvo (o chefe não).
   if (estilo === 'raizes' && golpeQuePrende(golpeDoDruida) && !l.fim) prender(l, alvo);
+  // Os elementos do Mago (rodada 5c), no disparo que acertou.
+  if (disparo && !l.fim) elementoNoGolpe(l, indice, acerto.dano, golpeDoDruida, estilo as string);
   if (paladino && !l.fim && alvo.fase !== 'caido') empurrar(l, alvo, l.arena.heroi, REGRAS_DO_PALADINO.empurrao);
 }
 
@@ -1361,7 +1389,9 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     bonusDoAtaque(estado.hero, contadores(l), { colado: colado(l, alvo.indice), chefe: !!monstro.isBoss, blocos: blocosAte(l, alvo.indice) }) +
     moral.dano +
     ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0) +
-    (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0);
+    (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0) +
+    // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
+    (estilo === 'magic' && idDaClasse(estado.hero) === 'mago' ? danoDoMago(estado.hero, contadores(l).golpes ?? 0) : 0);
   const daClasse = criticoDaClasse(estado.hero);
   const criticoAMais = moral.critico + criticoDoEstilo(estado.hero);
   const critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
@@ -2059,6 +2089,15 @@ function avancoPronto(l: Luta): boolean {
 
 /** Um passo do mundo: a espera do avanço e a imunidade do Espadachim correm; a Concentração junta cargas sem golpear. */
 function passarOsEstilos(l: Luta): void {
+  // A escuridão do Mago dura o tempo dela (rodada 5c).
+  if (l.arena.escuridao) {
+    if (l.arena.escuridao.tempo > 1) l.arena.escuridao = { ...l.arena.escuridao, tempo: l.arena.escuridao.tempo - 1 };
+    else delete l.arena.escuridao;
+  }
+  if ((contadores(l).ventania ?? 0) > 0) {
+    const { ventania, ...resto } = contadores(l);
+    l.arena.classe = (ventania as number) > 1 ? { ...resto, ventania: (ventania as number) - 1 } : resto;
+  }
   const estilo = idDoEstilo(masmorra(l).hero);
   if (estilo !== 'espadachim' && estilo !== 'concentracao') return;
   const c = { ...contadores(l) };
@@ -2155,19 +2194,214 @@ function corteInvernal(l: Luta): void {
 // ---------- os estilos do Druida (rodada 5b: Metamorfose, Florescimento, Raízes Ocultas) ----------
 
 /** O Druida com estilo deu mais um ataque nesta luta: conta, e avisa a aura de fera e as Raízes fundas quando chegam. O número deste. */
-function contarGolpeDoDruida(l: Luta, estilo: string): number {
+function contarGolpeDoEstilo(l: Luta, estilo: string): number {
   const golpes = (contadores(l).golpes ?? 0) + 1;
   l.arena.classe = { ...contadores(l), golpes };
-  if (estilo === 'metamorfose' && golpes === REGRAS_DA_METAMORFOSE.golpesDaAura) contar(l, { tipo: 'aviso', texto: '🐾 Aura de fera!' });
-  if (estilo === 'raizes' && golpes === REGRAS_DAS_RAIZES.golpesDoVeneno) contar(l, { tipo: 'aviso', texto: '🌱 Raízes fundas!' });
+  const aviso = (texto: string) => contar(l, { tipo: 'aviso', texto });
+  if (estilo === 'metamorfose' && golpes === REGRAS_DA_METAMORFOSE.golpesDaAura) aviso('🐾 Aura de fera!');
+  if (estilo === 'raizes' && golpes === REGRAS_DAS_RAIZES.golpesDoVeneno) aviso('🌱 Raízes fundas!');
+  if (estilo === 'terra' && golpes === REGRAS_DA_TERRA.golpesDaPedra) aviso('🪨 Revestimento de pedra!');
+  if (estilo === 'arcano' && golpes === REGRAS_DO_ARCANO.golpesDoArcano) aviso('✨ O arcano desperta!');
+  if (estilo === 'escuridao' && golpes === REGRAS_DA_ESCURIDAO.golpesDaFome) aviso('🌑 A escuridão tem fome!');
   return golpes;
 }
 
-/** As Raízes prendem o monstro de pé (o chefe não). No espelho, não (é do anfitrião). */
-function prender(l: Luta, m: MonstroNaArena): void {
+/** As Raízes (e os Grilhões, o redemoinho) prendem o monstro de pé (o chefe não). No espelho, não (é do anfitrião). */
+function prender(l: Luta, m: MonstroNaArena, passos: number = REGRAS_DAS_RAIZES.preso, texto = '🌱 Preso'): void {
   if (noEspelho(l) || m.fase === 'caido' || monstroNo(l, m.indice).isBoss) return;
-  m.preso = REGRAS_DAS_RAIZES.preso;
-  contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: '🌱 Preso', tom: 'erro' });
+  m.preso = passos;
+  contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto, tom: 'erro' });
+}
+
+// ---------- os elementos do Mago (rodada 5c: Fogo, Terra, Vento, Água, Arcano, Escuridão) ----------
+
+/**
+ * O disparo do Mago com elemento acertou o monstro `indice` (o de número
+ * `golpe` da luta): o que o elemento faz depois do dano. O que mexe no
+ * monstro (a queimadura, o empurrão, o preso) é do anfitrião, como sempre; o
+ * dano em quem está em volta, não.
+ */
+function elementoNoGolpe(l: Luta, indice: number, dano: number, golpe: number, estilo: string): void {
+  const alvo = l.arena.monstros[indice] as MonstroNaArena;
+  switch (estilo) {
+    case 'fogo': {
+      const r = REGRAS_DO_FOGO;
+      if (aCadaGolpe(golpe, r.bolaACada)) bolaDeFogo(l, indice);
+      else queimar(l, alvo, r.turnos);
+      return;
+    }
+    case 'vento': {
+      const r = REGRAS_DO_VENTO;
+      l.arena.classe = { ...contadores(l), ventania: r.ventania };
+      if (alvo.fase === 'caido') return;
+      if (!noEspelho(l)) alvo.encurtado = true;
+      contar(l, { tipo: 'numero', onde: 'monstro', indice, texto: '🌀', tom: 'erro' });
+      if (aCadaGolpe(golpe, r.empurraACada) && empurrarComBatida(l, alvo, l.arena.heroi, r.empurrao) && !monstroNo(l, indice).isBoss) atordoar(l, alvo, r.atordoa);
+      return;
+    }
+    case 'agua': {
+      jatoDagua(l, indice, dano);
+      if (!l.fim && aCadaGolpe(golpe, REGRAS_DA_AGUA.redemoinhoACada)) redemoinho(l, indice);
+      return;
+    }
+    case 'arcano': {
+      const r = REGRAS_DO_ARCANO;
+      if (alvo.fase === 'caido') return;
+      lentoNoMonstro(l, indice, r.lento);
+      if (aCadaGolpe(golpe, r.grilhoesACada)) prender(l, alvo, r.preso, '⛓️ Preso');
+      return;
+    }
+    case 'escuridao': {
+      const r = REGRAS_DA_ESCURIDAO;
+      if (aCadaGolpe(golpe, r.areaACada)) {
+        const lugar = lugarDe(l, indice);
+        l.arena.escuridao = { x: Math.trunc(lugar.x), y: Math.trunc(lugar.y), tempo: r.duracao };
+        contar(l, { tipo: 'aviso', texto: '🌑 Escuridão' });
+      }
+      if (golpe >= r.golpesDaFome && alvo.fase !== 'caido') engolir(l, indice);
+      return;
+    }
+    default:
+  }
+}
+
+/** O monstro de pé fica queimando `turnos` turnos (5% da vida máxima dele por turno), sem encurtar a queimadura que já tinha. No espelho, não. */
+function queimar(l: Luta, m: MonstroNaArena, turnos: number): void {
+  if (noEspelho(l) || m.fase === 'caido') return;
+  const monstro = (sala(l).monsters ?? [])[m.indice] as CombatMonster;
+  const dmg = Math.max(1, Math.trunc((monstro.maxHp * REGRAS_DO_FOGO.queimadura) / 100));
+  const antes = monstro.status?.queimadura;
+  const queimadura = { turns: Math.max(turnos, antes?.turns ?? 0), dmg: Math.max(dmg, antes?.dmg ?? 0) };
+  l.estado = gravarMonstro(masmorra(l), m.indice, { ...monstro, status: { ...monstro.status, queimadura } });
+  contar(l, { tipo: 'numero', onde: 'monstro', indice: m.indice, texto: '🔥', tom: 'erro' });
+}
+
+/** A bola de fogo: queima todos de pé no 3 × 3 em volta do alvo (ele também) por 2 turnos. */
+function bolaDeFogo(l: Luta, alvo: number): void {
+  const r = REGRAS_DO_FOGO;
+  const centro = lugarDe(l, alvo);
+  const meio = (r.ladoDaBola * TILE_UNITS) / 2;
+  contar(l, { tipo: 'aviso', texto: '🔥 Bola de fogo' });
+  for (let i = 0; i < l.arena.monstros.length; i++) {
+    const m = l.arena.monstros[i] as MonstroNaArena;
+    if (m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    if (Math.abs(lugar.x - centro.x) <= meio && Math.abs(lugar.y - centro.y) <= meio) queimar(l, m, r.turnosDaBola);
+  }
+}
+
+/** O monstro de pé fica `pct` (%) mais lento por 2 turnos (o Arcano). No espelho, não. */
+function lentoNoMonstro(l: Luta, indice: number, pct: number): void {
+  if (noEspelho(l)) return;
+  const monstro = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  const lento = { turns: REGRAS_DO_DRUIDA.turnos, amount: pct / 100 };
+  l.estado = gravarMonstro(masmorra(l), indice, { ...monstro, status: { ...monstro.status, lento } });
+}
+
+/**
+ * O empurrão do Vento: como o da maça, `blocos` blocos pra longe de `de`, mas
+ * diz se bateu em algo — a parede de volta da sala, uma parede de dentro ou
+ * outro monstro de pé. Batendo numa de dentro ou num monstro, fica onde está.
+ */
+function empurrarComBatida(l: Luta, m: MonstroNaArena, de: { x: number; y: number }, blocos: number): boolean {
+  if (noEspelho(l) || m.fase === 'caido' || m.fase === 'avisando' || m.fase === 'investindo') return false;
+  const r = rumo(m.corpoX - de.x, m.corpoY - de.y, blocos * TILE_UNITS);
+  const { cols, rows } = geometria(l);
+  const meia = TILE_UNITS / 2;
+  const alvoX = m.corpoX + r.x;
+  const alvoY = m.corpoY + r.y;
+  const x = Math.min(Math.max(alvoX, TILE_UNITS + meia), (cols - 1) * TILE_UNITS - meia);
+  const y = Math.min(Math.max(alvoY, TILE_UNITS + meia), (rows - 1) * TILE_UNITS - meia);
+  const noOutro = l.arena.monstros.some(
+    (o) => o.indice !== m.indice && o.fase !== 'caido' && (o.corpoX - x) * (o.corpoX - x) + (o.corpoY - y) * (o.corpoY - y) < ESPACO_ENTRE_MONSTROS * ESPACO_ENTRE_MONSTROS,
+  );
+  if (naParede(l, x, y) || noOutro) return true;
+  m.corpoX = x;
+  m.corpoY = y;
+  return x !== alvoX || y !== alvoY;
+}
+
+/** O jato da Água: quem está na linha do Mago ao alvo (1 casa de largura, até o alvo) leva o mesmo dano. */
+function jatoDagua(l: Luta, alvo: number, dano: number): void {
+  const heroi = { x: l.arena.heroi.x, y: l.arena.heroi.y };
+  const fim = lugarDe(l, alvo);
+  const dx = fim.x - heroi.x;
+  const dy = fim.y - heroi.y;
+  const comprimento = Math.sqrt(dx * dx + dy * dy);
+  if (comprimento === 0) return;
+  const meiaLargura = (REGRAS_DA_AGUA.largura * TILE_UNITS) / 2;
+  const pegos: MonstroNaArena[] = [];
+  for (const m of l.arena.monstros) {
+    if (m.indice === alvo || m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    const px = lugar.x - heroi.x;
+    const py = lugar.y - heroi.y;
+    const ao = (px * dx + py * dy) / comprimento;
+    const fora = Math.abs(px * dy - py * dx) / comprimento;
+    if (ao >= 0 && ao <= comprimento && fora <= meiaLargura) pegos.push(m);
+  }
+  for (const m of pegos) {
+    if (l.fim) return;
+    if (m.fase !== 'caido') ferirComDano(l, m.indice, dano, `💧-${dano}`);
+  }
+}
+
+/**
+ * O redemoinho da Água: puxa quem está de pé a até `raio` blocos do alvo,
+ * até `puxa` blocos rumo a ele, prende e deixa mais lento (o chefe não). No
+ * espelho, não.
+ */
+function redemoinho(l: Luta, alvo: number): void {
+  const r = REGRAS_DA_AGUA;
+  if (noEspelho(l)) return;
+  const centro = lugarDe(l, alvo);
+  const raio = r.raio * TILE_UNITS + TILE_UNITS / 2;
+  contar(l, { tipo: 'aviso', texto: '💧 Redemoinho' });
+  for (const m of l.arena.monstros) {
+    if (m.fase === 'caido' || monstroNo(l, m.indice).isBoss) continue;
+    const dx = centro.x - m.corpoX;
+    const dy = centro.y - m.corpoY;
+    const distancia = Math.sqrt(dx * dx + dy * dy);
+    if (distancia > raio) continue;
+    if (m.indice !== alvo && m.fase !== 'avisando' && m.fase !== 'investindo') {
+      // Puxa até `puxa` blocos, sem passar do espaço entre os monstros perto do meio.
+      const anda = Math.min(r.puxa * TILE_UNITS, Math.max(0, distancia - ESPACO_ENTRE_MONSTROS));
+      if (anda > 0 && distancia > 0) {
+        const x = m.corpoX + Math.trunc((dx * anda) / distancia);
+        const y = m.corpoY + Math.trunc((dy * anda) / distancia);
+        if (!naParede(l, x, y)) {
+          m.corpoX = x;
+          m.corpoY = y;
+        }
+      }
+    }
+    prender(l, m, r.preso, '💧 Preso');
+    m.lerdo = r.preso + r.lerdo;
+  }
+}
+
+/** O Arcano desperto: cada disparo dá mana (até o máximo). */
+function manaDoArcano(l: Luta): void {
+  const estado = masmorra(l);
+  const mp = Math.min(estado.hero.maxMp, estado.hero.mp + REGRAS_DO_ARCANO.mana);
+  if (mp !== estado.hero.mp) l.estado = { ...estado, hero: { ...estado.hero, mp } };
+}
+
+/** A fome da escuridão: o disparo engole 15% da vida que resta do alvo (no chefe, no máximo 300). */
+function engolir(l: Luta, indice: number): void {
+  const r = REGRAS_DA_ESCURIDAO;
+  const monstro = (sala(l).monsters ?? [])[indice] as CombatMonster;
+  let engole = Math.trunc((monstro.hp * r.engole) / 100);
+  if (monstro.isBoss) engole = Math.min(r.tetoNoChefe, engole);
+  if (engole >= 1) ferirComDano(l, indice, engole, `🌑-${engole}`);
+}
+
+/** O monstro está dentro da área de escuridão do Mago? */
+function naEscuridao(l: Luta, m: MonstroNaArena | undefined): boolean {
+  const e = l.arena.escuridao;
+  if (!e || !m) return false;
+  const meio = (REGRAS_DA_ESCURIDAO.lado * TILE_UNITS) / 2;
+  return Math.abs(m.corpoX - e.x) <= meio && Math.abs(m.corpoY - e.y) <= meio;
 }
 
 /**
@@ -2462,7 +2696,9 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
   const base = velocidadeNaArena(masmorra(l).hero);
   // As Raízes fundas (rodada 5b) também: o Druida anda 10% mais rápido.
   const fundas = idDoEstilo(masmorra(l).hero) === 'raizes' && raizesFundas(contadores(l).golpes ?? 0) ? REGRAS_DAS_RAIZES.velocidade : 0;
-  const daMais = daMoral + fundas;
+  // E a ventania do Vento (rodada 5c).
+  const ventania = (contadores(l).ventania ?? 0) > 0 ? REGRAS_DO_VENTO.velocidade : 0;
+  const daMais = daMoral + fundas + ventania;
   const velocidade = daMais > 0 ? Math.trunc((base * (100 + daMais)) / 100) : base;
   return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidade).walker;
 }
@@ -2531,6 +2767,10 @@ function agirMonstro(l: Luta, m: MonstroNaArena): void {
     if (m.preso > 1) m.preso -= 1;
     else delete m.preso;
   }
+  if (m.lerdo !== undefined) {
+    if (m.lerdo > 1) m.lerdo -= 1;
+    else delete m.lerdo;
+  }
   const jeito = jeitoDoGolpe(monstroNo(l, m.indice), m.poder);
   switch (m.fase) {
     case 'esperando':
@@ -2565,7 +2805,9 @@ function distanciaDoHeroi(l: Luta, m: MonstroNaArena): number {
 
 /** O monstro está perto o bastante do herói pro golpe dele começar? */
 function aDistanciaDoGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): boolean {
-  return distanciaDoHeroi(l, m) <= jeito.distancia * jeito.distancia;
+  // O Vento do Mago (rodada 5c): o monstro que ele acertou golpeia de 1 bloco mais perto (até meio bloco).
+  const distancia = m.encurtado ? Math.max(TILE_UNITS / 2, jeito.distancia - REGRAS_DO_VENTO.encurta * TILE_UNITS) : jeito.distancia;
+  return distanciaDoHeroi(l, m) <= distancia * distancia;
 }
 
 /**
@@ -2583,7 +2825,9 @@ function aproximar(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   // Lento (as vinhas do Druida, as canções…), anda menos.
   const lento = ((sala(l).monsters ?? [])[m.indice] as CombatMonster | undefined)?.status?.lento;
   // Sem `amount` (save antigo), os 20% do site (`startMonsterAttack`).
-  const passo = lento && lento.turns > 0 ? Math.trunc(jeito.passo * (1 - (lento.amount || 0.2))) : jeito.passo;
+  const passoLento = lento && lento.turns > 0 ? Math.trunc(jeito.passo * (1 - (lento.amount || 0.2))) : jeito.passo;
+  // O redemoinho da Água (rodada 5c) também.
+  const passo = (m.lerdo ?? 0) > 0 ? Math.trunc((passoLento * (100 - REGRAS_DA_AGUA.lento)) / 100) : passoLento;
   const r = rumo(heroi.x - m.corpoX, heroi.y - m.corpoY, passo);
   const { cols, rows } = geometria(l);
   const meia = TILE_UNITS / 2;
@@ -2798,9 +3042,13 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   const estado = masmorra(l);
   const monstro = monstroNo(l, indice);
   const c = contadores(l);
+  // Na escuridão do Mago (rodada 5c), o monstro bate mais fraco e acerta menos.
+  const escuro = naEscuridao(l, l.arena.monstros[indice]);
+  const r = REGRAS_DA_ESCURIDAO;
   // A esquiva da classe (a furtividade do Ladino) soma com a do pet.
-  const esquiva = (petBonus(l.pet).esquiva ?? 0) + esquivaDaClasse(estado.hero, c, !!monstro.isBoss);
-  const golpe = landHitOnHero(estado.hero, monstro, forca, l.rng, esquiva, defesasDoHeroi(estado.hero), classeRefeita(estado.hero));
+  const esquiva = (petBonus(l.pet).esquiva ?? 0) + esquivaDaClasse(estado.hero, c, !!monstro.isBoss) + (escuro ? r.erra : 0);
+  const forcaNoEscuro = escuro ? (forca * (100 - r.fraqueza)) / 100 : forca;
+  const golpe = landHitOnHero(estado.hero, monstro, forcaNoEscuro, l.rng, esquiva, defesasDoHeroi(estado.hero), classeRefeita(estado.hero));
   if (golpe.dodged) {
     // Esquivar treina a Destreza.
     l.estado = gravarMonstro({ ...estado, hero: anotarUso(golpe.hero, 'destreza') }, indice, golpe.monster);

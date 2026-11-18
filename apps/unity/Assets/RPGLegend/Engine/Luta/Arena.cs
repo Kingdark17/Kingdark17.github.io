@@ -55,6 +55,10 @@ namespace RPGLegend.Engine
         public double? NoLacaio;
         /// <summary>Preso pelas Raízes Ocultas (rodada 5b): os passos que faltam. Não anda nem investe; o golpe de onde está, sim.</summary>
         public double? Preso;
+        /// <summary>O Vento do Mago o acertou (rodada 5c): ele golpeia de 1 bloco mais perto até o fim da luta.</summary>
+        public bool? Encurtado;
+        /// <summary>O redemoinho da Água (rodada 5c): os passos que ainda anda mais devagar.</summary>
+        public double? Lerdo;
 
         public MonstroNaArena Clone() => (MonstroNaArena)MemberwiseClone();
     }
@@ -102,6 +106,16 @@ namespace RPGLegend.Engine
         public double? Passos;
         /// <summary>Os pontos de % de cura a mais (a Purificação da Metamorfose, rodada 5b).</summary>
         public double? Mais;
+    }
+
+    /// <summary>TS: EscuridaoNaSala — a área de escuridão do Mago (rodada 5c): o meio dela e os passos que ainda dura.</summary>
+    public sealed class EscuridaoNaSala
+    {
+        public double X;
+        public double Y;
+        public double Tempo;
+
+        public EscuridaoNaSala Clone() => new EscuridaoNaSala { X = X, Y = Y, Tempo = Tempo };
     }
 
     /// <summary>TS: FlorNaSala — uma flor do Florescimento (rodada 5b): o meio dela, em unidades da sala.</summary>
@@ -285,6 +299,8 @@ namespace RPGLegend.Engine
         /// <summary>O Florescimento (rodada 5b): as flores que o herói daqui plantou (a mais antiga primeiro), e os passos dentro de uma até a próxima cura.</summary>
         public List<FlorNaSala> Flores;
         public double? RelogioDaFlor;
+        /// <summary>A área de escuridão do Mago (rodada 5c).</summary>
+        public EscuridaoNaSala Escuridao;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -701,6 +717,7 @@ namespace RPGLegend.Engine
                 RecargaDaMagia = arena.RecargaDaMagia,
                 Flores = arena.Flores != null ? arena.Flores.ConvertAll(f => f.Clone()) : null,
                 RelogioDaFlor = arena.RelogioDaFlor,
+                Escuridao = arena.Escuridao?.Clone(),
             };
             if (arena.Cristais != null)
             {
@@ -1325,8 +1342,11 @@ namespace RPGLegend.Engine
                 recarga.RecargaDoEstilo = Estilos.Espadachim.Recarga;
                 l.Arena.Classe = recarga;
             }
-            // O Druida com estilo conta os ataques da luta (a aura da Metamorfose, as Raízes).
-            double golpeDoDruida = Catalog.IdDaClasse(heroDoGolpe.ClassId, heroDoGolpe.ClassName) == "druida" && estiloAtivo != null ? ContarGolpeDoDruida(l, estiloAtivo) : 0;
+            // O Druida com estilo conta os ataques da luta; o Mago com elemento, os disparos (rodada 5c).
+            string classeDoGolpe = Catalog.IdDaClasse(heroDoGolpe.ClassId, heroDoGolpe.ClassName);
+            bool conta = estiloAtivo != null && (classeDoGolpe == "druida" || (classeDoGolpe == "mago" && aberto.Estilo == AttackStyles.Magic));
+            double golpeDoDruida = conta ? ContarGolpeDoEstilo(l, estiloAtivo) : 0;
+            bool disparo = classeDoGolpe == "mago" && conta;
             // O chute erra 1 vez em 10.
             if (estiloAtivo == "chute" && l.Rng() * 100 < Estilos.Chute.Erro)
             {
@@ -1344,6 +1364,8 @@ namespace RPGLegend.Engine
                 gastou.SemGolpe = 0;
                 l.Arena.Classe = gastou;
             }
+            // O Arcano desperto dá mana a cada disparo, acertando ou não.
+            if (disparo && estiloAtivo == "arcano" && golpeDoDruida >= Estilos.Arcano.GolpesDoArcano) ManaDoArcano(l);
             if (dano == null || l.Fim != null) return;
             // O Bardo e o Clérigo também se curam batendo; as vinhas do Druida deixam o monstro lento e envenenado.
             ApoiarAqui(l);
@@ -1355,6 +1377,8 @@ namespace RPGLegend.Engine
             if (atordoarDepois && l.Fim == null && alvo.Fase != "caido") Atordoar(l, alvo, Estilos.Espadachim.Atordoa);
             // Todo 9º golpe das Raízes prende o alvo (o chefe não).
             if (estiloAtivo == "raizes" && ClassesDeLuta.GolpeQuePrende(golpeDoDruida) && l.Fim == null) Prender(l, alvo);
+            // Os elementos do Mago (rodada 5c), no disparo que acertou.
+            if (disparo && l.Fim == null) ElementoNoGolpe(l, indice.Value, dano.Value, golpeDoDruida, estiloAtivo);
             if (paladino && l.Fim == null && alvo.Fase != "caido") Empurrar(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, CD.Paladino.Empurrao);
         }
 
@@ -1382,7 +1406,9 @@ namespace RPGLegend.Engine
                 ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice), Estilos.IdDoEstilo(h)) +
                 moral.Dano +
                 ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0) +
-                (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0);
+                (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0) +
+                // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
+                (estilo == AttackStyles.Magic && Catalog.IdDaClasse(h.ClassId, h.ClassName) == "mago" ? ClassesDeLuta.DanoDoMago(Estilos.IdDoEstilo(h), Contadores(l).Golpes ?? 0) : 0);
             double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
             double criticoAMais = moral.Critico + ClassesDeLuta.CriticoDoEstilo(h);
             double? critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
@@ -1840,7 +1866,9 @@ namespace RPGLegend.Engine
             double base_ = VelocidadeNaArena(Masmorra(l).Hero);
             // As Raízes fundas (rodada 5b) também: o Druida anda 10% mais rápido.
             double fundas = Estilos.IdDoEstilo(Masmorra(l).Hero) == "raizes" && ClassesDeLuta.RaizesFundas(Contadores(l).Golpes ?? 0) ? Estilos.Raizes.Velocidade : 0;
-            double daMais = daMoral + fundas;
+            // E a ventania do Vento (rodada 5c).
+            double ventania = (Contadores(l).Ventania ?? 0) > 0 ? Estilos.Vento.Velocidade : 0;
+            double daMais = daMoral + fundas + ventania;
             double velocidade = daMais > 0 ? Math.Truncate(base_ * (100 + daMais) / 100) : base_;
             return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, velocidade).Walker;
         }
@@ -1920,6 +1948,7 @@ namespace RPGLegend.Engine
         {
             // Preso pelas Raízes (rodada 5b): o tempo corre aqui.
             if (m.Preso != null) m.Preso = m.Preso.Value > 1 ? m.Preso.Value - 1 : (double?)null;
+            if (m.Lerdo != null) m.Lerdo = m.Lerdo.Value > 1 ? m.Lerdo.Value - 1 : (double?)null;
             var jeito = JeitoDoGolpe(MonstroNo(l, m.Indice), m.Poder);
             switch (m.Fase)
             {
@@ -1957,8 +1986,12 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>O monstro está perto o bastante do herói pro golpe dele começar?</summary>
-        private static bool ADistanciaDoGolpe(Luta l, MonstroNaArena m, JeitoDeLutar jeito) =>
-            DistanciaDoHeroi(l, m) <= jeito.Distancia * jeito.Distancia;
+        private static bool ADistanciaDoGolpe(Luta l, MonstroNaArena m, JeitoDeLutar jeito)
+        {
+            // O Vento do Mago (rodada 5c): o monstro que ele acertou golpeia de 1 bloco mais perto (até meio bloco).
+            double distancia = m.Encurtado == true ? Js.Max(RoomWalk.TileUnits / 2, jeito.Distancia - Estilos.Vento.Encurta * RoomWalk.TileUnits) : jeito.Distancia;
+            return DistanciaDoHeroi(l, m) <= distancia * distancia;
+        }
 
         /// <summary>
         /// TS: aproximar — o monstro esperando anda em linha reta pro herói, no passo dele, até a distância do golpe.
@@ -1974,7 +2007,9 @@ namespace RPGLegend.Engine
             var heroi = PresaDe(l, m);
             // Lento (as vinhas do Druida, as canções…), anda menos.
             var lento = (Sala(l).Monsters[(int)m.Indice] as CombatMonster)?.Status?.Lento;
-            double passo = lento != null && lento.Turns > 0 ? Math.Truncate(jeito.Passo * (1 - ((lento.Amount ?? 0) != 0 ? lento.Amount.Value : 0.2))) : jeito.Passo;
+            double passoLento = lento != null && lento.Turns > 0 ? Math.Truncate(jeito.Passo * (1 - ((lento.Amount ?? 0) != 0 ? lento.Amount.Value : 0.2))) : jeito.Passo;
+            // O redemoinho da Água (rodada 5c) também.
+            double passo = (m.Lerdo ?? 0) > 0 ? Math.Truncate(passoLento * (100 - Estilos.Agua.Lento) / 100) : passoLento;
             var r = Rumo(heroi.X - m.CorpoX, heroi.Y - m.CorpoY, passo);
             var formato = Geometria(l);
             double meia = RoomWalk.TileUnits / 2;
@@ -2237,8 +2272,12 @@ namespace RPGLegend.Engine
             var c = Contadores(l);
             var h = estado.Hero;
             // A esquiva da classe (a furtividade do Ladino, o desvio do Cavaleiro) soma com a do pet.
-            double esquiva = (Pets.Bonus(l.Pet).Esquiva ?? 0) + ClassesDeLuta.EsquivaDaClasse(h.ClassId, h.ClassName, c, monstro.IsBoss, Estilos.IdDoEstilo(h));
-            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forca, l.Rng, esquiva, Encantamentos.DefesasDoHeroi(estado.Hero), ClassesDeLuta.ClasseRefeita(h));
+            // Na escuridão do Mago (rodada 5c), o monstro bate mais fraco e acerta menos.
+            bool escuro = NaEscuridao(l, MonstroDaArena(l, indice));
+            var rEscuro = Estilos.Escuridao;
+            double esquiva = (Pets.Bonus(l.Pet).Esquiva ?? 0) + ClassesDeLuta.EsquivaDaClasse(h.ClassId, h.ClassName, c, monstro.IsBoss, Estilos.IdDoEstilo(h)) + (escuro ? rEscuro.Erra : 0);
+            double forcaNoEscuro = escuro ? forca * (100 - rEscuro.Fraqueza) / 100 : forca;
+            var golpe = MonsterHit.LandHitOnHero(estado.Hero, monstro, forcaNoEscuro, l.Rng, esquiva, Encantamentos.DefesasDoHeroi(estado.Hero), ClassesDeLuta.ClasseRefeita(h));
             if (golpe.Dodged)
             {
                 var desviou = estado.Clone();
@@ -3103,6 +3142,23 @@ namespace RPGLegend.Engine
         /// <summary>TS: passarOsEstilos — a espera do avanço e a imunidade do Espadachim correm; a Concentração junta cargas sem golpear.</summary>
         private static void PassarOsEstilos(Luta l)
         {
+            // A escuridão do Mago dura o tempo dela (rodada 5c).
+            if (l.Arena.Escuridao != null)
+            {
+                if (l.Arena.Escuridao.Tempo > 1)
+                {
+                    var e = l.Arena.Escuridao.Clone();
+                    e.Tempo -= 1;
+                    l.Arena.Escuridao = e;
+                }
+                else l.Arena.Escuridao = null;
+            }
+            if ((Contadores(l).Ventania ?? 0) > 0)
+            {
+                var v = Contadores(l).Clone();
+                v.Ventania = v.Ventania.Value > 1 ? v.Ventania.Value - 1 : (double?)null;
+                l.Arena.Classe = v;
+            }
             string estilo = Estilos.IdDoEstilo(Masmorra(l).Hero);
             if (estilo != "espadachim" && estilo != "concentracao") return;
             var c = Contadores(l).Clone();
@@ -3220,7 +3276,7 @@ namespace RPGLegend.Engine
         // ---------- os estilos do Druida (rodada 5b: Metamorfose, Florescimento, Raízes Ocultas) ----------
 
         /// <summary>TS: contarGolpeDoDruida — o Druida com estilo deu mais um ataque nesta luta. O número deste.</summary>
-        private static double ContarGolpeDoDruida(Luta l, string estilo)
+        private static double ContarGolpeDoEstilo(Luta l, string estilo)
         {
             double golpes = (Contadores(l).Golpes ?? 0) + 1;
             var c = Contadores(l).Clone();
@@ -3228,15 +3284,228 @@ namespace RPGLegend.Engine
             l.Arena.Classe = c;
             if (estilo == "metamorfose" && golpes == Estilos.Metamorfose.GolpesDaAura) Contar(l, Aviso("🐾 Aura de fera!"));
             if (estilo == "raizes" && golpes == Estilos.Raizes.GolpesDoVeneno) Contar(l, Aviso("🌱 Raízes fundas!"));
+            if (estilo == "terra" && golpes == Estilos.Terra.GolpesDaPedra) Contar(l, Aviso("🪨 Revestimento de pedra!"));
+            if (estilo == "arcano" && golpes == Estilos.Arcano.GolpesDoArcano) Contar(l, Aviso("✨ O arcano desperta!"));
+            if (estilo == "escuridao" && golpes == Estilos.Escuridao.GolpesDaFome) Contar(l, Aviso("🌑 A escuridão tem fome!"));
             return golpes;
         }
 
         /// <summary>TS: prender — as Raízes prendem o monstro de pé (o chefe não). No espelho, não.</summary>
-        private static void Prender(Luta l, MonstroNaArena m)
+        private static void Prender(Luta l, MonstroNaArena m, double? passos = null, string texto = "🌱 Preso")
         {
             if (NoEspelho(l) || m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) return;
-            m.Preso = Estilos.Raizes.Preso;
-            Contar(l, Numero("monstro", m.Indice, "🌱 Preso", "erro"));
+            m.Preso = passos ?? Estilos.Raizes.Preso;
+            Contar(l, Numero("monstro", m.Indice, texto, "erro"));
+        }
+
+        // ---------- os elementos do Mago (rodada 5c: Fogo, Terra, Vento, Água, Arcano, Escuridão) ----------
+
+        /// <summary>TS: elementoNoGolpe — o disparo do Mago com elemento acertou: o que o elemento faz depois do dano.</summary>
+        private static void ElementoNoGolpe(Luta l, double indice, double dano, double golpe, string estilo)
+        {
+            var alvo = l.Arena.Monstros[(int)indice];
+            switch (estilo)
+            {
+                case "fogo":
+                {
+                    var r = Estilos.Fogo;
+                    if (ClassesDeLuta.ACadaGolpe(golpe, r.BolaACada)) BolaDeFogo(l, indice);
+                    else Queimar(l, alvo, r.Turnos);
+                    return;
+                }
+                case "vento":
+                {
+                    var r = Estilos.Vento;
+                    var c = Contadores(l).Clone();
+                    c.Ventania = r.Ventania;
+                    l.Arena.Classe = c;
+                    if (alvo.Fase == "caido") return;
+                    if (!NoEspelho(l)) alvo.Encurtado = true;
+                    Contar(l, Numero("monstro", indice, "🌀", "erro"));
+                    if (ClassesDeLuta.ACadaGolpe(golpe, r.EmpurraACada) && EmpurrarComBatida(l, alvo, l.Arena.Heroi.X, l.Arena.Heroi.Y, r.Empurrao) && !MonstroNo(l, indice).IsBoss)
+                        Atordoar(l, alvo, r.Atordoa);
+                    return;
+                }
+                case "agua":
+                    JatoDagua(l, indice, dano);
+                    if (l.Fim == null && ClassesDeLuta.ACadaGolpe(golpe, Estilos.Agua.RedemoinhoACada)) Redemoinho(l, indice);
+                    return;
+                case "arcano":
+                {
+                    var r = Estilos.Arcano;
+                    if (alvo.Fase == "caido") return;
+                    LentoNoMonstro(l, indice, r.Lento);
+                    if (ClassesDeLuta.ACadaGolpe(golpe, r.GrilhoesACada)) Prender(l, alvo, r.Preso, "⛓️ Preso");
+                    return;
+                }
+                case "escuridao":
+                {
+                    var r = Estilos.Escuridao;
+                    if (ClassesDeLuta.ACadaGolpe(golpe, r.AreaACada))
+                    {
+                        var lugar = LugarDe(l, indice);
+                        l.Arena.Escuridao = new EscuridaoNaSala { X = Math.Truncate(lugar.X), Y = Math.Truncate(lugar.Y), Tempo = r.Duracao };
+                        Contar(l, Aviso("🌑 Escuridão"));
+                    }
+                    if (golpe >= r.GolpesDaFome && alvo.Fase != "caido") Engolir(l, indice);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>TS: queimar — o monstro de pé queima tantos turnos (5% da vida máxima dele), sem encurtar a queimadura que já tinha.</summary>
+        private static void Queimar(Luta l, MonstroNaArena m, double turnos)
+        {
+            if (NoEspelho(l) || m.Fase == "caido") return;
+            var monstro = CombatMonster.From(Sala(l).Monsters[(int)m.Indice]);
+            double dmg = Js.Max(1, Math.Truncate(monstro.MaxHp * Estilos.Fogo.Queimadura / 100));
+            var antes = monstro.Status?.Queimadura;
+            var status = monstro.Status?.Clone() ?? new MonsterStatus();
+            status.Queimadura = new DotStatus { Turns = Js.Max(turnos, antes?.Turns ?? 0), Dmg = Js.Max(dmg, antes?.Dmg ?? 0) };
+            monstro.Status = status;
+            l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), m.Indice, monstro);
+            Contar(l, Numero("monstro", m.Indice, "🔥", "erro"));
+        }
+
+        /// <summary>TS: bolaDeFogo — queima todos de pé no 3 × 3 em volta do alvo (ele também) por 2 turnos.</summary>
+        private static void BolaDeFogo(Luta l, double alvo)
+        {
+            var r = Estilos.Fogo;
+            var centro = LugarDe(l, alvo);
+            double meio = r.LadoDaBola * RoomWalk.TileUnits / 2;
+            Contar(l, Aviso("🔥 Bola de fogo"));
+            for (int i = 0; i < l.Arena.Monstros.Count; i++)
+            {
+                var m = l.Arena.Monstros[i];
+                if (m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                if (Math.Abs(lugar.X - centro.X) <= meio && Math.Abs(lugar.Y - centro.Y) <= meio) Queimar(l, m, r.TurnosDaBola);
+            }
+        }
+
+        /// <summary>TS: lentoNoMonstro — o monstro fica tanto (%) mais lento por 2 turnos (o Arcano). No espelho, não.</summary>
+        private static void LentoNoMonstro(Luta l, double indice, double pct)
+        {
+            if (NoEspelho(l)) return;
+            var monstro = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            var status = monstro.Status?.Clone() ?? new MonsterStatus();
+            status.Lento = new AmountStatus { Turns = CD.Druida.Turnos, Amount = pct / 100 };
+            monstro.Status = status;
+            l.Estado = FimDaLuta.GravarMonstro(Masmorra(l), indice, monstro);
+        }
+
+        /// <summary>TS: empurrarComBatida — o empurrão do Vento, que diz se bateu em algo (a parede de volta, uma de dentro, outro monstro).</summary>
+        private static bool EmpurrarComBatida(Luta l, MonstroNaArena m, double deX, double deY, double blocos)
+        {
+            if (NoEspelho(l) || m.Fase == "caido" || m.Fase == "avisando" || m.Fase == "investindo") return false;
+            var r = Rumo(m.CorpoX - deX, m.CorpoY - deY, blocos * RoomWalk.TileUnits);
+            var formato = Geometria(l);
+            double meia = RoomWalk.TileUnits / 2;
+            double alvoX = m.CorpoX + r.X;
+            double alvoY = m.CorpoY + r.Y;
+            double x = Math.Min(Math.Max(alvoX, RoomWalk.TileUnits + meia), (formato.Cols - 1) * RoomWalk.TileUnits - meia);
+            double y = Math.Min(Math.Max(alvoY, RoomWalk.TileUnits + meia), (formato.Rows - 1) * RoomWalk.TileUnits - meia);
+            bool noOutro = false;
+            foreach (var o in l.Arena.Monstros)
+                if (o.Indice != m.Indice && o.Fase != "caido" && (o.CorpoX - x) * (o.CorpoX - x) + (o.CorpoY - y) * (o.CorpoY - y) < D.EspacoEntreMonstros * D.EspacoEntreMonstros)
+                    noOutro = true;
+            if (NaParede(l, x, y) || noOutro) return true;
+            m.CorpoX = x;
+            m.CorpoY = y;
+            return x != alvoX || y != alvoY;
+        }
+
+        /// <summary>TS: jatoDagua — quem está na linha do Mago ao alvo (1 casa de largura, até o alvo) leva o mesmo dano.</summary>
+        private static void JatoDagua(Luta l, double alvo, double dano)
+        {
+            double hx = l.Arena.Heroi.X, hy = l.Arena.Heroi.Y;
+            var fim = LugarDe(l, alvo);
+            double dx = fim.X - hx;
+            double dy = fim.Y - hy;
+            double comprimento = Math.Sqrt(dx * dx + dy * dy);
+            if (comprimento == 0) return;
+            double meiaLargura = Estilos.Agua.Largura * RoomWalk.TileUnits / 2;
+            var pegos = new List<MonstroNaArena>();
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Indice == alvo || m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                double px = lugar.X - hx;
+                double py = lugar.Y - hy;
+                double ao = (px * dx + py * dy) / comprimento;
+                double fora = Math.Abs(px * dy - py * dx) / comprimento;
+                if (ao >= 0 && ao <= comprimento && fora <= meiaLargura) pegos.Add(m);
+            }
+            foreach (var m in pegos)
+            {
+                if (l.Fim != null) return;
+                if (m.Fase != "caido") FerirComDano(l, m.Indice, dano, "💧-" + Js.NumberToString(dano));
+            }
+        }
+
+        /// <summary>TS: redemoinho — puxa quem está a até 5 blocos do alvo (até 3 blocos), prende e deixa mais lento (o chefe não).</summary>
+        private static void Redemoinho(Luta l, double alvo)
+        {
+            var r = Estilos.Agua;
+            if (NoEspelho(l)) return;
+            var centro = LugarDe(l, alvo);
+            double raio = r.Raio * RoomWalk.TileUnits + RoomWalk.TileUnits / 2;
+            Contar(l, Aviso("💧 Redemoinho"));
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) continue;
+                double dx = centro.X - m.CorpoX;
+                double dy = centro.Y - m.CorpoY;
+                double distancia = Math.Sqrt(dx * dx + dy * dy);
+                if (distancia > raio) continue;
+                if (m.Indice != alvo && m.Fase != "avisando" && m.Fase != "investindo")
+                {
+                    double anda = Math.Min(r.Puxa * RoomWalk.TileUnits, Js.Max(0, distancia - D.EspacoEntreMonstros));
+                    if (anda > 0 && distancia > 0)
+                    {
+                        double x = m.CorpoX + Math.Truncate(dx * anda / distancia);
+                        double y = m.CorpoY + Math.Truncate(dy * anda / distancia);
+                        if (!NaParede(l, x, y))
+                        {
+                            m.CorpoX = x;
+                            m.CorpoY = y;
+                        }
+                    }
+                }
+                Prender(l, m, r.Preso, "💧 Preso");
+                m.Lerdo = r.Preso + r.Lerdo;
+            }
+        }
+
+        /// <summary>TS: manaDoArcano — o Arcano desperto: cada disparo dá mana (até o máximo).</summary>
+        private static void ManaDoArcano(Luta l)
+        {
+            var estado = Masmorra(l);
+            double mp = Js.Min(estado.Hero.MaxMp, estado.Hero.Mp + Estilos.Arcano.Mana);
+            if (mp == estado.Hero.Mp) return;
+            var comMana = estado.Clone();
+            comMana.Hero = estado.Hero.Clone();
+            comMana.Hero.Mp = mp;
+            l.Estado = comMana;
+        }
+
+        /// <summary>TS: engolir — a fome da escuridão: o disparo engole 15% da vida que resta do alvo (no chefe, no máximo 300).</summary>
+        private static void Engolir(Luta l, double indice)
+        {
+            var r = Estilos.Escuridao;
+            var monstro = CombatMonster.From(Sala(l).Monsters[(int)indice]);
+            double engole = Math.Truncate(monstro.Hp * r.Engole / 100);
+            if (monstro.IsBoss) engole = Js.Min(r.TetoNoChefe, engole);
+            if (engole >= 1) FerirComDano(l, indice, engole, "🌑-" + Js.NumberToString(engole));
+        }
+
+        /// <summary>TS: naEscuridao — o monstro está dentro da área de escuridão do Mago?</summary>
+        private static bool NaEscuridao(Luta l, MonstroNaArena m)
+        {
+            var e = l.Arena.Escuridao;
+            if (e == null || m == null) return false;
+            double meio = Estilos.Escuridao.Lado * RoomWalk.TileUnits / 2;
+            return Math.Abs(m.CorpoX - e.X) <= meio && Math.Abs(m.CorpoY - e.Y) <= meio;
         }
 
         /// <summary>TS: plantar — o Florescimento planta uma flor em (x, y), a até 4 blocos do herói; no máximo 2, e a nova tira a mais antiga.</summary>

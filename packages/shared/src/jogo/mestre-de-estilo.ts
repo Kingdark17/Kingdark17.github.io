@@ -5,7 +5,7 @@
  */
 
 import type { DungeonCell } from '../dungeon/generate.js';
-import { aprenderEstilo, estiloPorId, type EstiloDef } from '../hero/estilos.js';
+import { aprenderEstilo, estiloPorId, estiloUnico, type EstiloDef } from '../hero/estilos.js';
 import { recomputeDerived } from '../hero/hero.js';
 import { celulaAtual, substituirCelulaAtual, type EstadoDoJogo, type EstadoNaMasmorra } from './estado.js';
 
@@ -33,5 +33,9 @@ export function aprenderComMestre(estado: EstadoDoJogo): { estado: EstadoDoJogo;
   // A vida máxima acompanha o estilo (o Cavaleiro tem 40% a mais).
   const hero = recomputeDerived(aprenderEstilo(masmorra.hero, mestre.estilo.id));
   const depois = substituirCelulaAtual({ ...masmorra, hero }, { ...sala, mestreDeEstilo: { ...(sala.mestreDeEstilo as { estilo: string }), ensinado: true } });
-  return { estado: depois, texto: `Você aprendeu o estilo ${mestre.estilo.nome}. Troque o estilo ativo na guilda.` };
+  // O elemento do Mago é pra sempre (rodada 5c): nada de trocar na guilda.
+  const texto = estiloUnico(masmorra.hero)
+    ? `Você aprendeu o elemento ${mestre.estilo.nome}. Ele é seu pra sempre.`
+    : `Você aprendeu o estilo ${mestre.estilo.nome}. Troque o estilo ativo na guilda.`;
+  return { estado: depois, texto };
 }

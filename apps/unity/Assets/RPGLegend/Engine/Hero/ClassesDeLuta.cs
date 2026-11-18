@@ -239,6 +239,8 @@ namespace RPGLegend.Engine
         public double? SemGolpe;
         /// <summary>Os estilos do Druida (rodada 5b): quantos ataques ele já deu nesta luta.</summary>
         public double? Golpes;
+        /// <summary>O Vento do Mago (rodada 5c): os passos que ainda faltam do passo mais ligeiro.</summary>
+        public double? Ventania;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -408,6 +410,9 @@ namespace RPGLegend.Engine
                 case "druida":
                     // A aura de fera da Metamorfose (rodada 5b).
                     return estilo == "metamorfose" && AuraDeFera(Z(c.Golpes)) ? Estilos.Metamorfose.Resistencia : 0;
+                case "mago":
+                    // O revestimento de pedra da Terra (rodada 5c).
+                    return estilo == "terra" && Z(c.Golpes) >= Estilos.Terra.GolpesDaPedra ? Estilos.Terra.Resistencia : 0;
                 case "guerreiro":
                 {
                     if (!(maxHp > 0)) return 0;
@@ -560,6 +565,43 @@ namespace RPGLegend.Engine
                     textos.Add("☯️ Ki " + Js.NumberToString(Z(extras.Ki)) + "/" + Js.NumberToString(D.Monge.TetoDoKi) + (extras.Revestido == true ? " · Revestido" : ""));
                     if (estilo == "concentracao") textos.Add("🧘 Cargas " + Js.NumberToString(Z(c.Cargas)) + "/" + Js.NumberToString(Estilos.Concentracao.TetoDeCargas));
                     break;
+                case "mago":
+                {
+                    // Os elementos (rodada 5c): quanto falta pro disparo da vez, e o que já acendeu.
+                    double golpes = Z(c.Golpes);
+                    switch (estilo)
+                    {
+                        case "fogo":
+                            textos.Add("🔥 Bola de fogo em " + Js.NumberToString(FaltamPro(golpes, Estilos.Fogo.BolaACada)));
+                            break;
+                        case "terra":
+                            textos.Add(golpes >= Estilos.Terra.GolpesDaPedra ? "🪨 Revestimento de pedra" : "🪨 Pedra " + Js.NumberToString(golpes) + "/" + Js.NumberToString(Estilos.Terra.GolpesDaPedra));
+                            break;
+                        case "vento":
+                            textos.Add("🌀 Empurrão em " + Js.NumberToString(FaltamPro(golpes, Estilos.Vento.EmpurraACada)) + (Z(c.Ventania) > 0 ? " · ventania" : ""));
+                            break;
+                        case "agua":
+                            textos.Add("💧 Redemoinho em " + Js.NumberToString(FaltamPro(golpes, Estilos.Agua.RedemoinhoACada)));
+                            break;
+                        case "arcano":
+                        {
+                            var r = Estilos.Arcano;
+                            textos.Add(golpes >= r.GolpesDoArcano
+                                ? "✨ Arcano +" + Js.NumberToString(Js.Max(0, golpes - r.GolpesDoArcano) * r.PorGolpe) + "%"
+                                : "✨ Grilhões em " + Js.NumberToString(FaltamPro(golpes, r.GrilhoesACada)) + " · " + Js.NumberToString(golpes) + "/" + Js.NumberToString(r.GolpesDoArcano));
+                            break;
+                        }
+                        case "escuridao":
+                        {
+                            var r = Estilos.Escuridao;
+                            textos.Add(golpes >= r.GolpesDaFome
+                                ? "🌑 Fome da escuridão"
+                                : "🌑 Escuridão em " + Js.NumberToString(FaltamPro(golpes, r.AreaACada)) + " · " + Js.NumberToString(golpes) + "/" + Js.NumberToString(r.GolpesDaFome));
+                            break;
+                        }
+                    }
+                    break;
+                }
                 case "necromante":
                     if (extras.MagiaSelada == true) textos.Add("☠️ Magia selada");
                     else textos.Add(Z(extras.RecargaDaMagia) > 0 ? "☠️ Magia em " + Tempo(extras.RecargaDaMagia.Value) : "☠️ Magia pronta");
@@ -638,6 +680,31 @@ namespace RPGLegend.Engine
                     return 0;
             }
         }
+
+        /// <summary>TS: aCadaGolpe — o golpe de número <paramref name="golpe"/> é o da vez de quem age a cada <paramref name="n"/>.</summary>
+        public static bool ACadaGolpe(double golpe, double n) => golpe > 0 && golpe % n == 0;
+
+        /// <summary>TS: danoDoMago — o dano a mais (%) do disparo do Mago com elemento (rodada 5c), no disparo de número <paramref name="golpe"/>.</summary>
+        public static double DanoDoMago(string estilo, double golpe)
+        {
+            switch (estilo)
+            {
+                case "terra":
+                    return Estilos.Terra.Dano;
+                case "arcano":
+                {
+                    var r = Estilos.Arcano;
+                    return r.Dano + (ACadaGolpe(golpe, r.GrilhoesACada) ? r.DanoDosGrilhoes : 0) + Js.Max(0, golpe - r.GolpesDoArcano) * r.PorGolpe;
+                }
+                case "escuridao":
+                    return Estilos.Escuridao.Dano;
+                default:
+                    return 0;
+            }
+        }
+
+        /// <summary>TS: faltamPro — quantos disparos faltam pro próximo múltiplo de <paramref name="n"/> (no múltiplo, n).</summary>
+        private static double FaltamPro(double golpes, double n) => n - golpes % n;
 
         /// <summary>TS: auraDeFera — a aura da Metamorfose está acesa (do 15º golpe da luta em diante).</summary>
         public static bool AuraDeFera(double golpes) => golpes >= Estilos.Metamorfose.GolpesDaAura;

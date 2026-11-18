@@ -603,6 +603,9 @@ namespace RPGLegend.Game.Jogo
             private static readonly Color Canteiro = new Color(0.36f, 0.66f, 0.30f, 1f);
             private static readonly Color Petala = new Color(0.96f, 0.56f, 0.70f, 1f);
             private static readonly Color MioloDaFlor = new Color(0.98f, 0.84f, 0.33f, 1f);
+            /// <summary>A escuridão do Mago (rodada 5c): um roxo quase preto, como a sombra das salas.</summary>
+            private static readonly Color Breu = new Color(0.10f, 0.05f, 0.16f, 1f);
+            private static readonly Color BordaDoBreu = new Color(0.45f, 0.25f, 0.62f, 1f);
 
             private Arena _arena;
             private List<MonsterInstance> _instancias;
@@ -710,6 +713,27 @@ namespace RPGLegend.Game.Jogo
                 }
             }
 
+            /// <summary>A área de escuridão (5 × 5 casas): um véu escuro que respira devagar e some no último segundo.</summary>
+            private static void DesenharEscuridao(Painter2D p, EscuridaoNaSala e, float escala)
+            {
+                if (e == null) return;
+                float meio = (float)(Estilos.Escuridao.Lado * RoomWalk.TileUnits / 2) * escala;
+                float some = Mathf.Clamp01((float)(e.Tempo / 60.0));
+                float respira = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 1.6f);
+                var c = new Vector2((float)e.X * escala, (float)e.Y * escala);
+                p.BeginPath();
+                p.MoveTo(new Vector2(c.x - meio, c.y - meio));
+                p.LineTo(new Vector2(c.x + meio, c.y - meio));
+                p.LineTo(new Vector2(c.x + meio, c.y + meio));
+                p.LineTo(new Vector2(c.x - meio, c.y + meio));
+                p.ClosePath();
+                p.fillColor = Cor(Breu, (0.42f + 0.10f * respira) * some);
+                p.Fill();
+                p.strokeColor = Cor(BordaDoBreu, 0.55f * some);
+                p.lineWidth = 2f;
+                p.Stroke();
+            }
+
             private void Desenhar(MeshGenerationContext contexto)
             {
                 if (_arena == null) return;
@@ -722,6 +746,7 @@ namespace RPGLegend.Game.Jogo
                 // As flores do Florescimento, por baixo de tudo: as minhas e as do parceiro.
                 DesenharFlores(p, _arena.Flores, escala);
                 DesenharFlores(p, _arena.Dupla?.FloresDoParceiro, escala);
+                DesenharEscuridao(p, _arena.Escuridao, escala);
 
                 for (int i = 0; i < _arena.Monstros.Count && i < _instancias.Count; i++)
                 {

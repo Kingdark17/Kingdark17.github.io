@@ -152,6 +152,9 @@ namespace RPGLegend.Tests
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return W(Estilos.Sortear(quem.ClassId, quem.ClassName, quem.Estilos, c.RngFn));
             });
+            Fn(M, "estiloUnico", (a, c) => { var quem = R<QuemLutaDoCaso>(a["quem"]); return W(Estilos.EstiloUnico(quem.ClassId, quem.ClassName)); });
+            Fn(M, "aCadaGolpe", (a, c) => W(ClassesDeLuta.ACadaGolpe(Num(a["golpe"]), Num(a["n"]))));
+            Fn(M, "danoDoMago", (a, c) => N(ClassesDeLuta.DanoDoMago(R<QuemLutaDoCaso>(a["quem"]).Ativo, Num(a["golpe"]))));
             Fn(M, "aprenderEstilo", (a, c) => AprenderOuTrocar(a, true));
             Fn(M, "trocarEstilo", (a, c) => AprenderOuTrocar(a, false));
             Fn(M, "custoDaMagia", (a, c) =>
@@ -242,6 +245,8 @@ namespace RPGLegend.Tests
                 quemJson["estilo"] = id;
                 return quemJson;
             }
+            // O do Mago é pra sempre (rodada 5c).
+            if (Estilos.EstiloUnico(quem.ClassId, quem.ClassName)) return quemJson;
             if (id == null)
             {
                 quemJson.Remove("estilo");

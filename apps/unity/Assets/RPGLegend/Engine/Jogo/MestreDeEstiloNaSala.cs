@@ -46,7 +46,11 @@ namespace RPGLegend.Engine
             novaSala.MestreDeEstilo = sala.MestreDeEstilo.Clone();
             novaSala.MestreDeEstilo.Ensinado = true;
             var depois = Estados.SubstituirCelulaAtual(comHeroi, novaSala);
-            return new AprendeuComMestre { Estado = depois, Texto = "Você aprendeu o estilo " + mestre.Estilo.Nome + ". Troque o estilo ativo na guilda." };
+            // O elemento do Mago é pra sempre (rodada 5c): nada de trocar na guilda.
+            string texto = Estilos.EstiloUnico(masmorra.Hero.ClassId, masmorra.Hero.ClassName)
+                ? "Você aprendeu o elemento " + mestre.Estilo.Nome + ". Ele é seu pra sempre."
+                : "Você aprendeu o estilo " + mestre.Estilo.Nome + ". Troque o estilo ativo na guilda.";
+            return new AprendeuComMestre { Estado = depois, Texto = texto };
         }
     }
 }

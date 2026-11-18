@@ -746,6 +746,8 @@ namespace RPGLegend.Game.Jogo
         {
             ("💥", "poder-fisico"), ("💫", "poder-fisico"), ("🔥", "fogo"), ("❄️", "gelo"), ("🌟", "luz"),
             ("☠️", "sombra"), ("☣️", "veneno"), ("🎶", "som"), ("🩸", "sangue"), ("⚡", "raio"),
+            // os elementos do Mago (rodada 5c): o jato da Água e a fome da Escuridão
+            ("💧", "gelo"), ("🌑", "sombra"),
         };
 
         /// <summary>Os reforços no herói pelo ícone do aviso do poder ("ícone nome").</summary>
@@ -770,7 +772,8 @@ namespace RPGLegend.Game.Jogo
             // o golpe que foi no chão (sem monstro na mira do cursor): a poeira ali
             if (a.Onde == "chao")
             {
-                _sala.TocarEfeito("poeira", a.X ?? 0, a.Y ?? 0);
+                // a flor do Florescimento (rodada 5b) brota com a cura; o golpe no chão, com a poeira
+                _sala.TocarEfeito(Comeca(texto, "🌸") ? "cura" : "poeira", a.X ?? 0, a.Y ?? 0);
                 return;
             }
             if (a.Onde == "monstro")

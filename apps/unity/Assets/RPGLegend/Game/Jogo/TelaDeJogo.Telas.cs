@@ -273,7 +273,10 @@ namespace RPGLegend.Game.Jogo
                 var grade = PecasDaTela.Grade();
                 grade.Add(PecasDaTela.CartaDeEscolha(estilo.Icone, estilo.Nome, estilo.Desc, true, () => { }));
                 conteudo.Add(grade);
-                conteudo.Add(PecasDaTela.Texto("O estilo aprendido vira o ativo. Na guilda dá pra trocar entre os que você tem.", "vazio"));
+                // O Mago aprende um elemento só (rodada 5c): o aviso é outro.
+                conteudo.Add(PecasDaTela.Texto(estilo.Classe == "mago"
+                    ? "O elemento é pra sempre: o Mago aprende um só. Recusando, outro mestre pode aparecer mais adiante."
+                    : "O estilo aprendido vira o ativo. Na guilda dá pra trocar entre os que você tem.", "vazio"));
             }, botoes.ToArray());
         }
 
@@ -307,7 +310,9 @@ namespace RPGLegend.Game.Jogo
             {
                 var meus = Estilos.DaClasse(hero.ClassId, hero.ClassName).FindAll(e => hero.Estilos != null && hero.Estilos.Contains(e.Id));
                 string ativo = Estilos.IdDoEstilo(hero) ?? SemEstilo;
-                string marcado = _estiloNaGuilda ?? ativo;
+                // O elemento do Mago é pra sempre (rodada 5c): a guilda só mostra.
+                bool praSempre = Estilos.EstiloUnico(hero.ClassId, hero.ClassName);
+                string marcado = praSempre ? ativo : _estiloNaGuilda ?? ativo;
                 if (meus.Count > 0 && marcado != ativo)
                 {
                     string nome = marcado == SemEstilo ? null : Estilos.PorId(marcado)?.Nome;
@@ -324,8 +329,14 @@ namespace RPGLegend.Game.Jogo
                         + ((hero.ClassIcon ?? "") + " " + hero.ClassName).Trim()
                         + ". A guilda segue de portas abertas, mas o treinamento de classe se faz uma vez só.", "fala-da-tela"));
                     if (meus.Count == 0) return;
-                    conteudo.Add(PecasDaTela.Secao("Estilo de luta"));
+                    conteudo.Add(PecasDaTela.Secao(praSempre ? "Elemento (pra sempre)" : "Estilo de luta"));
                     var grade = PecasDaTela.Grade();
+                    if (praSempre)
+                    {
+                        foreach (var estilo in meus) grade.Add(PecasDaTela.CartaDeEscolha(estilo.Icone, estilo.Nome, estilo.Desc, true, () => { }));
+                        conteudo.Add(grade);
+                        return;
+                    }
                     foreach (var estilo in meus)
                     {
                         var id = estilo.Id;

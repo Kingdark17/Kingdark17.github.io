@@ -55,7 +55,54 @@
       "nome": "Raízes Ocultas",
       "icone": "🌱",
       "desc": "As vinhas pegam qualquer monstro da sala. Todo 3º golpe bate +20% e deixa o alvo mais lento; todo 9º prende o alvo 4 s (o chefe não). Do 18º golpe da luta em diante, o veneno tira 15% da vida que resta e você anda 10% mais rápido."
+    },
+    {
+      "id": "fogo",
+      "classe": "mago",
+      "nome": "Fogo",
+      "icone": "🔥",
+      "desc": "Todo disparo queima o alvo por 1 turno (5% da vida dele). A cada 5 disparos, a bola de fogo queima todos em volta do alvo (3 × 3) por 2 turnos."
+    },
+    {
+      "id": "terra",
+      "classe": "mago",
+      "nome": "Terra",
+      "icone": "🪨",
+      "desc": "Disparos de rocha com +30% de dano. Do 20º disparo da luta em diante, o revestimento de pedra segura 20% do dano."
+    },
+    {
+      "id": "vento",
+      "classe": "mago",
+      "nome": "Vento",
+      "icone": "🌀",
+      "desc": "O monstro atingido golpeia de 1 bloco mais perto pelo resto da luta, e você anda 15% mais rápido por 3 s. A cada 5 disparos, o vento empurra o alvo 2 blocos; se ele bater em algo, cai atordoado por 5 s (o chefe não)."
+    },
+    {
+      "id": "agua",
+      "classe": "mago",
+      "nome": "Água",
+      "icone": "💧",
+      "desc": "O jato acerta todos no caminho até o alvo. A cada 10 disparos, um redemoinho no alvo puxa quem está a até 5 blocos (até 3 blocos), prende 2 s e deixa 25% mais lento por 5 s (o chefe não)."
+    },
+    {
+      "id": "arcano",
+      "classe": "mago",
+      "nome": "Arcano",
+      "icone": "✨",
+      "raro": 8,
+      "desc": "Disparos com +35% de dano que deixam o alvo 20% mais lento. A cada 5, os Grilhões Arcanos prendem o alvo 4 s (o chefe não) e batem +30%. Do 15º disparo da luta em diante, cada um dá 10 de mana e soma +10% de dano."
+    },
+    {
+      "id": "escuridao",
+      "classe": "mago",
+      "nome": "Escuridão",
+      "icone": "🌑",
+      "raro": 10,
+      "desc": "A orbe sombria bate +15%. A cada 8 disparos, a escuridão cobre 5 × 5 em volta do alvo por 10 s: quem está nela bate 20% mais fraco e acerta 25% menos. Do 24º disparo da luta em diante, cada um engole 15% da vida que resta do alvo (até 300 no chefe)."
     }
+  ],
+  "ESTILO_UNICO": [
+    "mago"
   ],
   "CHANCE_DO_MESTRE": {
     "guerreiro": 15,
@@ -120,5 +167,55 @@
     "golpesDoVeneno": 18,
     "veneno": 15,
     "velocidade": 10
+  },
+  "REGRAS_DO_FOGO": {
+    "turnos": 1,
+    "queimadura": 5,
+    "bolaACada": 5,
+    "ladoDaBola": 3,
+    "turnosDaBola": 2
+  },
+  "REGRAS_DA_TERRA": {
+    "dano": 30,
+    "golpesDaPedra": 20,
+    "resistencia": 20
+  },
+  "REGRAS_DO_VENTO": {
+    "encurta": 1,
+    "velocidade": 15,
+    "ventania": 180,
+    "empurraACada": 5,
+    "empurrao": 2,
+    "atordoa": 300
+  },
+  "REGRAS_DA_AGUA": {
+    "largura": 1,
+    "redemoinhoACada": 10,
+    "raio": 5,
+    "puxa": 3,
+    "preso": 120,
+    "lento": 25,
+    "lerdo": 300
+  },
+  "REGRAS_DO_ARCANO": {
+    "dano": 35,
+    "lento": 20,
+    "grilhoesACada": 5,
+    "preso": 240,
+    "danoDosGrilhoes": 30,
+    "golpesDoArcano": 15,
+    "mana": 10,
+    "porGolpe": 10
+  },
+  "REGRAS_DA_ESCURIDAO": {
+    "dano": 15,
+    "areaACada": 8,
+    "lado": 5,
+    "duracao": 600,
+    "fraqueza": 20,
+    "erra": 25,
+    "golpesDaFome": 24,
+    "engole": 15,
+    "tetoNoChefe": 300
   }
 }
