@@ -14,7 +14,8 @@
 import type { Hero } from '../hero/hero.js';
 import { addItem, removeByUid } from '../inventory/inventory.js';
 import { instantiate, randomItem, type Item } from '../items/item.js';
-import { RARITIES, type Rarity } from '../items/rarity.js';
+import { RARITIES, rarityById, type Rarity } from '../items/rarity.js';
+import { CHANCE_DO_CHAPEU, CHAPEU_DO_ESPADACHIM, RARIDADE_DAS_PECAS_SECRETAS } from '../items/pecas-secretas.js';
 import { templateById, type ItemCategory, type ItemTemplate } from '../items/templates.js';
 import { aposMudarDeTier } from '../items/runas.js';
 import { reforge, tierRank, type Tier } from '../items/tiers.js';
@@ -29,6 +30,8 @@ export interface RollStockOptions {
   now?: () => number;
   /** A loja é a do app: o ferreiro vende peça no degrau 2 do material, mas nunca no 3 (decisão do usuário, 2026-10-17). */
   app?: boolean;
+  /** A Floresta já foi zerada: o ferreiro do app pode ter o chapéu do espadachim (rodada 6). */
+  chapeu?: boolean;
 }
 
 /** O degrau mais alto que a loja do app vende. */
@@ -45,6 +48,11 @@ export function rollStock(kind: ShopKind, floor: number, options: RollStockOptio
   // A Poção de Reviver: só o vendedor do app, e só de vez em quando (um sorteio a mais, que o site não faz).
   if (options.app && kind !== 'blacksmith' && rng() < CHANCE_DA_POCAO_DE_REVIVER) {
     stock.push(instantiate(templateById(POCAO_DE_REVIVER) as ItemTemplate, RARITIES[0] as Rarity, options.now ? { rng, now: options.now } : { rng }));
+  }
+  // O chapéu do espadachim: só o ferreiro do app, depois de zerar a Floresta, e bem de vez em quando (rodada 6).
+  if (options.app && options.chapeu && kind === 'blacksmith' && rng() < CHANCE_DO_CHAPEU) {
+    const raro = rarityById(RARIDADE_DAS_PECAS_SECRETAS) as Rarity;
+    stock.push(instantiate(templateById(CHAPEU_DO_ESPADACHIM) as ItemTemplate, raro, options.now ? { rng, now: options.now } : { rng }));
   }
   return stock;
 }

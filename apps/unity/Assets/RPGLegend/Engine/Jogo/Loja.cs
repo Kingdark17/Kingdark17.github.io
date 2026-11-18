@@ -21,6 +21,8 @@ namespace RPGLegend.Engine
         public List<string> Log;
         /// <summary>A loja é a do app: o estoque novo pode ter peça no degrau 2 do material. Só aparece quando é true.</summary>
         public bool? App;
+        /// <summary>No app, com a Floresta zerada: o ferreiro pode ter o chapéu do espadachim (rodada 6). Só aparece quando é true.</summary>
+        public bool? Chapeu;
 
         /// <summary>O <c>{ ...loja }</c> do TS.</summary>
         public Loja Clone() => (Loja)MemberwiseClone();
@@ -51,9 +53,11 @@ namespace RPGLegend.Engine
         {
             rng = rng ?? Rng.Default;
             var sala = (CityCell)Estados.CelulaAtual(estado);
+            // O chapéu do espadachim (rodada 6): só no app, depois de zerar a Floresta na dificuldade do personagem.
+            bool chapeu = app && Dungeons.IsCleared(estado.Progresso, new DungeonRun { Dungeon = "floresta", Difficulty = estado.Masmorra.Difficulty });
             var comEstoque = sala.ForSale != null && sala.ForSale.Count > 0
                 ? estado
-                : Estados.SubstituirCelulaAtual(estado, ComEstoque(sala, Shop.RollStock(kind, Estados.AndarDeForca(estado), rng, now, app)));
+                : Estados.SubstituirCelulaAtual(estado, ComEstoque(sala, Shop.RollStock(kind, Estados.AndarDeForca(estado), rng, now, app, chapeu)));
 
             return new Loja
             {
@@ -65,6 +69,7 @@ namespace RPGLegend.Engine
                 Dado = null,
                 Log = new List<string> { kind == ShopKinds.Blacksmith ? "A forja do ferreiro está acesa." : "O vendedor itinerante abre a sacola." },
                 App = app ? true : (bool?)null,
+                Chapeu = chapeu ? true : (bool?)null,
             };
         }
 
@@ -135,7 +140,7 @@ namespace RPGLegend.Engine
         {
             rng = rng ?? Rng.Default;
             var sala = (CityCell)Estados.CelulaAtual(loja.Estado);
-            var renovacao = Shop.ResolveRestock(loja.Estado.Hero, loja.Kind, Estados.AndarDeForca(loja.Estado), loja.Renovacoes, rng, now, loja.App == true);
+            var renovacao = Shop.ResolveRestock(loja.Estado.Hero, loja.Kind, Estados.AndarDeForca(loja.Estado), loja.Renovacoes, rng, now, loja.App == true, loja.Chapeu == true);
 
             if (renovacao.Outcome.Kind == RestockOutcome.KindInsufficientGold)
                 return loja.ComLog("Renovar o estoque custa " + Js.NumberToString(renovacao.Outcome.Required ?? double.NaN) + " de ouro.");

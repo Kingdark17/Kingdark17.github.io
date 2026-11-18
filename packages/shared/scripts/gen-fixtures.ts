@@ -999,6 +999,33 @@ for (const cls of ['monge', 'mago', 'necromante']) {
   for (const [golpe, n] of [[0, 5], [5, 5], [6, 5], [10, 5], [10, 10], [8, 8], [16, 8], [7, 8]]) {
     caso(`aCadaGolpe: ${golpe} a cada ${n}`, 'aCadaGolpe', { golpe, n }, (a) => E.aCadaGolpe(a.golpe, a.n));
   }
+  // As peças secretas (rodada 6a).
+  for (const classId of ['arqueiro', 'monge', 'guerreiro', 'mago', 'cacador']) {
+    caso(`pecasDaClasse: ${classId}`, 'pecasDaClasse', { quem: { classId } }, (a) => E.pecasDaClasse(a.quem));
+    caso(`chanceDoNegociante: ${classId}`, 'chanceDoNegociante', { quem: { classId } }, (a) => E.chanceDoNegociante(a.quem));
+    for (const sequencia of [[0.1], [0.5], [0.9, 0.9], [0.5, 0.05]]) {
+      caso(`sortearPecaSecreta: ${classId}, ${sequencia.join(' ')}`, 'sortearPecaSecreta', { quem: { classId } }, (a, ctx) => E.sortearPecaSecreta(a.quem, ctx.rng), { rng: { sequence: sequencia } });
+    }
+  }
+  for (const id of ['lanca', 'aljava_explosiva', 'espada', 'inventado']) caso(`pecaSecreta: ${id}`, 'pecaSecreta', { id }, (a) => E.pecaSecreta(a.id));
+  for (const [nome, quem] of [
+    ['monge de bastão', { classId: 'monge', equip: { arma: { templateId: 'bastao' } } }],
+    ['monge de leque na secundária', { classId: 'monge', equip: { arma: null, secundaria: { templateId: 'leque' } } }],
+    ['monge de mãos vazias', { classId: 'monge', equip: {} }],
+    ['monge de espada', { classId: 'monge', equip: { arma: { templateId: 'espada' } } }],
+    ['guerreiro de kusarigama', { classId: 'guerreiro', equip: { arma: { templateId: 'kusarigama' } } }],
+  ] as const) {
+    for (const vida of [100, 77]) caso(`vidaComAArma: ${nome}, ${vida}`, 'vidaComAArma', { vida, quem }, (a) => E.vidaComAArma(a.vida, a.quem));
+  }
+  caso('derivedStats: o Monge de bastão com 50% de vida', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: { arma: item('bastao', 'raro') }, classId: 'monge' } }, (a) =>
+    E.derivedStats(a.hero as never),
+  );
+  caso('derivedStats: o Monge de leque na secundária', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: { secundaria: item('leque', 'raro') }, classId: 'monge' } }, (a) =>
+    E.derivedStats(a.hero as never),
+  );
+  caso('derivedStats: o Monge de bastão e Cavaleiro de mentira', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: { arma: item('bastao', 'raro') }, classId: 'monge', estilos: ['cavaleiro'], estilo: 'cavaleiro' } }, (a) =>
+    E.derivedStats(a.hero as never),
+  );
   caso('derivedStats: o Cavaleiro com 40% de vida', 'derivedStats', { hero: { level: 7, attrs: atributos({ constituicao: 13 }), equip: {}, classId: 'guerreiro', estilos: ['cavaleiro'], estilo: 'cavaleiro' } }, (a) => E.derivedStats(a.hero as never));
 }
 
@@ -1099,6 +1126,15 @@ for (const [arma, peca] of [
   ['espada', 'grimorio'],
   [null, 'grimorio'],
   ['cajado', null],
+  ['arco', 'aljava_paralisante'],
+  ['arco', 'aljava_explosiva'],
+  ['cajado', 'aljava_flamejante'],
+  ['espada', 'aljava_paralisante'],
+  [null, 'aljava_flamejante'],
+  ['bastao', 'leque'],
+  ['leque', 'leque'],
+  ['kusarigama', 'escudo'],
+  ['lanca', 'escudo'],
 ] as const) {
   caso(`cabeNaMaoLivre: ${arma ?? 'mão vazia'} e ${peca ?? 'nada'}`, 'cabeNaMaoLivre', { arma: arma ? item(arma) : null, peca: peca ? item(peca) : null }, (a) =>
     E.cabeNaMaoLivre(a.arma, a.peca),
@@ -1180,6 +1216,18 @@ for (const [arma, peca] of [
   );
   caso('equipItem: elmo vai pro elmo e recalcula', 'equipItem', { hero: guerreiro, item: item('placas_elmo', 'raro') }, (a) => E.equipItem(a.hero, a.item));
   caso('equipItem: poção não veste', 'equipItem', { hero: guerreiro, item: item('pot_vida') }, (a) => E.equipItem(a.hero, a.item));
+  // As peças secretas nas mãos (rodada 6a).
+  caso('equipItem: a aljava ao lado do arco', 'equipItem', { hero: heroi({ classe: 'arqueiro' }), item: item('aljava_paralisante', 'raro') }, (a) => E.equipItem(a.hero, a.item));
+  {
+    const mongeDeLeque = E.equipItem(heroi({ classe: 'monge' }), item('leque', 'raro')).hero;
+    caso('equipItem: o segundo leque na secundária, e o Monge com +50% de vida', 'equipItem', { hero: mongeDeLeque, item: item('leque', 'raro'), requestedSlot: 'secundaria' }, (a) =>
+      E.equipItem(a.hero, a.item, a.requestedSlot as 'secundaria'),
+    );
+    caso('equipItem: o bastão larga o leque da secundária', 'equipItem', { hero: E.equipItem(mongeDeLeque, item('leque', 'raro'), 'secundaria').hero, item: item('bastao', 'raro') }, (a) =>
+      E.equipItem(a.hero, a.item),
+    );
+  }
+  caso('equipItem: a lança com o escudo', 'equipItem', { hero: comEscudo, item: item('lanca', 'raro') }, (a) => E.equipItem(a.hero, a.item));
   caso('equipItem: slot errado', 'equipItem', { hero: guerreiro, item: item('botas'), requestedSlot: 'elmo' }, (a) => E.equipItem(a.hero, a.item, a.requestedSlot as 'elmo'));
   caso('unequipItem: tira a arma', 'unequipItem', { hero: guerreiro, slot: 'arma' }, (a) => E.unequipItem(a.hero, a.slot as 'arma'));
 }
@@ -2743,6 +2791,8 @@ for (const [floor, seed, run] of [
     ['mestre de estilo', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'cavaleiro' } }],
     ['espírito ancestral', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'raizes' } }],
     ['espírito que já ensinou', { ...andar.rooms[0]!, type: 'estilo', mestreDeEstilo: { estilo: 'raizes', ensinado: true } }],
+    ['negociante', { ...andar.rooms[0]!, type: 'negociante', negociante: { item: item('lanca', 'raro'), preco: 800 } }],
+    ['negociante que já vendeu', { ...andar.rooms[0]!, type: 'negociante', negociante: { item: item('lanca', 'raro'), preco: 800, vendido: true } }],
   ];
   for (const [nome, cell] of [...celulas, ...variantes]) {
     if (!cell) continue;
@@ -3598,6 +3648,52 @@ entrar('aprendiz não encontra professor', naCidade(saveNovo({ classe: null, ext
   }
 }
 
+// O negociante secreto (rodada 6a): só no app, depois de zerar a Floresta, pra quem tem peça da classe.
+{
+  const comFloresta = (o: Parameters<typeof saveNovo>[0] = {}) => {
+    const c = naCidade(saveNovo(o));
+    return { ...c, progresso: E.markCleared(c.progresso, { dungeon: 'floresta', difficulty: c.masmorra.difficulty }) };
+  };
+  const arqueiro = comFloresta({ classe: 'arqueiro' });
+  const temNegociante = (estado: EstadoNaCidade, semente: number) =>
+    E.entrarNaMasmorra(estado, E.seededRng(semente), undefined, 3, () => 1_700_000_000_000, true).map.flat().some((c) => c.type === 'negociante');
+  let semente = 1;
+  while (!temNegociante(arqueiro, semente)) semente++;
+  let semNegociante = 1;
+  while (temNegociante(arqueiro, semNegociante)) semNegociante++;
+  const noApp = (nome: string, estado: EstadoNaCidade, s: number) =>
+    caso(`entrarNaMasmorra: no app, ${nome}`, 'entrarNaMasmorra', { estado, andar: 3, app: true }, (a, ctx) => E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now, a.app), {
+      rng: { seed: s },
+      now: AGORA,
+    });
+  noApp('o negociante aparece pro Arqueiro', arqueiro, semente);
+  noApp('o negociante não aparece', arqueiro, semNegociante);
+  noApp('o Mago não tem negociante', comFloresta({ classe: 'mago' }), semente);
+  noApp('sem a Floresta, nada de negociante', naCidade(saveNovo({ classe: 'arqueiro' })), semente);
+  caso('entrarNaMasmorra: no site, nada de negociante', 'entrarNaMasmorra', { estado: arqueiro, andar: 3 }, (a, ctx) => E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now), {
+    rng: { seed: semente },
+    now: AGORA,
+  });
+  // Na sala dele: só o app o ouve; com ouro compra, sem ouro nada muda.
+  const naSala = (ouro: number, vendido = false) =>
+    naSalaDaMasmorra({ type: 'negociante', monsters: [], negociante: { item: item('lanca', 'raro'), preco: 800, ...(vendido ? { vendido } : {}) } }, { ...cidade.hero, gold: ouro });
+  for (const app of [false, true]) {
+    caso(`interagir: o negociante${app ? ' no app' : ' no site'}`, 'interagir', { estado: naSala(1000), pet: null, app }, (a, ctx) => E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now, a.app), {
+      rng: { seed: 5 },
+      now: AGORA,
+    });
+  }
+  caso('interagir: o negociante que já vendeu', 'interagir', { estado: naSala(1000, true), pet: null, app: true }, (a, ctx) => E.interagir(a.estado, ctx.rng, a.pet as never, ctx.now, a.app), {
+    rng: { seed: 5 },
+    now: AGORA,
+  });
+  for (const ouro of [1000, 800, 300]) {
+    caso(`abrirNegociante: com ${ouro} de ouro`, 'abrirNegociante', { estado: naSala(ouro) }, (a) => E.abrirNegociante(a.estado));
+    caso(`comprarDoNegociante: com ${ouro} de ouro`, 'comprarDoNegociante', { estado: naSala(ouro) }, (a) => E.comprarDoNegociante(a.estado));
+  }
+  caso('abrirNegociante: depois da venda', 'abrirNegociante', { estado: naSala(1000, true) }, (a) => E.abrirNegociante(a.estado));
+}
+
 // No app, o andar de entrada pode ter item com material (pelo totem do 60, que o portão já conferiu).
 caso('entrarNaMasmorra: no app, pelo andar 60', 'entrarNaMasmorra', { estado: cidade, andar: 60, app: true }, (a, ctx) =>
   E.entrarNaMasmorra(a.estado, ctx.rng, undefined, a.andar, ctx.now, a.app),
@@ -4284,6 +4380,23 @@ for (const [nome, kind, semente] of [
 }
 const ferreiroDoApp = E.abrirLoja({ ...naSalaDaCidade('blacksmith', rico), floor: 80 }, 'blacksmith', E.seededRng(62), relogio, true);
 caso('renovarEstoque: ferreiro do app', 'renovarEstoque', { loja: ferreiroDoApp }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: 63 }, now: AGORA });
+// O chapéu do espadachim (rodada 6a): o ferreiro do app, com a Floresta zerada, às vezes o tem.
+{
+  const comFloresta = (estado: EstadoNaCidade): EstadoNaCidade => ({ ...estado, progresso: E.markCleared(estado.progresso, { dungeon: 'floresta', difficulty: estado.masmorra.difficulty }) });
+  const ferreiroZerado = { ...comFloresta(naSalaDaCidade('blacksmith', rico)), floor: 80 };
+  const temChapeu = (semente: number) => E.estoque(E.abrirLoja(ferreiroZerado, 'blacksmith', E.seededRng(semente), relogio, true)).some((i) => i.templateId === E.CHAPEU_DO_ESPADACHIM);
+  let semente = 1;
+  while (!temChapeu(semente)) semente++;
+  for (const [nome, s, app] of [
+    ['o chapéu do espadachim no ferreiro do app', semente, true],
+    ['o ferreiro do site, mesmo com a Floresta', semente, false],
+    ['o ferreiro do app com a Floresta, sem o chapéu', semente + 1, true],
+  ] as const) {
+    caso(`abrirLoja: ${nome}`, 'abrirLoja', { estado: ferreiroZerado, kind: 'blacksmith', app }, (a, ctx) => E.abrirLoja(a.estado, a.kind, ctx.rng, ctx.now, a.app), { rng: { seed: s }, now: AGORA });
+  }
+  const comChapeu = E.abrirLoja(ferreiroZerado, 'blacksmith', E.seededRng(semente + 1), relogio, true);
+  caso('renovarEstoque: o ferreiro do app com a Floresta', 'renovarEstoque', { loja: comChapeu }, (a, ctx) => E.renovarEstoque(a.loja, ctx.rng, ctx.now), { rng: { seed: semente }, now: AGORA });
+}
 
 const ferreiro = lojaDe('blacksmith', rico, [espadaNova, minerio, item('essencia'), item('pedra_protecao')]);
 for (const [nome, loja, materialId, semente] of [

@@ -159,6 +159,11 @@ namespace RPGLegend.Tests
             Fn(M, "abrirMestreDeEstilo", (a, c) => W(MestresDeEstilo.Abrir(JogoJson.LerEstado(a["estado"]))));
             Fn(M, "aprenderComMestre", (a, c) => W(MestresDeEstilo.Aprender(JogoJson.LerEstado(a["estado"]))));
 
+            // ---------- o negociante secreto (rodada 6a) ----------
+
+            Fn(M, "abrirNegociante", (a, c) => W(Negociantes.Abrir(JogoJson.LerEstado(a["estado"]))));
+            Fn(M, "comprarDoNegociante", (a, c) => W(Negociantes.Comprar(JogoJson.LerEstado(a["estado"]))));
+
             // ---------- a Encantadora ----------
 
             Fn(M, "abrirEncantadora", (a, c) => W(Encantadoras.AbrirEncantadora(JogoJson.LerEstado(a["estado"]))));

@@ -14,7 +14,7 @@
  * — quem chama (`RoomRegistry`) é responsável por guardar o resultado.
  */
 
-import { ATTR_KEYS, equipmentCap, equipmentStat, manaComAClasse, vidaComAClasse, vidaComOEstilo, xpForLevel, type Equipment } from '@rpg-legend/shared';
+import { ATTR_KEYS, equipmentCap, equipmentStat, manaComAClasse, vidaComAArma, vidaComAClasse, vidaComOEstilo, xpForLevel, type Equipment } from '@rpg-legend/shared';
 
 import { PROFILE_COLORS, PROFILE_FRAMES, PROFILE_PETS } from '../auth/cosmetics';
 import { publicAvatarUrl, resumoDoAvatar } from '../social/avatar';
@@ -98,7 +98,9 @@ export function sanitizeHero(candidate: unknown, previousRecord: SanitizedHeroRe
     estilos: Array.isArray(hero.estilos) ? hero.estilos.filter((e): e is string => typeof e === 'string') : undefined,
     estilo: texto(hero.estilo),
   };
-  const calculatedHp = vidaComOEstilo(vidaComAClasse(20 + (hero.level as number) * 5 + attrs.constituicao * 10 + equipmentStat(equip, 'vida', cap), quem), quem);
+  // E a do Monge com a arma dele (rodada 6).
+  const comArma = { ...quem, equip: equip as { arma?: { templateId?: string } | null; secundaria?: { templateId?: string } | null } };
+  const calculatedHp = vidaComAArma(vidaComOEstilo(vidaComAClasse(20 + (hero.level as number) * 5 + attrs.constituicao * 10 + equipmentStat(equip, 'vida', cap), quem), quem), comArma);
   const calculatedMp = manaComAClasse(10 + (hero.level as number) * 2 + attrs.intelecto * 5 + equipmentStat(equip, 'mana', cap), quem);
   hero.maxHp = calculatedHp;
   hero.maxMp = calculatedMp;

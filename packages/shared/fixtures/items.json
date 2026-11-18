@@ -332,6 +332,62 @@
           "escada": "madeira"
         },
         {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        },
+        {
           "id": "escudo",
           "name": "Escudo de Carvalho",
           "genero": "m",
@@ -360,6 +416,51 @@
           },
           "value": 22,
           "escada": "couro"
+        },
+        {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
         },
         {
           "id": "couro",
@@ -532,6 +633,20 @@
             "vida": 8
           },
           "value": 22
+        },
+        {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
         },
         {
           "id": "pot_vida",
@@ -1702,6 +1817,62 @@
             "icon": "💫"
           },
           "escada": "madeira"
+        },
+        {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
         }
       ]
     }
@@ -1745,6 +1916,51 @@
           },
           "value": 22,
           "escada": "couro"
+        },
+        {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
         },
         {
           "id": "couro",
@@ -1930,6 +2146,20 @@
             "vida": 8
           },
           "value": 22
+        },
+        {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
         },
         {
           "id": "amuleto_floresta",
@@ -2544,6 +2774,106 @@
     }
   },
   {
+    "name": "slotForTemplate: bastao",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "arma"
+    }
+  },
+  {
+    "name": "slotForTemplate: leque",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "arma"
+    }
+  },
+  {
+    "name": "slotForTemplate: kusarigama",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "arma"
+    }
+  },
+  {
+    "name": "slotForTemplate: lanca",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "arma"
+    }
+  },
+  {
     "name": "slotForTemplate: escudo",
     "input": {
       "fn": "slotForTemplate",
@@ -2588,6 +2918,84 @@
           },
           "value": 22,
           "escada": "couro"
+        }
+      }
+    },
+    "expected": {
+      "result": "secundaria"
+    }
+  },
+  {
+    "name": "slotForTemplate: aljava_paralisante",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "secundaria"
+    }
+  },
+  {
+    "name": "slotForTemplate: aljava_flamejante",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        }
+      }
+    },
+    "expected": {
+      "result": "secundaria"
+    }
+  },
+  {
+    "name": "slotForTemplate: aljava_explosiva",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
         }
       }
     },
@@ -2892,6 +3300,31 @@
             "vida": 8
           },
           "value": 22
+        }
+      }
+    },
+    "expected": {
+      "result": "acessorio"
+    }
+  },
+  {
+    "name": "slotForTemplate: chapeu_espadachim",
+    "input": {
+      "fn": "slotForTemplate",
+      "args": {
+        "template": {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
         }
       }
     },
@@ -4527,6 +4960,726 @@
     }
   },
   {
+    "name": "instantiate: bastao em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "bastao_1700000000000_62706",
+          "templateId": "bastao",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_273",
+          "templateId": "bastao",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 8,
+            "esquiva": 4
+          },
+          "value": 764,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_52744",
+          "templateId": "bastao",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "esquiva": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_98104",
+          "templateId": "bastao",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 13,
+            "esquiva": 7
+          },
+          "value": 1294,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_96836",
+          "templateId": "bastao",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 18,
+            "esquiva": 9
+          },
+          "value": 1764,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_28110",
+          "templateId": "bastao",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "esquiva": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: leque em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "leque_1700000000000_62706",
+          "templateId": "leque",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_273",
+          "templateId": "leque",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 5,
+            "critico": 8
+          },
+          "value": 764,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_52744",
+          "templateId": "leque",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 7,
+            "critico": 10
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_98104",
+          "templateId": "leque",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 9,
+            "critico": 13
+          },
+          "value": 1294,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_96836",
+          "templateId": "leque",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 12,
+            "critico": 18
+          },
+          "value": 1764,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_28110",
+          "templateId": "leque",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 16,
+            "critico": 24
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: kusarigama em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "kusarigama_1700000000000_62706",
+          "templateId": "kusarigama",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_273",
+          "templateId": "kusarigama",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 9,
+            "critico": 4
+          },
+          "value": 764,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_52744",
+          "templateId": "kusarigama",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 12,
+            "critico": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_98104",
+          "templateId": "kusarigama",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 15,
+            "critico": 7
+          },
+          "value": 1294,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_96836",
+          "templateId": "kusarigama",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 21,
+            "critico": 9
+          },
+          "value": 1764,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_28110",
+          "templateId": "kusarigama",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 28,
+            "critico": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: lanca em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "lanca_1700000000000_62706",
+          "templateId": "lanca",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_273",
+          "templateId": "lanca",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 8,
+            "critico": 4
+          },
+          "value": 612,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_52744",
+          "templateId": "lanca",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "critico": 5
+          },
+          "value": 801,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_98104",
+          "templateId": "lanca",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 13,
+            "critico": 7
+          },
+          "value": 1036,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_96836",
+          "templateId": "lanca",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 18,
+            "critico": 9
+          },
+          "value": 1413,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_28110",
+          "templateId": "lanca",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "critico": 12
+          },
+          "value": 1884,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
     "name": "instantiate: escudo em cada raridade",
     "input": {
       "fn": "instantiate",
@@ -4876,6 +6029,549 @@
             "mana": 32
           },
           "value": 88,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: aljava_paralisante em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_paralisante_1700000000000_62706",
+          "templateId": "aljava_paralisante",
+          "rarity": "comum",
+          "stats": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_273",
+          "templateId": "aljava_paralisante",
+          "rarity": "incomum",
+          "stats": {
+            "critico": 4,
+            "esquiva": 3
+          },
+          "value": 688,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_52744",
+          "templateId": "aljava_paralisante",
+          "rarity": "raro",
+          "stats": {
+            "critico": 5,
+            "esquiva": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_98104",
+          "templateId": "aljava_paralisante",
+          "rarity": "epico",
+          "stats": {
+            "critico": 7,
+            "esquiva": 4
+          },
+          "value": 1164,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_96836",
+          "templateId": "aljava_paralisante",
+          "rarity": "lendario",
+          "stats": {
+            "critico": 9,
+            "esquiva": 6
+          },
+          "value": 1587,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_28110",
+          "templateId": "aljava_paralisante",
+          "rarity": "mitico",
+          "stats": {
+            "critico": 12,
+            "esquiva": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: aljava_flamejante em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_flamejante_1700000000000_62706",
+          "templateId": "aljava_flamejante",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_273",
+          "templateId": "aljava_flamejante",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 688,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_52744",
+          "templateId": "aljava_flamejante",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_98104",
+          "templateId": "aljava_flamejante",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 4,
+            "critico": 4
+          },
+          "value": 1164,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_96836",
+          "templateId": "aljava_flamejante",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 6,
+            "critico": 6
+          },
+          "value": 1587,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_28110",
+          "templateId": "aljava_flamejante",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 8,
+            "critico": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: aljava_explosiva em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_explosiva_1700000000000_62706",
+          "templateId": "aljava_explosiva",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_273",
+          "templateId": "aljava_explosiva",
+          "rarity": "incomum",
+          "stats": {
+            "ataque": 4,
+            "critico": 4
+          },
+          "value": 1377,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_52744",
+          "templateId": "aljava_explosiva",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 5
+          },
+          "value": 1800,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_98104",
+          "templateId": "aljava_explosiva",
+          "rarity": "epico",
+          "stats": {
+            "ataque": 7,
+            "critico": 7
+          },
+          "value": 2330,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_96836",
+          "templateId": "aljava_explosiva",
+          "rarity": "lendario",
+          "stats": {
+            "ataque": 9,
+            "critico": 9
+          },
+          "value": 3177,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_28110",
+          "templateId": "aljava_explosiva",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 12
+          },
+          "value": 4236,
           "equipped": false
         }
       ],
@@ -7028,6 +8724,186 @@
             "vida": 32
           },
           "value": 88,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 6
+    }
+  },
+  {
+    "name": "instantiate: chapeu_espadachim em cada raridade",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "incomum",
+            "label": "Incomum",
+            "adjetivo": [
+              "Incomum",
+              "Incomum",
+              "Incomuns",
+              "Incomuns"
+            ],
+            "colorVar": "--r-incomum",
+            "mult": 1.3,
+            "weight": 28
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "epico",
+            "label": "Épico",
+            "adjetivo": [
+              "Épico",
+              "Épica",
+              "Épicos",
+              "Épicas"
+            ],
+            "colorVar": "--r-epico",
+            "mult": 2.2,
+            "weight": 7
+          },
+          {
+            "id": "lendario",
+            "label": "Lendário",
+            "adjetivo": [
+              "Lendário",
+              "Lendária",
+              "Lendários",
+              "Lendárias"
+            ],
+            "colorVar": "--r-lendario",
+            "mult": 3,
+            "weight": 1.2
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "chapeu_espadachim_1700000000000_62706",
+          "templateId": "chapeu_espadachim",
+          "rarity": "comum",
+          "stats": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_273",
+          "templateId": "chapeu_espadachim",
+          "rarity": "incomum",
+          "stats": {
+            "esquiva": 5,
+            "critico": 5
+          },
+          "value": 918,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_52744",
+          "templateId": "chapeu_espadachim",
+          "rarity": "raro",
+          "stats": {
+            "esquiva": 7,
+            "critico": 7
+          },
+          "value": 1200,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_98104",
+          "templateId": "chapeu_espadachim",
+          "rarity": "epico",
+          "stats": {
+            "esquiva": 9,
+            "critico": 9
+          },
+          "value": 1553,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_96836",
+          "templateId": "chapeu_espadachim",
+          "rarity": "lendario",
+          "stats": {
+            "esquiva": 12,
+            "critico": 12
+          },
+          "value": 2118,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_28110",
+          "templateId": "chapeu_espadachim",
+          "rarity": "mitico",
+          "stats": {
+            "esquiva": 16,
+            "critico": 16
+          },
+          "value": 2824,
           "equipped": false
         }
       ],
@@ -12239,6 +14115,166 @@
     }
   },
   {
+    "name": "nomeComMaterial: bastao",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Bastão",
+        "Bastão",
+        "Bastão",
+        "Bastão",
+        "Bastão",
+        "Bastão"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: leque",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Leque de Guerra",
+        "Leque de Guerra",
+        "Leque de Guerra",
+        "Leque de Guerra",
+        "Leque de Guerra",
+        "Leque de Guerra"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: kusarigama",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Kusarigama",
+        "Kusarigama",
+        "Kusarigama",
+        "Kusarigama",
+        "Kusarigama",
+        "Kusarigama"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: lanca",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Lança",
+        "Lança",
+        "Lança",
+        "Lança",
+        "Lança",
+        "Lança"
+      ]
+    }
+  },
+  {
     "name": "nomeComMaterial: escudo",
     "input": {
       "fn": "nomeComMaterial",
@@ -12317,6 +14353,129 @@
         "Grimório de Couro de Dragão",
         "Grimório",
         "Grimório"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: aljava_paralisante",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Aljava Paralisante",
+        "Aljava Paralisante",
+        "Aljava Paralisante",
+        "Aljava Paralisante",
+        "Aljava Paralisante",
+        "Aljava Paralisante"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: aljava_flamejante",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Aljava Flamejante",
+        "Aljava Flamejante",
+        "Aljava Flamejante",
+        "Aljava Flamejante",
+        "Aljava Flamejante",
+        "Aljava Flamejante"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: aljava_explosiva",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Aljava Explosiva",
+        "Aljava Explosiva",
+        "Aljava Explosiva",
+        "Aljava Explosiva",
+        "Aljava Explosiva",
+        "Aljava Explosiva"
       ]
     }
   },
@@ -12801,6 +14960,46 @@
         "Colar da Força Ancestral",
         "Colar da Força Ancestral",
         "Colar da Força Ancestral"
+      ]
+    }
+  },
+  {
+    "name": "nomeComMaterial: chapeu_espadachim",
+    "input": {
+      "fn": "nomeComMaterial",
+      "args": {
+        "template": {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
+        },
+        "degraus": [
+          1,
+          2,
+          3,
+          4,
+          0,
+          2.5
+        ]
+      }
+    },
+    "expected": {
+      "result": [
+        "Chapéu do Espadachim",
+        "Chapéu do Espadachim",
+        "Chapéu do Espadachim",
+        "Chapéu do Espadachim",
+        "Chapéu do Espadachim",
+        "Chapéu do Espadachim"
       ]
     }
   },
@@ -15392,6 +17591,878 @@
     }
   },
   {
+    "name": "instantiate: bastao no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "bastao_1700000000000_62706",
+          "templateId": "bastao",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_273",
+          "templateId": "bastao",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "esquiva": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_52744",
+          "templateId": "bastao",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "esquiva": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: bastao no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "bastao",
+          "name": "Bastão",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/bastao.png",
+          "base": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "bastao_1700000000000_62706",
+          "templateId": "bastao",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "esquiva": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_273",
+          "templateId": "bastao",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "esquiva": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "bastao_1700000000000_52744",
+          "templateId": "bastao",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "esquiva": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: leque no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "leque_1700000000000_62706",
+          "templateId": "leque",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_273",
+          "templateId": "leque",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 7,
+            "critico": 10
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_52744",
+          "templateId": "leque",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 16,
+            "critico": 24
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: leque no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "leque",
+          "name": "Leque de Guerra",
+          "genero": "m",
+          "category": "arma",
+          "desc": "Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.",
+          "sprite": "weapons/leque.png",
+          "base": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "leque_1700000000000_62706",
+          "templateId": "leque",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 4,
+            "critico": 6
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_273",
+          "templateId": "leque",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 7,
+            "critico": 10
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "leque_1700000000000_52744",
+          "templateId": "leque",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 16,
+            "critico": 24
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: kusarigama no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "kusarigama_1700000000000_62706",
+          "templateId": "kusarigama",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_273",
+          "templateId": "kusarigama",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 12,
+            "critico": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_52744",
+          "templateId": "kusarigama",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 28,
+            "critico": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: kusarigama no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "kusarigama",
+          "name": "Kusarigama",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.",
+          "sprite": "weapons/kusarigama.png",
+          "base": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "kusarigama_1700000000000_62706",
+          "templateId": "kusarigama",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 7,
+            "critico": 3
+          },
+          "value": 588,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_273",
+          "templateId": "kusarigama",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 12,
+            "critico": 5
+          },
+          "value": 1000,
+          "equipped": false
+        },
+        {
+          "uid": "kusarigama_1700000000000_52744",
+          "templateId": "kusarigama",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 28,
+            "critico": 12
+          },
+          "value": 2352,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: lanca no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "lanca_1700000000000_62706",
+          "templateId": "lanca",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_273",
+          "templateId": "lanca",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "critico": 5
+          },
+          "value": 801,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_52744",
+          "templateId": "lanca",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "critico": 12
+          },
+          "value": 1884,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: lanca no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "lanca",
+          "name": "Lança",
+          "genero": "f",
+          "category": "arma",
+          "desc": "Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.",
+          "sprite": "weapons/lanca.png",
+          "base": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "lanca_1700000000000_62706",
+          "templateId": "lanca",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 6,
+            "critico": 3
+          },
+          "value": 471,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_273",
+          "templateId": "lanca",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 10,
+            "critico": 5
+          },
+          "value": 801,
+          "equipped": false
+        },
+        {
+          "uid": "lanca_1700000000000_52744",
+          "templateId": "lanca",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 24,
+            "critico": 12
+          },
+          "value": 1884,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
     "name": "instantiate: escudo no degrau 2",
     "input": {
       "fn": "instantiate",
@@ -15832,6 +18903,666 @@
           "value": 132,
           "equipped": false,
           "degrau": 3
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_paralisante no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_paralisante_1700000000000_62706",
+          "templateId": "aljava_paralisante",
+          "rarity": "comum",
+          "stats": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_273",
+          "templateId": "aljava_paralisante",
+          "rarity": "raro",
+          "stats": {
+            "critico": 5,
+            "esquiva": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_52744",
+          "templateId": "aljava_paralisante",
+          "rarity": "mitico",
+          "stats": {
+            "critico": 12,
+            "esquiva": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_paralisante no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_paralisante",
+          "name": "Aljava Paralisante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.",
+          "sprite": "armor/aljava_paralisante.png",
+          "slot": "secundaria",
+          "base": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_paralisante_1700000000000_62706",
+          "templateId": "aljava_paralisante",
+          "rarity": "comum",
+          "stats": {
+            "critico": 3,
+            "esquiva": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_273",
+          "templateId": "aljava_paralisante",
+          "rarity": "raro",
+          "stats": {
+            "critico": 5,
+            "esquiva": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_paralisante_1700000000000_52744",
+          "templateId": "aljava_paralisante",
+          "rarity": "mitico",
+          "stats": {
+            "critico": 12,
+            "esquiva": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_flamejante no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_flamejante_1700000000000_62706",
+          "templateId": "aljava_flamejante",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_273",
+          "templateId": "aljava_flamejante",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_52744",
+          "templateId": "aljava_flamejante",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 8,
+            "critico": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_flamejante no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_flamejante",
+          "name": "Aljava Flamejante",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.",
+          "sprite": "armor/aljava_flamejante.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_flamejante_1700000000000_62706",
+          "templateId": "aljava_flamejante",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 2,
+            "critico": 2
+          },
+          "value": 529,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_273",
+          "templateId": "aljava_flamejante",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 899,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_flamejante_1700000000000_52744",
+          "templateId": "aljava_flamejante",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 8,
+            "critico": 8
+          },
+          "value": 2116,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_explosiva no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_explosiva_1700000000000_62706",
+          "templateId": "aljava_explosiva",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_273",
+          "templateId": "aljava_explosiva",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 5
+          },
+          "value": 1800,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_52744",
+          "templateId": "aljava_explosiva",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 12
+          },
+          "value": 4236,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: aljava_explosiva no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "aljava_explosiva",
+          "name": "Aljava Explosiva",
+          "genero": "f",
+          "category": "armadura",
+          "desc": "Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.",
+          "sprite": "armor/aljava_explosiva.png",
+          "slot": "secundaria",
+          "base": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "aljava_explosiva_1700000000000_62706",
+          "templateId": "aljava_explosiva",
+          "rarity": "comum",
+          "stats": {
+            "ataque": 3,
+            "critico": 3
+          },
+          "value": 1059,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_273",
+          "templateId": "aljava_explosiva",
+          "rarity": "raro",
+          "stats": {
+            "ataque": 5,
+            "critico": 5
+          },
+          "value": 1800,
+          "equipped": false
+        },
+        {
+          "uid": "aljava_explosiva_1700000000000_52744",
+          "templateId": "aljava_explosiva",
+          "rarity": "mitico",
+          "stats": {
+            "ataque": 12,
+            "critico": 12
+          },
+          "value": 4236,
+          "equipped": false
         }
       ],
       "rngCalls": 3
@@ -18491,6 +22222,224 @@
             "vida": 32
           },
           "value": 88,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: chapeu_espadachim no degrau 2",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 2
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "chapeu_espadachim_1700000000000_62706",
+          "templateId": "chapeu_espadachim",
+          "rarity": "comum",
+          "stats": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_273",
+          "templateId": "chapeu_espadachim",
+          "rarity": "raro",
+          "stats": {
+            "esquiva": 7,
+            "critico": 7
+          },
+          "value": 1200,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_52744",
+          "templateId": "chapeu_espadachim",
+          "rarity": "mitico",
+          "stats": {
+            "esquiva": 16,
+            "critico": 16
+          },
+          "value": 2824,
+          "equipped": false
+        }
+      ],
+      "rngCalls": 3
+    }
+  },
+  {
+    "name": "instantiate: chapeu_espadachim no degrau 3",
+    "input": {
+      "fn": "instantiate",
+      "args": {
+        "template": {
+          "id": "chapeu_espadachim",
+          "name": "Chapéu do Espadachim",
+          "genero": "m",
+          "category": "acessorio",
+          "desc": "Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.",
+          "sprite": "accessories/chapeu_espadachim.png",
+          "base": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "foraDoSorteio": true
+        },
+        "rarities": [
+          {
+            "id": "comum",
+            "label": "Comum",
+            "adjetivo": [
+              "Comum",
+              "Comum",
+              "Comuns",
+              "Comuns"
+            ],
+            "colorVar": "--r-comum",
+            "mult": 1,
+            "weight": 45
+          },
+          {
+            "id": "raro",
+            "label": "Raro",
+            "adjetivo": [
+              "Raro",
+              "Rara",
+              "Raros",
+              "Raras"
+            ],
+            "colorVar": "--r-raro",
+            "mult": 1.7,
+            "weight": 16
+          },
+          {
+            "id": "mitico",
+            "label": "Mítico",
+            "adjetivo": [
+              "Mítico",
+              "Mítica",
+              "Míticos",
+              "Míticas"
+            ],
+            "colorVar": "--r-mitico",
+            "mult": 4,
+            "weight": 0.35
+          }
+        ],
+        "options": {
+          "now": 1700000000000,
+          "degrau": 3
+        }
+      },
+      "rng": {
+        "seed": 1
+      },
+      "now": 1700000000000
+    },
+    "expected": {
+      "result": [
+        {
+          "uid": "chapeu_espadachim_1700000000000_62706",
+          "templateId": "chapeu_espadachim",
+          "rarity": "comum",
+          "stats": {
+            "esquiva": 4,
+            "critico": 4
+          },
+          "value": 706,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_273",
+          "templateId": "chapeu_espadachim",
+          "rarity": "raro",
+          "stats": {
+            "esquiva": 7,
+            "critico": 7
+          },
+          "value": 1200,
+          "equipped": false
+        },
+        {
+          "uid": "chapeu_espadachim_1700000000000_52744",
+          "templateId": "chapeu_espadachim",
+          "rarity": "mitico",
+          "stats": {
+            "esquiva": 16,
+            "critico": 16
+          },
+          "value": 2824,
           "equipped": false
         }
       ],

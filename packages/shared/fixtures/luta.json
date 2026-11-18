@@ -200,6 +200,106 @@
     }
   },
   {
+    "name": "eventoDaArma: bastao",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "bastao"
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: bastao no teclado",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "bastao",
+        "teclado": true
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: leque",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "leque"
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: leque no teclado",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "leque",
+        "teclado": true
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: kusarigama",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "kusarigama"
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: kusarigama no teclado",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "kusarigama",
+        "teclado": true
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: lanca",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "lanca"
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
+    "name": "eventoDaArma: lanca no teclado",
+    "input": {
+      "fn": "eventoDaArma",
+      "args": {
+        "templateId": "lanca",
+        "teclado": true
+      }
+    },
+    "expected": {
+      "result": "barra"
+    }
+  },
+  {
     "name": "eventoDaArma: null",
     "input": {
       "fn": "eventoDaArma",
@@ -23236,16 +23336,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "cajado_1700000000000_68976",
-              "templateId": "cajado",
+              "uid": "marreta_1700000000000_68976",
+              "templateId": "marreta",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "mana": 14
+                "ataque": 12,
+                "velocidade": -3
               },
-              "value": 41,
+              "value": 46,
               "equipped": false,
-              "procChance": 0.135
+              "procChance": 0.155
             },
             "secundaria": null,
             "elmo": null,
@@ -23289,71 +23389,71 @@
           "masteryBattles": 60,
           "derived": {
             "maxHp": 305,
-            "maxMp": 243,
+            "maxMp": 229,
             "dmgFisico": 48,
             "dmgMagico": 75,
             "esquiva": 7,
             "critico": 12,
-            "velocidade": 14,
+            "velocidade": 11,
             "curaBonus": 12,
             "resistMagica": 12,
             "descontoLoja": 12.5
           },
           "maxHp": 305,
           "hp": 202,
-          "maxMp": 243,
-          "mp": 224,
+          "maxMp": 229,
+          "mp": 211,
           "buffs": {}
         },
         "monster": {
-          "speciesId": "elemental_fogo",
-          "enemyClassId": "guardiao",
-          "floor": 25,
-          "hp": 32,
-          "maxHp": 61,
-          "dmg": 30,
-          "speed": 3,
+          "speciesId": "lobo_sombras",
+          "enemyClassId": "feiticeiro",
+          "floor": 32,
+          "hp": 49,
+          "maxHp": 80,
+          "dmg": 16,
+          "speed": 20,
           "xp": 10,
           "gold": 10,
           "isBoss": false,
           "status": {},
-          "attackCount": 4,
+          "attackCount": 0,
           "guardHits": 0,
           "poisonStrike": false,
           "species": {
-            "id": "elemental_fogo",
-            "name": "Elemental de Fogo",
-            "icon": "🔥",
-            "behavior": "magico",
-            "baseHp": 11,
-            "baseSpeed": 9,
-            "baseDmg": 5,
-            "weakness": "fisico",
-            "resistance": "magico",
-            "ability": "Chama Arcana",
-            "abilityDesc": "Pode queimar e drenar mana."
+            "id": "lobo_sombras",
+            "name": "Lobo das Sombras",
+            "icon": "🐺",
+            "behavior": "agil",
+            "baseHp": 9,
+            "baseSpeed": 13,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "fisico",
+            "ability": "Reflexos Rápidos",
+            "abilityDesc": "Tem chance de evitar ataques comuns."
           },
           "enemyClass": {
-            "id": "guardiao",
-            "name": "Guardião",
-            "icon": "🛡️",
-            "power": "Muralha Sombria",
-            "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
-            "hpMult": 1.35,
-            "dmgMult": 0.95,
-            "speedMult": 0.8
+            "id": "feiticeiro",
+            "name": "Feiticeiro",
+            "icon": "🧙",
+            "power": "Ruptura Arcana",
+            "powerDesc": "A cada 3 ataques drena Mana e aumenta o dano mágico.",
+            "hpMult": 0.95,
+            "dmgMult": 1.18,
+            "speedMult": 1.05
           },
-          "name": "Elemental de Fogo Lendário",
-          "icon": "🔥",
-          "behavior": "magico",
-          "ability": "Chama Arcana",
-          "abilityDesc": "Pode queimar e drenar mana.",
-          "enemyClassLabel": "Guardião"
+          "name": "Lobo das Sombras Lendário",
+          "icon": "🐺",
+          "behavior": "agil",
+          "ability": "Reflexos Rápidos",
+          "abilityDesc": "Tem chance de evitar ataques comuns.",
+          "enemyClassLabel": "Feiticeiro"
         },
-        "dado": 14,
+        "dado": 10,
         "leitura": {
-          "acerto": true,
-          "forca": 0.99,
+          "acerto": false,
+          "forca": 0,
           "critico": false
         },
         "attackStyle": "normal",
@@ -23377,16 +23477,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "cajado_1700000000000_68976",
-              "templateId": "cajado",
+              "uid": "marreta_1700000000000_68976",
+              "templateId": "marreta",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "mana": 14
+                "ataque": 12,
+                "velocidade": -3
               },
-              "value": 41,
+              "value": 46,
               "equipped": false,
-              "procChance": 0.135
+              "procChance": 0.155
             },
             "secundaria": null,
             "elmo": null,
@@ -23430,92 +23530,78 @@
           "masteryBattles": 60,
           "derived": {
             "maxHp": 305,
-            "maxMp": 243,
+            "maxMp": 229,
             "dmgFisico": 48,
             "dmgMagico": 75,
             "esquiva": 7,
             "critico": 12,
-            "velocidade": 14,
+            "velocidade": 11,
             "curaBonus": 12,
             "resistMagica": 12,
             "descontoLoja": 12.5
           },
           "maxHp": 305,
           "hp": 202,
-          "maxMp": 243,
-          "mp": 224,
-          "buffs": {
-            "critNext": false
-          }
+          "maxMp": 229,
+          "mp": 211,
+          "buffs": {}
         },
         "monster": {
-          "speciesId": "elemental_fogo",
-          "enemyClassId": "guardiao",
-          "floor": 25,
-          "hp": -48,
-          "maxHp": 61,
-          "dmg": 30,
-          "speed": 3,
+          "speciesId": "lobo_sombras",
+          "enemyClassId": "feiticeiro",
+          "floor": 32,
+          "hp": 49,
+          "maxHp": 80,
+          "dmg": 16,
+          "speed": 20,
           "xp": 10,
           "gold": 10,
           "isBoss": false,
-          "status": {
-            "sangramento": {
-              "turns": 3,
-              "dmg": 16
-            }
-          },
-          "attackCount": 4,
+          "status": {},
+          "attackCount": 0,
           "guardHits": 0,
           "poisonStrike": false,
           "species": {
-            "id": "elemental_fogo",
-            "name": "Elemental de Fogo",
-            "icon": "🔥",
-            "behavior": "magico",
-            "baseHp": 11,
-            "baseSpeed": 9,
-            "baseDmg": 5,
-            "weakness": "fisico",
-            "resistance": "magico",
-            "ability": "Chama Arcana",
-            "abilityDesc": "Pode queimar e drenar mana."
+            "id": "lobo_sombras",
+            "name": "Lobo das Sombras",
+            "icon": "🐺",
+            "behavior": "agil",
+            "baseHp": 9,
+            "baseSpeed": 13,
+            "baseDmg": 3,
+            "weakness": "magico",
+            "resistance": "fisico",
+            "ability": "Reflexos Rápidos",
+            "abilityDesc": "Tem chance de evitar ataques comuns."
           },
           "enemyClass": {
-            "id": "guardiao",
-            "name": "Guardião",
-            "icon": "🛡️",
-            "power": "Muralha Sombria",
-            "powerDesc": "A cada 3 ataques reduz o dano dos próximos golpes.",
-            "hpMult": 1.35,
-            "dmgMult": 0.95,
-            "speedMult": 0.8
+            "id": "feiticeiro",
+            "name": "Feiticeiro",
+            "icon": "🧙",
+            "power": "Ruptura Arcana",
+            "powerDesc": "A cada 3 ataques drena Mana e aumenta o dano mágico.",
+            "hpMult": 0.95,
+            "dmgMult": 1.18,
+            "speedMult": 1.05
           },
-          "name": "Elemental de Fogo Lendário",
-          "icon": "🔥",
-          "behavior": "magico",
-          "ability": "Chama Arcana",
-          "abilityDesc": "Pode queimar e drenar mana.",
-          "enemyClassLabel": "Guardião"
+          "name": "Lobo das Sombras Lendário",
+          "icon": "🐺",
+          "behavior": "agil",
+          "ability": "Reflexos Rápidos",
+          "abilityDesc": "Tem chance de evitar ataques comuns.",
+          "enemyClassLabel": "Feiticeiro"
         },
-        "outcome": "hit",
+        "outcome": "miss",
         "magical": false,
-        "affinityPct": 25,
+        "affinityPct": 50,
         "mira": {
-          "acerto": true,
-          "forca": 0.99,
+          "acerto": false,
+          "forca": 0,
           "critico": false
         },
-        "damage": 80,
-        "isCrit": false,
-        "procTriggered": null,
-        "classPassiveTriggered": {
-          "kind": "cacador",
-          "amount": 16
-        },
-        "monsterDefeated": true
+        "monsterDefeated": false
       },
-      "rngCalls": 3
+      "rngCalls": 0
     }
   },
   {
@@ -23524,41 +23610,40 @@
       "fn": "resolverGolpe",
       "args": {
         "hero": {
-          "level": 35,
+          "level": 27,
           "attrs": {
-            "forca": 14,
-            "destreza": 7,
-            "constituicao": 4,
-            "intelecto": 19,
-            "sabedoria": 18,
-            "carisma": 9
+            "forca": 4,
+            "destreza": 24,
+            "constituicao": 14,
+            "intelecto": 7,
+            "sabedoria": 4,
+            "carisma": 19
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_19872",
-              "templateId": "maca",
-              "rarity": "comum",
+              "uid": "cajado_1700000000000_15629",
+              "templateId": "cajado",
+              "rarity": "lendario",
               "stats": {
-                "ataque": 3,
-                "vida": 6
+                "ataque": 9,
+                "mana": 24
               },
-              "value": 22,
+              "value": 72,
               "equipped": false,
-              "procChance": 0.1
+              "procChance": 0.2
             },
             "secundaria": null,
-            "elmo": null,
-            "armadura": {
-              "uid": "robe_1700000000000_15629",
-              "templateId": "robe",
+            "elmo": {
+              "uid": "robe_chapeu_1700000000000_62706",
+              "templateId": "robe_chapeu",
               "rarity": "comum",
               "stats": {
-                "defesa": 1,
-                "mana": 5
+                "mana": 2
               },
-              "value": 13,
+              "value": 5,
               "equipped": false
             },
+            "armadura": null,
             "calca": null,
             "botas": null,
             "acessorio": null
@@ -23566,97 +23651,98 @@
           "name": "Teste",
           "race": "Humano",
           "raceIcon": "🧑",
-          "className": "Paladino",
-          "classIcon": "🛡️",
-          "classId": "paladino",
+          "className": "Druida",
+          "classIcon": "🌿",
+          "classId": "druida",
           "raceId": "humano",
           "xp": 0,
-          "xpNext": 1230,
+          "xpNext": 950,
           "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
           "debuff": {
-            "id": "orgulhoso",
-            "name": "Orgulhoso",
-            "icon": "👑",
-            "desc": "-1 Carisma em negociações com autoridades.",
-            "attr": "carisma"
+            "id": "mana_instavel",
+            "name": "Mana Instável",
+            "icon": "💢",
+            "desc": "-1 Intelecto e poderes custam 20% mais Mana.",
+            "attr": "intelecto",
+            "effect": "manaCostPenalty"
           },
           "killCount": 0,
-          "masteryBattles": 200,
+          "masteryBattles": 0,
           "derived": {
-            "maxHp": 313,
-            "maxMp": 180,
-            "dmgFisico": 28,
-            "dmgMagico": 57,
-            "esquiva": 3.5,
-            "critico": 8.5,
-            "velocidade": 7,
-            "curaBonus": 18,
-            "resistMagica": 18,
-            "descontoLoja": 4.5
+            "maxHp": 295,
+            "maxMp": 125,
+            "dmgFisico": 8,
+            "dmgMagico": 21,
+            "esquiva": 12,
+            "critico": 17,
+            "velocidade": 24,
+            "curaBonus": 4,
+            "resistMagica": 4,
+            "descontoLoja": 9.5
           },
-          "maxHp": 313,
-          "hp": 267,
-          "maxMp": 180,
-          "mp": 29,
+          "maxHp": 295,
+          "hp": 255,
+          "maxMp": 125,
+          "mp": 80,
           "buffs": {
-            "forcaTurns": 2,
-            "forcaAmount": 0.3
+            "critNext": true,
+            "shield": 0.5
           }
         },
         "monster": {
-          "speciesId": "morcego",
-          "enemyClassId": "brutamontes",
-          "floor": 22,
-          "hp": 34,
-          "maxHp": 85,
-          "dmg": 15,
-          "speed": 17,
+          "speciesId": "orc",
+          "enemyClassId": "assassino",
+          "floor": 26,
+          "hp": 4,
+          "maxHp": 18,
+          "dmg": 17,
+          "speed": 10,
           "xp": 10,
           "gold": 10,
           "isBoss": false,
           "status": {
-            "lento": {
+            "vulneravel": {
               "turns": 1,
               "amount": 0.2
             }
           },
-          "attackCount": 1,
+          "attackCount": 2,
           "guardHits": 0,
           "poisonStrike": false,
           "species": {
-            "id": "morcego",
-            "name": "Morcego Vampírico",
-            "icon": "🦇",
-            "behavior": "agil",
-            "baseHp": 7,
-            "baseSpeed": 14,
-            "baseDmg": 2,
-            "weakness": "fisico",
-            "resistance": "magico",
-            "ability": "Voo Errático",
-            "abilityDesc": "Tem chance de evitar ataques comuns."
+            "id": "orc",
+            "name": "Orc Selvagem",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 14,
+            "baseSpeed": 7,
+            "baseDmg": 4,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Fúria Selvagem",
+            "abilityDesc": "Pode causar dano extra."
           },
           "enemyClass": {
-            "id": "brutamontes",
-            "name": "Brutamontes",
-            "icon": "💥",
-            "power": "Impacto Brutal",
-            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
-            "hpMult": 1.15,
-            "dmgMult": 1.2,
-            "speedMult": 0.9
+            "id": "assassino",
+            "name": "Assassino",
+            "icon": "🗡️",
+            "power": "Lâmina Tóxica",
+            "powerDesc": "A cada 3 ataques causa dano extra e aplica veneno.",
+            "hpMult": 0.9,
+            "dmgMult": 1.15,
+            "speedMult": 1.25
           },
-          "name": "Morcego Vampírico Lendário",
-          "icon": "🦇",
-          "behavior": "agil",
-          "ability": "Voo Errático",
-          "abilityDesc": "Tem chance de evitar ataques comuns.",
-          "enemyClassLabel": "Brutamontes"
+          "name": "Orc Selvagem Lendário",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Fúria Selvagem",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Assassino"
         },
-        "dado": 6,
+        "dado": 14,
         "leitura": {
           "acerto": false,
           "forca": 0,
@@ -23672,41 +23758,40 @@
     "expected": {
       "result": {
         "hero": {
-          "level": 35,
+          "level": 27,
           "attrs": {
-            "forca": 14,
-            "destreza": 7,
-            "constituicao": 4,
-            "intelecto": 19,
-            "sabedoria": 18,
-            "carisma": 9
+            "forca": 4,
+            "destreza": 24,
+            "constituicao": 14,
+            "intelecto": 7,
+            "sabedoria": 4,
+            "carisma": 19
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_19872",
-              "templateId": "maca",
-              "rarity": "comum",
+              "uid": "cajado_1700000000000_15629",
+              "templateId": "cajado",
+              "rarity": "lendario",
               "stats": {
-                "ataque": 3,
-                "vida": 6
+                "ataque": 9,
+                "mana": 24
               },
-              "value": 22,
+              "value": 72,
               "equipped": false,
-              "procChance": 0.1
+              "procChance": 0.2
             },
             "secundaria": null,
-            "elmo": null,
-            "armadura": {
-              "uid": "robe_1700000000000_15629",
-              "templateId": "robe",
+            "elmo": {
+              "uid": "robe_chapeu_1700000000000_62706",
+              "templateId": "robe_chapeu",
               "rarity": "comum",
               "stats": {
-                "defesa": 1,
-                "mana": 5
+                "mana": 2
               },
-              "value": 13,
+              "value": 5,
               "equipped": false
             },
+            "armadura": null,
             "calca": null,
             "botas": null,
             "acessorio": null
@@ -23714,97 +23799,93 @@
           "name": "Teste",
           "race": "Humano",
           "raceIcon": "🧑",
-          "className": "Paladino",
-          "classIcon": "🛡️",
-          "classId": "paladino",
+          "className": "Druida",
+          "classIcon": "🌿",
+          "classId": "druida",
           "raceId": "humano",
           "xp": 0,
-          "xpNext": 1230,
+          "xpNext": 950,
           "attrPoints": 0,
           "gold": 100,
           "powerNames": [],
           "powerIds": [],
           "debuff": {
-            "id": "orgulhoso",
-            "name": "Orgulhoso",
-            "icon": "👑",
-            "desc": "-1 Carisma em negociações com autoridades.",
-            "attr": "carisma"
+            "id": "mana_instavel",
+            "name": "Mana Instável",
+            "icon": "💢",
+            "desc": "-1 Intelecto e poderes custam 20% mais Mana.",
+            "attr": "intelecto",
+            "effect": "manaCostPenalty"
           },
           "killCount": 0,
-          "masteryBattles": 200,
+          "masteryBattles": 0,
           "derived": {
-            "maxHp": 313,
-            "maxMp": 180,
-            "dmgFisico": 28,
-            "dmgMagico": 57,
-            "esquiva": 3.5,
-            "critico": 8.5,
-            "velocidade": 7,
-            "curaBonus": 18,
-            "resistMagica": 18,
-            "descontoLoja": 4.5
+            "maxHp": 295,
+            "maxMp": 125,
+            "dmgFisico": 8,
+            "dmgMagico": 21,
+            "esquiva": 12,
+            "critico": 17,
+            "velocidade": 24,
+            "curaBonus": 4,
+            "resistMagica": 4,
+            "descontoLoja": 9.5
           },
-          "maxHp": 313,
-          "hp": 267,
-          "maxMp": 180,
-          "mp": 29,
+          "maxHp": 295,
+          "hp": 255,
+          "maxMp": 125,
+          "mp": 80,
           "buffs": {
-            "forcaTurns": 1,
-            "forcaAmount": 0.3
+            "critNext": false,
+            "shield": 0.5
           }
         },
         "monster": {
-          "speciesId": "morcego",
-          "enemyClassId": "brutamontes",
-          "floor": 22,
-          "hp": 34,
-          "maxHp": 85,
-          "dmg": 15,
-          "speed": 17,
+          "speciesId": "orc",
+          "enemyClassId": "assassino",
+          "floor": 26,
+          "hp": -60,
+          "maxHp": 18,
+          "dmg": 17,
+          "speed": 10,
           "xp": 10,
           "gold": 10,
           "isBoss": false,
-          "status": {
-            "lento": {
-              "turns": 1,
-              "amount": 0.2
-            }
-          },
-          "attackCount": 1,
+          "status": {},
+          "attackCount": 2,
           "guardHits": 0,
           "poisonStrike": false,
           "species": {
-            "id": "morcego",
-            "name": "Morcego Vampírico",
-            "icon": "🦇",
-            "behavior": "agil",
-            "baseHp": 7,
-            "baseSpeed": 14,
-            "baseDmg": 2,
-            "weakness": "fisico",
-            "resistance": "magico",
-            "ability": "Voo Errático",
-            "abilityDesc": "Tem chance de evitar ataques comuns."
+            "id": "orc",
+            "name": "Orc Selvagem",
+            "icon": "👹",
+            "behavior": "agressivo",
+            "baseHp": 14,
+            "baseSpeed": 7,
+            "baseDmg": 4,
+            "weakness": "magico",
+            "resistance": "nenhuma",
+            "ability": "Fúria Selvagem",
+            "abilityDesc": "Pode causar dano extra."
           },
           "enemyClass": {
-            "id": "brutamontes",
-            "name": "Brutamontes",
-            "icon": "💥",
-            "power": "Impacto Brutal",
-            "powerDesc": "A cada 3 ataques causa 70% mais dano.",
-            "hpMult": 1.15,
-            "dmgMult": 1.2,
-            "speedMult": 0.9
+            "id": "assassino",
+            "name": "Assassino",
+            "icon": "🗡️",
+            "power": "Lâmina Tóxica",
+            "powerDesc": "A cada 3 ataques causa dano extra e aplica veneno.",
+            "hpMult": 0.9,
+            "dmgMult": 1.15,
+            "speedMult": 1.25
           },
-          "name": "Morcego Vampírico Lendário",
-          "icon": "🦇",
-          "behavior": "agil",
-          "ability": "Voo Errático",
-          "abilityDesc": "Tem chance de evitar ataques comuns.",
-          "enemyClassLabel": "Brutamontes"
+          "name": "Orc Selvagem Lendário",
+          "icon": "👹",
+          "behavior": "agressivo",
+          "ability": "Fúria Selvagem",
+          "abilityDesc": "Pode causar dano extra.",
+          "enemyClassLabel": "Assassino"
         },
-        "outcome": "miss",
+        "outcome": "hit",
         "magical": false,
         "affinityPct": 100,
         "mira": {
@@ -23812,9 +23893,13 @@
           "forca": 0,
           "critico": false
         },
-        "monsterDefeated": false
+        "damage": 64,
+        "isCrit": true,
+        "procTriggered": null,
+        "classPassiveTriggered": null,
+        "monsterDefeated": true
       },
-      "rngCalls": 0
+      "rngCalls": 2
     }
   },
   {
@@ -23834,15 +23919,13 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_62706",
-              "templateId": "violao",
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "critico": 10,
-                "esquiva": 3
+                "ataque": 7
               },
-              "value": 39,
+              "value": 37,
               "equipped": false,
               "procChance": 0.185
             },
@@ -23866,9 +23949,9 @@
           "name": "Teste",
           "race": "Humano",
           "raceIcon": "🧑",
-          "className": "Bardo",
-          "classIcon": "🎵",
-          "classId": "bardo",
+          "className": "Paladino",
+          "classIcon": "🛡️",
+          "classId": "paladino",
           "raceId": "humano",
           "xp": 0,
           "xpNext": 1090,
@@ -23886,19 +23969,19 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 268,
+            "maxHp": 436,
             "maxMp": 122,
             "dmgFisico": 28,
             "dmgMagico": 30,
-            "esquiva": 14,
+            "esquiva": 11,
             "critico": 8,
             "velocidade": 6,
             "curaBonus": 6,
             "resistMagica": 6,
             "descontoLoja": 4
           },
-          "maxHp": 268,
-          "hp": 107,
+          "maxHp": 436,
+          "hp": 173,
           "maxMp": 122,
           "mp": 71,
           "buffs": {
@@ -23978,15 +24061,13 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_62706",
-              "templateId": "violao",
+              "uid": "espada_1700000000000_62706",
+              "templateId": "espada",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "critico": 10,
-                "esquiva": 3
+                "ataque": 7
               },
-              "value": 39,
+              "value": 37,
               "equipped": false,
               "procChance": 0.185
             },
@@ -24010,9 +24091,9 @@
           "name": "Teste",
           "race": "Humano",
           "raceIcon": "🧑",
-          "className": "Bardo",
-          "classIcon": "🎵",
-          "classId": "bardo",
+          "className": "Paladino",
+          "classIcon": "🛡️",
+          "classId": "paladino",
           "raceId": "humano",
           "xp": 0,
           "xpNext": 1090,
@@ -24030,19 +24111,19 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 268,
+            "maxHp": 436,
             "maxMp": 122,
             "dmgFisico": 28,
             "dmgMagico": 30,
-            "esquiva": 14,
+            "esquiva": 11,
             "critico": 8,
             "velocidade": 6,
             "curaBonus": 6,
             "resistMagica": 6,
             "descontoLoja": 4
           },
-          "maxHp": 268,
-          "hp": 107,
+          "maxHp": 436,
+          "hp": 173,
           "maxMp": 122,
           "mp": 71,
           "buffs": {
@@ -24055,7 +24136,7 @@
           "speciesId": "lobo_sombras",
           "enemyClassId": "assassino",
           "floor": 14,
-          "hp": -49,
+          "hp": -39,
           "maxHp": 299,
           "dmg": 26,
           "speed": 15,
@@ -24098,13 +24179,13 @@
         },
         "outcome": "hit",
         "magical": false,
-        "affinityPct": 100,
+        "affinityPct": 90,
         "mira": {
           "acerto": true,
           "forca": 1.3,
           "critico": false
         },
-        "damage": 65,
+        "damage": 55,
         "isCrit": false,
         "procTriggered": null,
         "classPassiveTriggered": null,
@@ -24130,16 +24211,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "marreta_1700000000000_19872",
-              "templateId": "marreta",
+              "uid": "kusarigama_1700000000000_19872",
+              "templateId": "kusarigama",
               "rarity": "epico",
               "stats": {
                 "ataque": 15,
-                "velocidade": -4
+                "critico": 7
               },
-              "value": 59,
-              "equipped": false,
-              "procChance": 0.18
+              "value": 1294,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -24187,7 +24267,7 @@
             "dmgMagico": 48,
             "esquiva": 3,
             "critico": 8,
-            "velocidade": 5,
+            "velocidade": 9,
             "curaBonus": 8,
             "resistMagica": 8,
             "descontoLoja": 3.5
@@ -24273,16 +24353,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "marreta_1700000000000_19872",
-              "templateId": "marreta",
+              "uid": "kusarigama_1700000000000_19872",
+              "templateId": "kusarigama",
               "rarity": "epico",
               "stats": {
                 "ataque": 15,
-                "velocidade": -4
+                "critico": 7
               },
-              "value": 59,
-              "equipped": false,
-              "procChance": 0.18
+              "value": 1294,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -24330,7 +24409,7 @@
             "dmgMagico": 48,
             "esquiva": 3,
             "critico": 8,
-            "velocidade": 5,
+            "velocidade": 9,
             "curaBonus": 8,
             "resistMagica": 8,
             "descontoLoja": 3.5
@@ -24357,7 +24436,6 @@
           "gold": 10,
           "isBoss": false,
           "status": {
-            "atordoado": 1,
             "vulneravel": {
               "turns": 2,
               "amount": 0.15
@@ -24398,7 +24476,7 @@
         },
         "outcome": "hit",
         "magical": false,
-        "affinityPct": 30,
+        "affinityPct": 35,
         "mira": {
           "acerto": true,
           "forca": 0.73,
@@ -24406,19 +24484,14 @@
         },
         "damage": 42,
         "isCrit": false,
-        "procTriggered": {
-          "chance": 0.18,
-          "effect": "atordoar",
-          "label": "Atordoar",
-          "icon": "💫"
-        },
+        "procTriggered": null,
         "classPassiveTriggered": {
           "kind": "bardo",
           "amount": 0.15
         },
         "monsterDefeated": true
       },
-      "rngCalls": 3
+      "rngCalls": 2
     }
   },
   {
@@ -26592,15 +26665,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "espada_1700000000000_72021",
-              "templateId": "espada",
+              "uid": "machado_1700000000000_72021",
+              "templateId": "machado",
               "rarity": "raro",
               "stats": {
-                "ataque": 7
+                "ataque": 10,
+                "velocidade": -2
               },
-              "value": 37,
+              "value": 44,
               "equipped": false,
-              "procChance": 0.185
+              "procChance": 0.155
             },
             "secundaria": null,
             "elmo": null,
@@ -26639,7 +26713,7 @@
             "dmgMagico": 9,
             "esquiva": 3.5,
             "critico": 8.5,
-            "velocidade": 7,
+            "velocidade": 5,
             "curaBonus": 21,
             "resistMagica": 21,
             "descontoLoja": 11
@@ -26727,15 +26801,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "espada_1700000000000_72021",
-              "templateId": "espada",
+              "uid": "machado_1700000000000_72021",
+              "templateId": "machado",
               "rarity": "raro",
               "stats": {
-                "ataque": 7
+                "ataque": 10,
+                "velocidade": -2
               },
-              "value": 37,
+              "value": 44,
               "equipped": false,
-              "procChance": 0.185
+              "procChance": 0.155
             },
             "secundaria": null,
             "elmo": null,
@@ -26774,7 +26849,7 @@
             "dmgMagico": 9,
             "esquiva": 3.5,
             "critico": 8.5,
-            "velocidade": 7,
+            "velocidade": 5,
             "curaBonus": 21,
             "resistMagica": 21,
             "descontoLoja": 11
@@ -26837,7 +26912,7 @@
         },
         "outcome": "miss",
         "magical": false,
-        "affinityPct": 55,
+        "affinityPct": 40,
         "mira": {
           "acerto": false,
           "forca": 0,
@@ -28321,17 +28396,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_92362",
-              "templateId": "violao",
+              "uid": "lanca_1700000000000_92362",
+              "templateId": "lanca",
               "rarity": "lendario",
               "stats": {
-                "ataque": 9,
-                "critico": 18,
-                "esquiva": 6
+                "ataque": 18,
+                "critico": 9
               },
-              "value": 69,
-              "equipped": false,
-              "procChance": 0.25
+              "value": 1413,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -28377,7 +28450,7 @@
             "maxMp": 176,
             "dmgFisico": 22,
             "dmgMagico": 72,
-            "esquiva": 15.5,
+            "esquiva": 9.5,
             "critico": 16.5,
             "velocidade": 23,
             "curaBonus": 14,
@@ -28466,17 +28539,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_92362",
-              "templateId": "violao",
+              "uid": "lanca_1700000000000_92362",
+              "templateId": "lanca",
               "rarity": "lendario",
               "stats": {
-                "ataque": 9,
-                "critico": 18,
-                "esquiva": 6
+                "ataque": 18,
+                "critico": 9
               },
-              "value": 69,
-              "equipped": false,
-              "procChance": 0.25
+              "value": 1413,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -28522,7 +28593,7 @@
             "maxMp": 176,
             "dmgFisico": 22,
             "dmgMagico": 72,
-            "esquiva": 15.5,
+            "esquiva": 9.5,
             "critico": 16.5,
             "velocidade": 23,
             "curaBonus": 14,
@@ -28542,7 +28613,7 @@
           "speciesId": "aranha",
           "enemyClassId": "assassino",
           "floor": 6,
-          "hp": -39,
+          "hp": -51,
           "maxHp": 19,
           "dmg": 9,
           "speed": 3,
@@ -28593,13 +28664,13 @@
           "forca": 0.96,
           "critico": false
         },
-        "damage": 51,
+        "damage": 63,
         "isCrit": false,
         "procTriggered": null,
         "classPassiveTriggered": null,
         "monsterDefeated": true
       },
-      "rngCalls": 2
+      "rngCalls": 1
     }
   },
   {
@@ -28619,16 +28690,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "marreta_1700000000000_62706",
-              "templateId": "marreta",
+              "uid": "kusarigama_1700000000000_62706",
+              "templateId": "kusarigama",
               "rarity": "mitico",
               "stats": {
                 "ataque": 28,
-                "velocidade": -8
+                "critico": 12
               },
-              "value": 108,
-              "equipped": false,
-              "procChance": 0.27
+              "value": 2352,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -28680,19 +28750,19 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 417,
+            "maxHp": 626,
             "maxMp": 178,
             "dmgFisico": 28,
             "dmgMagico": 51,
             "esquiva": 11,
             "critico": 16,
-            "velocidade": 14,
+            "velocidade": 22,
             "curaBonus": 8,
             "resistMagica": 8,
             "descontoLoja": 5
           },
-          "maxHp": 417,
-          "hp": 402,
+          "maxHp": 626,
+          "hp": 603,
           "maxMp": 178,
           "mp": 68,
           "buffs": {}
@@ -28776,16 +28846,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "marreta_1700000000000_62706",
-              "templateId": "marreta",
+              "uid": "kusarigama_1700000000000_62706",
+              "templateId": "kusarigama",
               "rarity": "mitico",
               "stats": {
                 "ataque": 28,
-                "velocidade": -8
+                "critico": 12
               },
-              "value": 108,
-              "equipped": false,
-              "procChance": 0.27
+              "value": 2352,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": null,
@@ -28837,19 +28906,19 @@
           "killCount": 0,
           "masteryBattles": 550,
           "derived": {
-            "maxHp": 417,
+            "maxHp": 626,
             "maxMp": 178,
             "dmgFisico": 28,
             "dmgMagico": 51,
             "esquiva": 11,
             "critico": 16,
-            "velocidade": 14,
+            "velocidade": 22,
             "curaBonus": 8,
             "resistMagica": 8,
             "descontoLoja": 5
           },
-          "maxHp": 417,
-          "hp": 402,
+          "maxHp": 626,
+          "hp": 603,
           "maxMp": 178,
           "mp": 68,
           "buffs": {}
@@ -28908,7 +28977,7 @@
         },
         "outcome": "miss",
         "magical": false,
-        "affinityPct": 40,
+        "affinityPct": 100,
         "mira": {
           "acerto": false,
           "forca": 0,
@@ -28936,17 +29005,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_62706",
-              "templateId": "violao",
+              "uid": "kusarigama_1700000000000_62706",
+              "templateId": "kusarigama",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "critico": 10,
-                "esquiva": 3
+                "ataque": 12,
+                "critico": 5
               },
-              "value": 39,
-              "equipped": false,
-              "procChance": 0.185
+              "value": 1000,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -29002,7 +29069,7 @@
             "maxMp": 228,
             "dmgFisico": 46,
             "dmgMagico": 60,
-            "esquiva": 10.5,
+            "esquiva": 7.5,
             "critico": 12.5,
             "velocidade": 18,
             "curaBonus": 19,
@@ -29097,17 +29164,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "violao_1700000000000_62706",
-              "templateId": "violao",
+              "uid": "kusarigama_1700000000000_62706",
+              "templateId": "kusarigama",
               "rarity": "raro",
               "stats": {
-                "ataque": 5,
-                "critico": 10,
-                "esquiva": 3
+                "ataque": 12,
+                "critico": 5
               },
-              "value": 39,
-              "equipped": false,
-              "procChance": 0.185
+              "value": 1000,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -29163,7 +29228,7 @@
             "maxMp": 228,
             "dmgFisico": 46,
             "dmgMagico": 60,
-            "esquiva": 10.5,
+            "esquiva": 7.5,
             "critico": 12.5,
             "velocidade": 18,
             "curaBonus": 19,
@@ -29233,7 +29298,7 @@
         },
         "outcome": "miss",
         "magical": false,
-        "affinityPct": 30,
+        "affinityPct": 25,
         "mira": {
           "acerto": false,
           "forca": 0,
@@ -29527,16 +29592,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "machado_1700000000000_68976",
-              "templateId": "machado",
+              "uid": "adaga_1700000000000_68976",
+              "templateId": "adaga",
               "rarity": "incomum",
               "stats": {
-                "ataque": 8,
-                "velocidade": -1
+                "ataque": 4,
+                "critico": 10
               },
-              "value": 34,
+              "value": 26,
               "equipped": false,
-              "procChance": 0.135
+              "procChance": 0.165
             },
             "secundaria": null,
             "elmo": {
@@ -29584,7 +29649,7 @@
             "dmgMagico": 69,
             "esquiva": 3.5,
             "critico": 8.5,
-            "velocidade": 6,
+            "velocidade": 7,
             "curaBonus": 12,
             "resistMagica": 12,
             "descontoLoja": 8.5
@@ -29673,16 +29738,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "machado_1700000000000_68976",
-              "templateId": "machado",
+              "uid": "adaga_1700000000000_68976",
+              "templateId": "adaga",
               "rarity": "incomum",
               "stats": {
-                "ataque": 8,
-                "velocidade": -1
+                "ataque": 4,
+                "critico": 10
               },
-              "value": 34,
+              "value": 26,
               "equipped": false,
-              "procChance": 0.135
+              "procChance": 0.165
             },
             "secundaria": null,
             "elmo": {
@@ -29730,7 +29795,7 @@
             "dmgMagico": 69,
             "esquiva": 3.5,
             "critico": 8.5,
-            "velocidade": 6,
+            "velocidade": 7,
             "curaBonus": 12,
             "resistMagica": 12,
             "descontoLoja": 8.5
@@ -29796,7 +29861,7 @@
         },
         "outcome": "hit",
         "magical": true,
-        "affinityPct": 30,
+        "affinityPct": 40,
         "mira": {
           "acerto": true,
           "forca": 0.87,
@@ -29828,16 +29893,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "adaga_1700000000000_73424",
-              "templateId": "adaga",
+              "uid": "arco_1700000000000_73424",
+              "templateId": "arco",
               "rarity": "incomum",
               "stats": {
-                "ataque": 4,
-                "critico": 10
+                "ataque": 5,
+                "esquiva": 3,
+                "critico": 8
               },
-              "value": 26,
-              "equipped": false,
-              "procChance": 0.165
+              "value": 31,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -29883,7 +29948,7 @@
             "maxMp": 123,
             "dmgFisico": 8,
             "dmgMagico": 21,
-            "esquiva": 11,
+            "esquiva": 14,
             "critico": 16,
             "velocidade": 22,
             "curaBonus": 22,
@@ -29970,16 +30035,16 @@
           },
           "equip": {
             "arma": {
-              "uid": "adaga_1700000000000_73424",
-              "templateId": "adaga",
+              "uid": "arco_1700000000000_73424",
+              "templateId": "arco",
               "rarity": "incomum",
               "stats": {
-                "ataque": 4,
-                "critico": 10
+                "ataque": 5,
+                "esquiva": 3,
+                "critico": 8
               },
-              "value": 26,
-              "equipped": false,
-              "procChance": 0.165
+              "value": 31,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -30025,7 +30090,7 @@
             "maxMp": 123,
             "dmgFisico": 8,
             "dmgMagico": 21,
-            "esquiva": 11,
+            "esquiva": 14,
             "critico": 16,
             "velocidade": 22,
             "curaBonus": 22,
@@ -30089,7 +30154,7 @@
         },
         "outcome": "hit",
         "magical": true,
-        "affinityPct": 40,
+        "affinityPct": 35,
         "mira": {
           "acerto": true,
           "forca": 1.1,
@@ -30101,7 +30166,7 @@
         "classPassiveTriggered": null,
         "monsterDefeated": false
       },
-      "rngCalls": 4
+      "rngCalls": 3
     }
   },
   {
@@ -30722,16 +30787,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_92362",
-              "templateId": "maca",
+              "uid": "bastao_1700000000000_92362",
+              "templateId": "bastao",
               "rarity": "mitico",
               "stats": {
-                "ataque": 12,
-                "vida": 24
+                "ataque": 24,
+                "esquiva": 12
               },
-              "value": 88,
-              "equipped": false,
-              "procChance": 0.25
+              "value": 2352,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -30782,19 +30846,19 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 324,
+            "maxHp": 300,
             "maxMp": 52,
             "dmgFisico": 20,
             "dmgMagico": 12,
-            "esquiva": 12.5,
+            "esquiva": 24.5,
             "critico": 17.5,
             "velocidade": 29,
             "curaBonus": 14,
             "resistMagica": 14,
             "descontoLoja": 3.5
           },
-          "maxHp": 324,
-          "hp": 100,
+          "maxHp": 300,
+          "hp": 93,
           "maxMp": 52,
           "mp": 4,
           "buffs": {
@@ -30880,16 +30944,15 @@
           },
           "equip": {
             "arma": {
-              "uid": "maca_1700000000000_92362",
-              "templateId": "maca",
+              "uid": "bastao_1700000000000_92362",
+              "templateId": "bastao",
               "rarity": "mitico",
               "stats": {
-                "ataque": 12,
-                "vida": 24
+                "ataque": 24,
+                "esquiva": 12
               },
-              "value": 88,
-              "equipped": false,
-              "procChance": 0.25
+              "value": 2352,
+              "equipped": false
             },
             "secundaria": null,
             "elmo": {
@@ -30940,19 +31003,19 @@
           "killCount": 0,
           "masteryBattles": 0,
           "derived": {
-            "maxHp": 324,
+            "maxHp": 300,
             "maxMp": 52,
             "dmgFisico": 20,
             "dmgMagico": 12,
-            "esquiva": 12.5,
+            "esquiva": 24.5,
             "critico": 17.5,
             "velocidade": 29,
             "curaBonus": 14,
             "resistMagica": 14,
             "descontoLoja": 3.5
           },
-          "maxHp": 324,
-          "hp": 100,
+          "maxHp": 300,
+          "hp": 93,
           "maxMp": 52,
           "mp": 4,
           "buffs": {

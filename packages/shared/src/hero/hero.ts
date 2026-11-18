@@ -470,7 +470,7 @@ export function gainXP(hero: Hero, amount: number): { hero: Hero; leveledUp: boo
 
 // ---------- equipamento ----------
 
-const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
+const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca', 'leque']);
 
 /**
  * Armas que ocupam as duas mãos, e por isso não convivem com nada na
@@ -486,7 +486,7 @@ const OFFHAND_WEAPON_IDS = new Set(['espada', 'adaga', 'maca']);
  * pesada do catálogo — 7 de ataque e −2 de velocidade — e agora paga por
  * isso com a mão secundária, em vez de ser a única pesada que não pagava.
  */
-const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'marreta', 'violao']);
+const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'marreta', 'violao', 'bastao', 'kusarigama']);
 
 /**
  * O que cabe na mão livre do cajado, que para o resto ocupa as duas mãos: o
@@ -495,6 +495,9 @@ const TWO_HANDED_WEAPON_IDS = new Set(['arco', 'cajado', 'machado', 'marreta', '
  * arma leve continuam sem lugar ao lado dele.
  */
 const AO_LADO_DO_CAJADO = new Set(['grimorio']);
+
+/** O que cabe na mão livre do arco: as aljavas (rodada 6). */
+const AO_LADO_DO_ARCO = new Set(['aljava_paralisante', 'aljava_flamejante', 'aljava_explosiva']);
 
 /** Vai na mão secundária: a peça que veste lá (o escudo e o grimório), ou uma arma leve (`OFFHAND_WEAPON_IDS`). */
 export function isOffhandEligible(item: Item | null | undefined): boolean {
@@ -511,6 +514,7 @@ export function isOffhandEligible(item: Item | null | undefined): boolean {
  */
 export function cabeNaMaoLivre(arma: Item | null | undefined, peca: Item | null | undefined): boolean {
   if (!peca || !arma || !isTwoHanded(arma)) return true;
+  if (arma.templateId === 'arco') return AO_LADO_DO_ARCO.has(peca.templateId);
   return arma.templateId === 'cajado' && AO_LADO_DO_CAJADO.has(peca.templateId);
 }
 

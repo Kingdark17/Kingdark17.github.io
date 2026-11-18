@@ -28,6 +28,8 @@ namespace RPGLegend.Engine
         [JsName("OFFHAND_WEAPON_IDS")] public List<string> OffhandWeaponIds = new List<string>();
         [JsName("TWO_HANDED_WEAPON_IDS")] public List<string> TwoHandedWeaponIds = new List<string>();
         [JsName("AO_LADO_DO_CAJADO")] public List<string> AoLadoDoCajado = new List<string>();
+        /// <summary>O que cabe na mão livre do arco: as aljavas (rodada 6).</summary>
+        [JsName("AO_LADO_DO_ARCO")] public List<string> AoLadoDoArco = new List<string>();
         [JsName("COMPANION_ROLES")] public OrderedMap<CompanionRoleDef> CompanionRoles = new OrderedMap<CompanionRoleDef>();
     }
 

@@ -240,6 +240,38 @@ namespace RPGLegend.Game.Jogo
 
         private void SeguirProfessor(Professor proximo) => _partida.Seguir(new TelaAberta { Tipo = "professor", Professor = proximo }, proximo.Estado);
 
+        // ---------- negociante secreto (rodada 6a) ----------
+
+        /// <summary>
+        /// O negociante secreto: a peça que ele trouxe (a carta e a ficha, com o que muda em você), o preço fixo e o
+        /// COMPRAR. Depois da compra ele segue viagem; sem ouro, o botão fica apagado.
+        /// </summary>
+        private void TelaDoNegociante(NegocianteNaSala negociante)
+        {
+            _sairDaTela = () => _partida.Fechar(_partida.Estado);
+            var hero = _partida.Estado.Hero;
+            var item = negociante.Item;
+            JanelaLarga("🧳 Negociante", Ouro(hero), null, colunas =>
+            {
+                var lista = Coluna("rolagem-do-negociante", "coluna-larga");
+                lista.Add(PecasDaTela.Texto("O negociante abre a capa sem dizer o nome. \"Uma peça só, e não volto pra buscar.\"", "fala-da-tela"));
+                var grade = PecasDaTela.Grade();
+                grade.Add(PecasDaTela.CartaDeItem(item, PecasDaTela.Inteiro(negociante.Preco) + " ouro", true, () => { }));
+                lista.Add(grade);
+                colunas.Add(lista);
+                var ficha = Coluna("rolagem-da-peca-do-negociante", "coluna-da-ficha");
+                ficha.Add(PecasDaTela.FichaDeItem(item, hero, acoes =>
+                {
+                    acoes.Add(PecasDaTela.Botao("COMPRAR POR " + PecasDaTela.Inteiro(negociante.Preco) + " OURO", () =>
+                    {
+                        var compra = Negociantes.Comprar(_partida.Estado);
+                        _partida.Fechar(compra.Estado, new Aviso("🧳", "Negociante", compra.Texto));
+                    }, principal: true, habilitado: negociante.PodeComprar));
+                }, ""));
+                colunas.Add(ficha);
+            }, ("AGORA NÃO", _sairDaTela));
+        }
+
         // ---------- mestre de estilo (rodada 5a) ----------
 
         /// <summary>

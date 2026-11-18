@@ -399,6 +399,7 @@ namespace RPGLegend.Engine
         public static bool CabeNaMaoLivre(Item arma, Item peca)
         {
             if (peca == null || arma == null || !IsTwoHanded(arma)) return true;
+            if (arma.TemplateId == "arco") return D.AoLadoDoArco.Contains(peca.TemplateId);
             return arma.TemplateId == "cajado" && D.AoLadoDoCajado.Contains(peca.TemplateId);
         }
 

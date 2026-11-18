@@ -35218,6 +35218,386 @@
     }
   },
   {
+    "name": "iconFor: negociante",
+    "input": {
+      "fn": "iconFor",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "🧳"
+    }
+  },
+  {
+    "name": "shortLabel: negociante",
+    "input": {
+      "fn": "shortLabel",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "um negociante encapuzado"
+    }
+  },
+  {
+    "name": "roomDesc: negociante",
+    "input": {
+      "fn": "roomDesc",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Um negociante encapuzado abre a capa e mostra uma peça rara."
+    }
+  },
+  {
+    "name": "entryText: negociante",
+    "input": {
+      "fn": "entryText",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Um negociante encapuzado espera nesta sala. Deseja ver o que ele vende?"
+    }
+  },
+  {
+    "name": "iconFor: negociante que já vendeu",
+    "input": {
+      "fn": "iconFor",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800,
+            "vendido": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": ""
+    }
+  },
+  {
+    "name": "shortLabel: negociante que já vendeu",
+    "input": {
+      "fn": "shortLabel",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800,
+            "vendido": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "uma sala vazia"
+    }
+  },
+  {
+    "name": "roomDesc: negociante que já vendeu",
+    "input": {
+      "fn": "roomDesc",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800,
+            "vendido": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "O negociante já seguiu viagem."
+    }
+  },
+  {
+    "name": "entryText: negociante que já vendeu",
+    "input": {
+      "fn": "entryText",
+      "args": {
+        "cell": {
+          "type": "negociante",
+          "x": 3,
+          "y": 3,
+          "doors": {
+            "S": true,
+            "N": true,
+            "W": true
+          },
+          "extras": [
+            {
+              "kind": "sign",
+              "col": 1,
+              "row": 1
+            },
+            {
+              "kind": "sign",
+              "col": 6,
+              "row": 6
+            }
+          ],
+          "negociante": {
+            "item": {
+              "uid": "lanca_1700000000000_62706",
+              "templateId": "lanca",
+              "rarity": "raro",
+              "stats": {
+                "ataque": 10,
+                "critico": 5
+              },
+              "value": 801,
+              "equipped": false
+            },
+            "preco": 800,
+            "vendido": true
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": "Deseja entrar na sala?"
+    }
+  },
+  {
     "name": "ROOM_COLS (constante)",
     "input": {
       "const": "ROOM_COLS"

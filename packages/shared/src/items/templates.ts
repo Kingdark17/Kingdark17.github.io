@@ -291,6 +291,54 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     escada: 'madeira',
   },
 
+  // As armas secretas (rodada 6; `items/pecas-secretas.ts`): só o negociante do app as vende, e o
+  // efeito delas só a luta do app aplica. O valor é o preço do negociante ÷ 1,7 (elas vêm raras), pra
+  // venda render a metade do que custaram.
+  {
+    id: 'bastao',
+    name: 'Bastão',
+    genero: 'm',
+    category: 'arma',
+    desc: 'Madeira dura nas duas mãos. No app, o Monge alcança mais longe e junta ki mais rápido. O Monge que o usa tem +50% de vida.',
+    sprite: 'weapons/bastao.png',
+    base: { ataque: 6, esquiva: 3 },
+    value: 588,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'leque',
+    name: 'Leque de Guerra',
+    genero: 'm',
+    category: 'arma',
+    desc: 'Lâminas que abrem num golpe. No app, o empurrão do Monge joga mais longe e o crítico pesa mais; com dois, ele anda mais rápido. O Monge que o usa tem +50% de vida.',
+    sprite: 'weapons/leque.png',
+    base: { ataque: 4, critico: 6 },
+    value: 588,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'kusarigama',
+    name: 'Kusarigama',
+    genero: 'f',
+    category: 'arma',
+    desc: 'Uma foice presa a uma corrente. No app, alcança longe e corta em área no fim da corrente, e o revestimento de ki protege mais. O Monge que a usa tem +50% de vida.',
+    sprite: 'weapons/kusarigama.png',
+    base: { ataque: 7, critico: 3 },
+    value: 588,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'lanca',
+    name: 'Lança',
+    genero: 'f',
+    category: 'arma',
+    desc: 'Longa e de uma mão só. No app, alcança 1 bloco a mais, às vezes alarga a faixa do crítico do golpe seguinte, e o Guerreiro bate 10% mais com ela.',
+    sprite: 'weapons/lanca.png',
+    base: { ataque: 6, critico: 3 },
+    value: 471,
+    foraDoSorteio: true,
+  },
+
   // ---------- armaduras ----------
   {
     id: 'escudo',
@@ -324,6 +372,43 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     base: { mana: 8 },
     value: 22,
     escada: 'couro',
+  },
+  // As aljavas do Arqueiro (rodada 6): na mão livre, ao lado do arco; só o negociante do app as vende.
+  {
+    id: 'aljava_paralisante',
+    name: 'Aljava Paralisante',
+    genero: 'f',
+    category: 'armadura',
+    desc: 'Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha encurta o alcance do monstro, e a cada 5 acertos ele para paralisado.',
+    sprite: 'armor/aljava_paralisante.png',
+    slot: 'secundaria',
+    base: { critico: 3, esquiva: 2 },
+    value: 529,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'aljava_flamejante',
+    name: 'Aljava Flamejante',
+    genero: 'f',
+    category: 'armadura',
+    desc: 'Na mão livre, ao lado do arco: +1 de alcance. No app, cada flecha enfraquece o monstro, e a cada 6 ele pega fogo.',
+    sprite: 'armor/aljava_flamejante.png',
+    slot: 'secundaria',
+    base: { ataque: 2, critico: 2 },
+    value: 529,
+    foraDoSorteio: true,
+  },
+  {
+    id: 'aljava_explosiva',
+    name: 'Aljava Explosiva',
+    genero: 'f',
+    category: 'armadura',
+    desc: 'Na mão livre, ao lado do arco: +1 de alcance. No app, a flecha explode e acerta quem está perto; a cada 10, as explosões se espalham.',
+    sprite: 'armor/aljava_explosiva.png',
+    slot: 'secundaria',
+    base: { ataque: 3, critico: 3 },
+    value: 1059,
+    foraDoSorteio: true,
   },
   {
     id: 'couro',
@@ -478,6 +563,18 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     sprite: 'accessories/colar_forca.png',
     base: { ataque: 2, vida: 8 },
     value: 22,
+  },
+  // O chapéu do espadachim (rodada 6): o ferreiro do app o tem de vez em quando, depois de zerar a Floresta.
+  {
+    id: 'chapeu_espadachim',
+    name: 'Chapéu do Espadachim',
+    genero: 'm',
+    category: 'acessorio',
+    desc: 'Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.',
+    sprite: 'accessories/chapeu_espadachim.png',
+    base: { esquiva: 4, critico: 4 },
+    value: 706,
+    foraDoSorteio: true,
   },
 
   // ---------- consumíveis ----------

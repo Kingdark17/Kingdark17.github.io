@@ -58,8 +58,10 @@ namespace RPGLegend.Engine
             return new DerivedStats
             {
                 // A vida da classe (doc do Breno de 2026-11-15) vale no site e no app.
-                // E a do Cavaleiro (rodada 5a), também em todo lugar.
-                MaxHp = Estilos.VidaComOEstilo(ClassesDeLuta.VidaComAClasse(20 + hero.Level * 5 + a.Constituicao * 10 + EquipmentStat(hero.Equip, "vida", cap), hero.ClassId, hero.ClassName), hero.ClassId, hero.ClassName, hero.Estilos, hero.Estilo),
+                // E a do Cavaleiro (rodada 5a) e a do Monge com a arma dele (rodada 6), também em todo lugar.
+                MaxHp = PecasSecretas.VidaComAArma(
+                    Estilos.VidaComOEstilo(ClassesDeLuta.VidaComAClasse(20 + hero.Level * 5 + a.Constituicao * 10 + EquipmentStat(hero.Equip, "vida", cap), hero.ClassId, hero.ClassName), hero.ClassId, hero.ClassName, hero.Estilos, hero.Estilo),
+                    hero.ClassId, hero.ClassName, hero.Equip?.Get("arma")?.TemplateId, hero.Equip?.Get("secundaria")?.TemplateId),
                 MaxMp = ClassesDeLuta.ManaComAClasse(10 + hero.Level * 2 + a.Intelecto * 5 + EquipmentStat(hero.Equip, "mana", cap), hero.ClassId, hero.ClassName),
                 DmgFisico = a.Forca * 2,
                 DmgMagico = a.Intelecto * 3,

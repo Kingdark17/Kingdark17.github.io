@@ -691,8 +691,30 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   resta do alvo (até 300 no chefe). No espelho, o que o convidado faz nos
   monstros (a queimadura, o empurrão, o preso, o encurtar) não passa pro
   anfitrião (o dano passa), e a escuridão dele só protege ele.
-  Falta, nesta ordem: mercadores secretos e itens novos (a arte das armas
-  novas é o Claude que desenha, no estilo do Breno); o Caçador.
+  Rodada 6a, **o negociante secreto e as peças novas** (2026-11-17, decidido
+  com o usuário; regras em `items/pecas-secretas.ts` ↔
+  `Engine/Items/PecasSecretas.cs`): **o negociante é uma sala da masmorra, só
+  do app** (`'negociante'`, `NegocianteSecreto` na célula), depois de zerar a
+  Floresta na dificuldade do personagem: cada andar novo tem 5%
+  (`CHANCE_DO_NEGOCIANTE`, sorteado em `negocianteDoAndar` depois do mestre,
+  o rng só gasta quando pode aparecer), só pra classe que tem peça secreta
+  (Arqueiro: as três aljavas; Monge: bastão, leque e kusarigama; Guerreiro: a
+  lança; o Caçador depois). Ele traz **uma peça da classe, rara, por preço
+  fixo** (aljavas 900, a explosiva 1800 e só em 1 de cada 5 negociantes; as
+  armas do Monge 1000; a lança 800); comprou (`comprarDoNegociante`, a tela
+  `negociante`), ele segue viagem (`vendido`). O **chapéu do espadachim** é
+  da loja: o ferreiro do app, com a Floresta zerada, o tem em 5% dos estoques
+  (`Loja.chapeu`, `rollStock(..., chapeu)`), por 1200. As peças são
+  `foraDoSorteio` e o site as conhece pelos atributos. Nas mãos: a lança é de
+  uma mão, o bastão e a kusarigama de duas, o leque vai também na secundária
+  (dois leques), e a aljava só na secundária, ao lado do arco
+  (`AO_LADO_DO_ARCO`). **O Monge com bastão, leque ou kusarigama tem +50% de
+  vida em todo lugar** (`vidaComAArma` no `derived` e no `sanitize` da sala
+  da API). A arte (ícone e camada do boneco grande) é do Claude, no estilo do
+  Breno, nos dois lugares de sempre. Os efeitos das aljavas na luta ficam
+  pra 6b, e os das armas do Monge, da lança e do chapéu pra 6c.
+  Falta, nesta ordem: os efeitos das aljavas (6b); os das armas do Monge, da
+  lança e do chapéu (6c); o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

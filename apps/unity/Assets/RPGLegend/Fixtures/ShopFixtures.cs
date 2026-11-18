@@ -20,7 +20,7 @@ namespace RPGLegend.Tests
 
             Const(M, "FORGE_MATERIALS", () => W(Shop.ForgeMaterials));
 
-            Fn(M, "rollStock", (a, c) => W(Shop.RollStock(Str(a["kind"]), Num(a["floor"]), c.RngFn, c.NowOrFail, JsJson.Truthy(JsJson.Prop(a["options"], "app")))));
+            Fn(M, "rollStock", (a, c) => W(Shop.RollStock(Str(a["kind"]), Num(a["floor"]), c.RngFn, c.NowOrFail, JsJson.Truthy(JsJson.Prop(a["options"], "app")), JsJson.Truthy(JsJson.Prop(a["options"], "chapeu")))));
             Fn(M, "buyPrice", (a, c) => N(Shop.BuyPrice(R<Hero>(a["hero"]), R<Item>(a["item"]), Discount(a["discount"]))));
             Fn(M, "sellPrice", (a, c) => N(Shop.SellPrice(R<Item>(a["item"]))));
             Fn(M, "discountForRoll", (a, c) => N(Shop.DiscountForRoll(Num(a["roll"]))));

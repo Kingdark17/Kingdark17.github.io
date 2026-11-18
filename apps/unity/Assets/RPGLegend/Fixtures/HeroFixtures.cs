@@ -155,6 +155,17 @@ namespace RPGLegend.Tests
             Fn(M, "estiloUnico", (a, c) => { var quem = R<QuemLutaDoCaso>(a["quem"]); return W(Estilos.EstiloUnico(quem.ClassId, quem.ClassName)); });
             Fn(M, "aCadaGolpe", (a, c) => W(ClassesDeLuta.ACadaGolpe(Num(a["golpe"]), Num(a["n"]))));
             Fn(M, "danoDoMago", (a, c) => N(ClassesDeLuta.DanoDoMago(R<QuemLutaDoCaso>(a["quem"]).Ativo, Num(a["golpe"]))));
+            // ---------- as peças secretas (rodada 6a) ----------
+            Fn(M, "pecasDaClasse", (a, c) => { var quem = R<QuemLutaDoCaso>(a["quem"]); return W(PecasSecretas.DaClasse(quem.ClassId, quem.ClassName)); });
+            Fn(M, "chanceDoNegociante", (a, c) => { var quem = R<QuemLutaDoCaso>(a["quem"]); return N(PecasSecretas.ChanceDoNegociante(quem.ClassId, quem.ClassName)); });
+            Fn(M, "sortearPecaSecreta", (a, c) => { var quem = R<QuemLutaDoCaso>(a["quem"]); return W(PecasSecretas.Sortear(quem.ClassId, quem.ClassName, c.RngFn)); });
+            Fn(M, "pecaSecreta", (a, c) => W(PecasSecretas.PorId(Str(a["id"]))));
+            Fn(M, "vidaComAArma", (a, c) =>
+            {
+                var quem = R<QuemLutaDoCaso>(a["quem"]);
+                return N(PecasSecretas.VidaComAArma(Num(a["vida"]), quem.ClassId, quem.ClassName,
+                    Str(JsJson.Prop(JsJson.Prop(a["quem"]["equip"], "arma"), "templateId")), Str(JsJson.Prop(JsJson.Prop(a["quem"]["equip"], "secundaria"), "templateId"))));
+            });
             Fn(M, "aprenderEstilo", (a, c) => AprenderOuTrocar(a, true));
             Fn(M, "trocarEstilo", (a, c) => AprenderOuTrocar(a, false));
             Fn(M, "custoDaMagia", (a, c) =>

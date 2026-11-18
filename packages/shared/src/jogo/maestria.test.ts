@@ -19,7 +19,7 @@ function heroi(classe: string, masteryBattles: number, arma?: string): Hero {
 
 describe('armasDaMaestria', () => {
   it('diz a arma pela primeira palavra do nome, em minúscula', () => {
-    expect(armasDaMaestria(heroi('guerreiro', 0))).toBe('espada');
+    expect(armasDaMaestria(heroi('guerreiro', 0))).toBe('espada ou lança');
     // O Clérigo é do cajado, como o Mago, desde 2026-11-17.
     expect(armasDaMaestria(heroi('clerigo', 0))).toBe('cajado');
   });
@@ -45,21 +45,21 @@ describe('maestriaNoCartao', () => {
       atual: 4,
       maximo: 10,
       contagem: '4/10',
-      bonus: '+2% de dano por nível, com espada',
+      bonus: '+2% de dano por nível, com espada ou lança',
     });
   });
 
   it('com a arma da classe na mão, o bônus vale', () => {
     // A espada é a arma inicial do guerreiro, então ele já começa com ela.
-    expect(maestriaNoCartao(heroi('guerreiro', 35))).toMatchObject({ nivel: 2, contagem: '5/30', bonus: '+4% de dano com espada' });
+    expect(maestriaNoCartao(heroi('guerreiro', 35))).toMatchObject({ nivel: 2, contagem: '5/30', bonus: '+4% de dano com espada ou lança' });
   });
 
   it('com outra arma, avisa que o bônus depende da arma da classe', () => {
-    expect(maestriaNoCartao(heroi('guerreiro', 35, 'machado'))?.bonus).toBe('+4% de dano só com espada');
+    expect(maestriaNoCartao(heroi('guerreiro', 35, 'machado'))?.bonus).toBe('+4% de dano só com espada ou lança');
   });
 
   it('no teto a barra sai cheia e diz "máx."', () => {
-    expect(maestriaNoCartao(heroi('guerreiro', 700))).toMatchObject({ nivel: 10, atual: 1, maximo: 1, contagem: 'máx.', bonus: '+20% de dano com espada' });
+    expect(maestriaNoCartao(heroi('guerreiro', 700))).toMatchObject({ nivel: 10, atual: 1, maximo: 1, contagem: 'máx.', bonus: '+20% de dano com espada ou lança' });
   });
 });
 

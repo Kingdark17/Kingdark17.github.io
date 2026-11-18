@@ -54,6 +54,8 @@ export type ItemStats = Partial<Record<ItemStatKey, number>>;
 /** O mínimo que a engine precisa saber de um item para derivar atributos. */
 export interface EquippableItem {
   stats: ItemStats;
+  /** O modelo da peça: a vida do Monge com a arma dele olha pra ele (rodada 6). */
+  templateId?: string;
 }
 
 export type Equipment = Partial<Record<EquipSlot, EquippableItem | null>>;

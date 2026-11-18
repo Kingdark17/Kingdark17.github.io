@@ -19,6 +19,28 @@ namespace RPGLegend.Engine
         public const string Teacher = "teacher";
         /// <summary>O mestre de estilo (rodada 5a, só o app gera).</summary>
         public const string Estilo = "estilo";
+        /// <summary>O negociante secreto (rodada 6, só o app gera).</summary>
+        public const string Negociante = "negociante";
+    }
+
+    /// <summary>TS: NegocianteSecreto — o negociante secreto numa sala (ver items/pecas-secretas.ts): a peça e o preço.</summary>
+    public sealed class NegocianteSecreto
+    {
+        public Item Item;
+        public double Preco;
+        /// <summary>Já vendeu: ele seguiu viagem. Opcional.</summary>
+        public bool? Vendido;
+
+        /// <summary>Campos do save que o C# não conhece; voltam intactos ao salvar.</summary>
+        [JsExtra] public JsExtras Extra;
+
+        /// <summary>O <c>{ ...negociante }</c> do TS.</summary>
+        public NegocianteSecreto Clone()
+        {
+            var c = (NegocianteSecreto)MemberwiseClone();
+            c.Extra = Extra?.Clone();
+            return c;
+        }
     }
 
     /// <summary>TS: MestreDeEstilo — o mestre de estilo numa sala (ver hero/estilos.ts): o estilo que ele ensina.</summary>
@@ -163,6 +185,8 @@ namespace RPGLegend.Engine
         public DungeonTeacher Teacher;
         /// <summary>O mestre de estilo (sala 'estilo').</summary>
         public MestreDeEstilo MestreDeEstilo;
+        /// <summary>O negociante secreto (sala 'negociante').</summary>
+        public NegocianteSecreto Negociante;
         /// <summary>Baú pequeno, vaso, placa, parede rachada (RoomExtras). Andar gerado antes deles não tem: null.</summary>
         public List<DungeonExtra> Extras;
         /// <summary>A armadilha escondida no chão (<see cref="Armadilhas"/>, desde 2026-11-06). Andar gerado antes delas não tem: null.</summary>

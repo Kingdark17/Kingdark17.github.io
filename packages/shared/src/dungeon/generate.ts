@@ -23,7 +23,15 @@ import { colocarArmadilhas, type Armadilha } from './armadilhas.js';
 import { placeExtras, type DungeonExtra } from './extras.js';
 import { distancesFrom, generateRoomGraph, DIR_VECTORS, type Direction, type RoomCell, type RoomGraph } from './graph.js';
 
-export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher' | 'estilo';
+export type DungeonRoomType = 'void' | 'start' | 'normal' | 'npc' | 'event' | 'treasure' | 'monster' | 'boss' | 'stairs' | 'exit' | 'totem' | 'teacher' | 'estilo' | 'negociante';
+
+/** O negociante secreto numa sala (rodada 6, só o app gera; `items/pecas-secretas.ts`): a peça que ele vende e o preço. */
+export interface NegocianteSecreto {
+  item: Item;
+  preco: number;
+  /** Já vendeu: ele seguiu viagem, e a sala vira só uma sala. */
+  vendido?: boolean;
+}
 
 /** O mestre de estilo numa sala (rodada 5a, só o app gera; `hero/estilos.ts`): o estilo que ele ensina. */
 export interface MestreDeEstilo {
@@ -111,6 +119,8 @@ export interface DungeonCell extends RoomCell {
   teacher?: DungeonTeacher;
   /** O mestre de estilo (sala 'estilo'). */
   mestreDeEstilo?: MestreDeEstilo;
+  /** O negociante secreto (sala 'negociante'). */
+  negociante?: NegocianteSecreto;
   /** Baú pequeno, vaso, placa, parede rachada (`extras.ts`). Andar gerado antes deles não tem. */
   extras?: DungeonExtra[];
   /** A armadilha escondida no chão (`armadilhas.ts`, desde 2026-11-06). Andar gerado antes delas não tem. */
@@ -180,6 +190,8 @@ export interface DungeonGenerateOptions {
   teacher?: Omit<DungeonTeacher, 'taught'>;
   /** Põe o mestre de estilo neste andar (o app decide, pelo herói). */
   mestreDeEstilo?: { estilo: string };
+  /** Põe o negociante secreto neste andar, com a peça (o app decide, pelo herói). */
+  negociante?: { item: Item; preco: number };
   /** Quem gera o andar é o app: os itens dos baús e das salas podem vir com material (`items/materiais.ts`). */
   app?: boolean;
   /**
@@ -403,6 +415,10 @@ export function generateDungeonFloor(floor: number, rows: number, cols: number, 
     const sala = place('estilo', 1)[0];
     if (sala) sala.mestreDeEstilo = { estilo: options.mestreDeEstilo.estilo };
   }
+  if (options.negociante) {
+    const sala = place('negociante', 1)[0];
+    if (sala) sala.negociante = { item: options.negociante.item, preco: options.negociante.preco };
+  }
 
   // Em andar de chefe sem a sala de antes da escada (a escada colada no
   // início), o chefe fica numa sala qualquer: reserva uma pra ele.
@@ -439,6 +455,7 @@ export function iconFor(cell: DungeonCell): string {
   if (cell.type === 'event') return cell.resolved ? '' : '❓';
   if (cell.type === 'teacher') return cell.teacher?.taught ? '' : '🎓';
   if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? '' : quemEnsina(cell.mestreDeEstilo?.estilo).icone;
+  if (cell.type === 'negociante') return cell.negociante?.vendido ? '' : '🧳';
   return ICONES_FIXOS[cell.type] ?? '';
 }
 
@@ -455,6 +472,7 @@ export function shortLabel(cell: DungeonCell): string {
   if (cell.type === 'event') return cell.resolved ? 'vestígios de um acontecimento' : 'algo incomum';
   if (cell.type === 'teacher') return cell.teacher?.taught ? 'uma sala onde alguém ensinou' : nomeDoMestre(cell);
   if (cell.type === 'estilo') return cell.mestreDeEstilo?.ensinado ? 'uma sala onde alguém ensinou' : quemEnsina(cell.mestreDeEstilo?.estilo).deLonge;
+  if (cell.type === 'negociante') return cell.negociante?.vendido ? 'uma sala vazia' : 'um negociante encapuzado';
   const labels: Partial<Record<DungeonRoomType, string>> = {
     npc: 'alguém parado por perto',
     treasure: cell.collected ? 'um baú já vazio' : 'um baú fechado',
@@ -491,6 +509,9 @@ export function roomDesc(cell: DungeonCell): string {
       ? 'O mestre seguiu caminho. Ficaram as marcas do treino no chão.'
       : quemEnsina(cell.mestreDeEstilo?.estilo).naSala;
   }
+  if (cell.type === 'negociante') {
+    return cell.negociante?.vendido ? 'O negociante já seguiu viagem.' : 'Um negociante encapuzado abre a capa e mostra uma peça rara.';
+  }
   const descs: Partial<Record<DungeonRoomType, string>> = {
     npc: 'Alguém está parado por aqui.',
     treasure: cell.collected ? 'Um baú vazio jaz aberto no chão.' : 'Um baú de madeira reforçada repousa alguns passos à frente.',
@@ -514,5 +535,6 @@ export function entryText(cell: DungeonCell): string {
   if (cell.type === 'totem') return 'Um totem antigo brilha nesta sala. Deseja tocá-lo?';
   if (cell.type === 'teacher') return `${nomeDoMestre(cell).replace(/^um/, 'Um')} espera nesta sala. Deseja falar com ele?`;
   if (cell.type === 'estilo' && !cell.mestreDeEstilo?.ensinado) return quemEnsina(cell.mestreDeEstilo?.estilo).pergunta;
+  if (cell.type === 'negociante' && !cell.negociante?.vendido) return 'Um negociante encapuzado espera nesta sala. Deseja ver o que ele vende?';
   return 'Deseja entrar na sala?';
 }

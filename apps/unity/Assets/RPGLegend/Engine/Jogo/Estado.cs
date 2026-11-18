@@ -392,6 +392,24 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>
+        /// TS: negocianteDoAndar — o negociante secreto (rodada 6, só o app): depois de zerar a Floresta, 5% a cada
+        /// andar novo pra quem tem peça secreta da classe; ele traz uma peça rara. O rng só é gasto quando ele pode
+        /// aparecer.
+        /// </summary>
+        private static (Item Item, double Preco)? NegocianteDoAndar(EstadoDoJogo baseDoAndar, RngFn rng, Func<double> now)
+        {
+            var hero = baseDoAndar.Hero;
+            double chance = PecasSecretas.ChanceDoNegociante(hero.ClassId, hero.ClassName);
+            if (chance <= 0 || !Dungeons.IsCleared(baseDoAndar.Progresso, new DungeonRun { Dungeon = "floresta", Difficulty = baseDoAndar.Masmorra.Difficulty })) return null;
+            if (rng() * 100 >= chance) return null;
+            var peca = PecasSecretas.Sortear(hero.ClassId, hero.ClassName, rng);
+            var template = peca != null ? ItemTemplates.ById(peca.Id) : null;
+            if (peca == null || template == null) return null;
+            var item = Items.Instantiate(template, Rarities.ById(PecasSecretas.Raridade), rng, now);
+            return (item, peca.Preco);
+        }
+
+        /// <summary>
         /// TS: gerarAndar. <paramref name="now"/> é o relógio do uid dos itens que o andar sorteia; ausente,
         /// o relógio de verdade. <paramref name="app"/>: quem desce é o app, e os itens do andar podem vir com material.
         /// </summary>
@@ -399,12 +417,15 @@ namespace RPGLegend.Engine
         {
             var teacher = ProfessorDoAndar(baseDoAndar.Hero, floor, rng);
             string mestreDeEstilo = app ? MestreDoAndar(baseDoAndar, rng) : null;
+            var negociante = app ? NegocianteDoAndar(baseDoAndar, rng, now) : null;
             var andar = DungeonFloors.Generate(floor, baseDoAndar.MapRows, baseDoAndar.MapCols, new DungeonGenerateOptions
             {
                 Rng = rng,
                 Run = baseDoAndar.Masmorra,
                 Teacher = teacher,
                 MestreDeEstilo = mestreDeEstilo,
+                NegocianteItem = negociante?.Item,
+                NegociantePreco = negociante?.Preco ?? 0,
                 Now = now,
                 App = app,
                 Entrada = entrada,

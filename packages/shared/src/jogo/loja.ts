@@ -14,6 +14,7 @@
  */
 
 import type { CityCell } from '../city/city.js';
+import { isCleared } from '../dungeon/dungeons.js';
 import { concordar, displayName, type Item } from '../items/item.js';
 import { defaultRng, type Rng } from '../rng.js';
 import { buyPrice, discountForRoll, resolveBuy, resolveForge, resolveRestock, resolveSell, rollStock, sellPrice, type ShopKind } from '../shop/shop.js';
@@ -32,13 +33,17 @@ export interface Loja {
   log: string[];
   /** A loja é a do app: o estoque novo (o de abrir e o de renovar) pode ter peça no degrau 2 do material. */
   app?: true;
+  /** No app, com a Floresta zerada: o ferreiro pode ter o chapéu do espadachim (rodada 6). */
+  chapeu?: true;
 }
 
 export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = defaultRng, now?: () => number, app = false): Loja {
   const sala = celulaAtual(estado) as CityCell;
+  // O chapéu do espadachim (rodada 6): só no app, depois de zerar a Floresta na dificuldade do personagem.
+  const chapeu = app && isCleared(estado.progresso, { dungeon: 'floresta', difficulty: estado.masmorra.difficulty });
   const comEstoque = sala.forSale?.length
     ? estado
-    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now, ...(app ? { app } : {}) }) });
+    : substituirCelulaAtual(estado, { ...sala, forSale: rollStock(kind, andarDeForca(estado), { rng, now, ...(app ? { app } : {}), ...(chapeu ? { chapeu } : {}) }) });
 
   return {
     estado: comEstoque,
@@ -49,6 +54,7 @@ export function abrirLoja(estado: EstadoNaCidade, kind: ShopKind, rng: Rng = def
     dado: null,
     log: [kind === 'blacksmith' ? 'A forja do ferreiro está acesa.' : 'O vendedor itinerante abre a sacola.'],
     ...(app ? { app: true as const } : {}),
+    ...(chapeu ? { chapeu: true as const } : {}),
   };
 }
 
@@ -121,7 +127,12 @@ export function vender(loja: Loja, item: Item): Loja {
 
 export function renovarEstoque(loja: Loja, rng: Rng = defaultRng, now?: () => number): Loja {
   const sala = celulaAtual(loja.estado) as CityCell;
-  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, { rng, now, ...(loja.app ? { app: true } : {}) });
+  const renovacao = resolveRestock(loja.estado.hero, loja.kind, andarDeForca(loja.estado), loja.renovacoes, {
+    rng,
+    now,
+    ...(loja.app ? { app: true } : {}),
+    ...(loja.chapeu ? { chapeu: true } : {}),
+  });
 
   if (renovacao.outcome.kind === 'insufficient_gold') {
     return { ...loja, log: [`Renovar o estoque custa ${renovacao.outcome.required} de ouro.`] };

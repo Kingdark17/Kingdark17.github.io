@@ -37,7 +37,10 @@ import { passarDeSala } from '../hero/ferimentos.js';
 import { hydrateSavedHero, type Companion, type Hero } from '../hero/hero.js';
 import { teacherAppears, teacherFor } from '../hero/teachers.js';
 import { chanceDoMestre, sortearEstilo } from '../hero/estilos.js';
-import type { Item } from '../items/item.js';
+import { instantiate, type Item } from '../items/item.js';
+import { chanceDoNegociante, RARIDADE_DAS_PECAS_SECRETAS, sortearPecaSecreta } from '../items/pecas-secretas.js';
+import { rarityById, type Rarity } from '../items/rarity.js';
+import { templateById, type ItemTemplate } from '../items/templates.js';
 import { onFloorReached, type Quest } from '../quests/quests.js';
 import { defaultRng, type Rng } from '../rng.js';
 import type { Tutorial } from './tutorial.js';
@@ -293,14 +296,32 @@ function mestreDoAndar(base: Omit<EstadoBase, 'pos'>, rng: Rng): { estilo: strin
   return estilo ? { estilo } : undefined;
 }
 
+/**
+ * O negociante secreto (rodada 6, só o app): depois de zerar a Floresta, 5%
+ * a cada andar novo pra quem tem peça secreta da classe; ele traz uma peça
+ * rara. O `rng` só é gasto quando ele pode aparecer.
+ */
+function negocianteDoAndar(base: Omit<EstadoBase, 'pos'>, rng: Rng, now?: () => number): { item: Item; preco: number } | undefined {
+  const chance = chanceDoNegociante(base.hero);
+  if (chance <= 0 || !isCleared(base.progresso, { dungeon: 'floresta', difficulty: base.masmorra.difficulty })) return undefined;
+  if (rng() * 100 >= chance) return undefined;
+  const peca = sortearPecaSecreta(base.hero, rng);
+  const template = peca ? templateById(peca.id) : null;
+  if (!peca || !template) return undefined;
+  const item = instantiate(template as ItemTemplate, rarityById(RARIDADE_DAS_PECAS_SECRETAS) as Rarity, now ? { rng, now } : { rng });
+  return { item, preco: peca.preco };
+}
+
 function gerarAndar(base: Omit<EstadoBase, 'pos'>, floor: number, rng: Rng, now?: () => number, app = false, entrada = false): EstadoNaMasmorra {
   const teacher = professorDoAndar(base.hero, floor, rng);
   const mestreDeEstilo = app ? mestreDoAndar(base, rng) : undefined;
+  const negociante = app ? negocianteDoAndar(base, rng, now) : undefined;
   const andar = generateDungeonFloor(floor, base.mapRows, base.mapCols, {
     rng,
     run: base.masmorra,
     teacher,
     ...(mestreDeEstilo ? { mestreDeEstilo } : {}),
+    ...(negociante ? { negociante } : {}),
     now,
     ...(app ? { app } : {}),
     ...(entrada ? { entrada } : {}),

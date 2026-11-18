@@ -160,7 +160,7 @@ namespace RPGLegend.Engine
         /// ferreiro), o template, a raridade e o uid. Na loja do app (<paramref name="app"/>), a peça do ferreiro
         /// pode vir no degrau 2 do material, nunca no 3 (DEGRAU_DA_LOJA).
         /// </summary>
-        public static List<Item> RollStock(string kind, double floor, RngFn rng = null, Func<double> now = null, bool app = false)
+        public static List<Item> RollStock(string kind, double floor, RngFn rng = null, Func<double> now = null, bool app = false, bool chapeu = false)
         {
             rng = rng ?? Rng.Default;
             var stock = new List<Item>();
@@ -180,6 +180,9 @@ namespace RPGLegend.Engine
             // A Poção de Reviver: só o vendedor do app, e só de vez em quando (um sorteio a mais, que o site não faz).
             if (app && kind != ShopKinds.Blacksmith && rng() < D.ChanceDaPocaoDeReviver)
                 stock.Add(Items.Instantiate(ItemTemplates.ById(D.PocaoDeReviver), Rarities.All[0], rng, now));
+            // O chapéu do espadachim: só o ferreiro do app, depois de zerar a Floresta, e bem de vez em quando (rodada 6).
+            if (app && chapeu && kind == ShopKinds.Blacksmith && rng() < PecasSecretas.ChanceDoChapeu)
+                stock.Add(Items.Instantiate(ItemTemplates.ById(PecasSecretas.ChapeuDoEspadachim), Rarities.ById(PecasSecretas.Raridade), rng, now));
             return stock;
         }
 
@@ -324,7 +327,7 @@ namespace RPGLegend.Engine
         /// visita: zera quando a loja reabre). Sem ouro: o mesmo herói, <c>forSale: null</c> (quem chama mantém o
         /// estoque) e a contagem como veio, sem sortear. Com ouro: um <see cref="RollStock"/> novo e a contagem + 1.
         /// </summary>
-        public static RestockResult ResolveRestock(Hero hero, string kind, double floor, double restockCount, RngFn rng = null, Func<double> now = null, bool app = false)
+        public static RestockResult ResolveRestock(Hero hero, string kind, double floor, double restockCount, RngFn rng = null, Func<double> now = null, bool app = false, bool chapeu = false)
         {
             double price = 10 + floor * 3 + restockCount * 10;
             if (hero.Gold < price)
@@ -335,7 +338,7 @@ namespace RPGLegend.Engine
             return new RestockResult
             {
                 Hero = next,
-                ForSale = RollStock(kind, floor, rng, now, app),
+                ForSale = RollStock(kind, floor, rng, now, app, chapeu),
                 RestockCount = restockCount + 1,
                 Outcome = RestockOutcome.Restocked(price),
             };

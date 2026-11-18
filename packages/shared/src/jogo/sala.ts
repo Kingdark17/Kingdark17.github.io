@@ -51,6 +51,7 @@ import type { Mochila } from './mochila.js';
 import { abrirPortao, type Portao } from './portao.js';
 import { abrirProfessor, type Professor } from './professor.js';
 import { abrirMestreDeEstilo, type MestreDeEstiloNaSala } from './mestre-de-estilo.js';
+import { abrirNegociante, type NegocianteNaSala } from './negociante.js';
 import { quemEnsina } from '../hero/estilos.js';
 import { tocarTotem, type Totem } from './totem.js';
 import { marcar, type PassoDoTutorial, type Recado, type ResultadoDoPasso } from './tutorial.js';
@@ -83,7 +84,8 @@ export type TelaAberta =
   | { tipo: 'portao'; portao: Portao }
   | { tipo: 'totem'; totem: Totem }
   | { tipo: 'professor'; professor: Professor }
-  | { tipo: 'mestreDeEstilo'; mestre: MestreDeEstiloNaSala };
+  | { tipo: 'mestreDeEstilo'; mestre: MestreDeEstiloNaSala }
+  | { tipo: 'negociante'; negociante: NegocianteNaSala };
 
 export interface ResultadoDaInteracao {
   estado: EstadoDoJogo;
@@ -288,6 +290,15 @@ function naMasmorra(estado: EstadoNaMasmorra, rng: Rng, pet: PetId | null, now: 
         return { estado, aviso: aviso(quem.icone, quem.nome, celula.mestreDeEstilo?.ensinado ? quem.foiEmbora : quem.naSala), tela: null };
       }
       return { estado, aviso: null, tela: { tipo: 'mestreDeEstilo', mestre } };
+    }
+    case 'negociante': {
+      // O negociante secreto (rodada 6): só o app o gera e só o app o ouve.
+      const negociante = app ? abrirNegociante(estado) : null;
+      if (!negociante) {
+        const texto = celula.negociante?.vendido ? 'O negociante já seguiu viagem.' : 'Um negociante encapuzado passa por aqui, mas não abre a capa.';
+        return { estado, aviso: aviso('🧳', 'Negociante', texto), tela: null };
+      }
+      return { estado, aviso: null, tela: { tipo: 'negociante', negociante } };
     }
     case 'event': {
       const evento = abrirEvento(estado, app);

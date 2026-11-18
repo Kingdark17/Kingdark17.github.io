@@ -41,6 +41,8 @@ namespace RPGLegend.Engine
         public Professor Professor;
         /// <summary>O mestre de estilo (rodada 5a, só o app).</summary>
         public MestreDeEstiloNaSala Mestre;
+        /// <summary>O negociante secreto (rodada 6, só o app).</summary>
+        public NegocianteNaSala Negociante;
     }
 
     /// <summary>TS: ResultadoDaInteracao.</summary>
@@ -223,6 +225,14 @@ namespace RPGLegend.Engine
                         return ComAviso(estado, quem.Icone, quem.Nome, celula.MestreDeEstilo?.Ensinado == true ? quem.FoiEmbora : quem.NaSala);
                     }
                     return ComTela(estado, new TelaAberta { Tipo = "mestreDeEstilo", Mestre = mestre });
+                }
+                case DungeonRoomTypes.Negociante:
+                {
+                    // O negociante secreto (rodada 6): só o app o gera e só o app o ouve.
+                    var negociante = app ? Negociantes.Abrir(estado) : null;
+                    if (negociante == null)
+                        return ComAviso(estado, "🧳", "Negociante", celula.Negociante?.Vendido == true ? "O negociante já seguiu viagem." : "Um negociante encapuzado passa por aqui, mas não abre a capa.");
+                    return ComTela(estado, new TelaAberta { Tipo = "negociante", Negociante = negociante });
                 }
                 case DungeonRoomTypes.Event:
                 {

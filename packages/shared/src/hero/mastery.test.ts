@@ -74,8 +74,9 @@ describe('masteryProgress', () => {
 });
 
 describe('arma da classe', () => {
-  it('é a de afinidade 100 — bárbaro e bardo têm duas', () => {
-    expect(masteryWeapons(classById('guerreiro')!)).toEqual(['espada']);
+  it('é a de afinidade 100 — bárbaro e bardo têm duas, e as armas secretas contam (rodada 6)', () => {
+    expect(masteryWeapons(classById('guerreiro')!)).toEqual(['espada', 'lanca']);
+    expect(masteryWeapons(classById('monge')!)).toEqual(['maos', 'bastao', 'leque', 'kusarigama']);
     expect(masteryWeapons(classById('barbaro')!)).toEqual(['machado', 'marreta']);
     expect(masteryWeapons(classById('bardo')!)).toEqual(['adaga', 'violao']);
   });

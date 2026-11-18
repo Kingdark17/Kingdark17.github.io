@@ -67,6 +67,13 @@ describe('sanitizeHero', () => {
     expect(mago.hero.maxMp).toBe(Math.round(((10 + 2 + 50) * 120) / 100));
   });
 
+  it('o Monge com a arma dele tem +50% de vida, como no derivedStats (rodada 6)', () => {
+    const attrs = { forca: 1, destreza: 1, constituicao: 10, intelecto: 1, sabedoria: 1, carisma: 1 };
+    const semArma = sanitizeHero({ attrs, level: 1, equip: {}, classId: 'monge' }, null, false);
+    const deBastao = sanitizeHero({ attrs, level: 1, equip: { arma: { templateId: 'bastao', stats: {} } }, classId: 'monge' }, null, false);
+    expect(deBastao.hero.maxHp).toBe(Math.round(((semArma.hero.maxHp as number) * 150) / 100));
+  });
+
   it('soma vida/mana de equipamento, capado por equipmentCap(nível)', () => {
     const candidate = {
       attrs: { forca: 1, destreza: 1, constituicao: 1, intelecto: 1, sabedoria: 1, carisma: 1 },

@@ -10,17 +10,25 @@
   "OFFHAND_WEAPON_IDS": [
     "espada",
     "adaga",
-    "maca"
+    "maca",
+    "leque"
   ],
   "TWO_HANDED_WEAPON_IDS": [
     "arco",
     "cajado",
     "machado",
     "marreta",
-    "violao"
+    "violao",
+    "bastao",
+    "kusarigama"
   ],
   "AO_LADO_DO_CAJADO": [
     "grimorio"
+  ],
+  "AO_LADO_DO_ARCO": [
+    "aljava_paralisante",
+    "aljava_flamejante",
+    "aljava_explosiva"
   ],
   "COMPANION_ROLES": {
     "guerreiro": {
@@ -77,11 +85,13 @@
     "OFFHAND_WEAPON_IDS",
     "TWO_HANDED_WEAPON_IDS",
     "AO_LADO_DO_CAJADO",
+    "AO_LADO_DO_ARCO",
     "COMPANION_ROLES"
   ],
   "$conjuntos": [
     "OFFHAND_WEAPON_IDS",
     "TWO_HANDED_WEAPON_IDS",
-    "AO_LADO_DO_CAJADO"
+    "AO_LADO_DO_CAJADO",
+    "AO_LADO_DO_ARCO"
   ]
 }
