@@ -51961,6 +51961,8543 @@
     }
   },
   {
+    "name": "(6c) alcanceDoHeroi: monge de bastão",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de bastão",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de bastão",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de bastão",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de bastão",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de bastão",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de bastão",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de bastão",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de bastão",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de bastão",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de bastão",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de bastão",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de bastão",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de bastão, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de bastão",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de bastão",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de bastão no chute",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 8
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de bastão no chute",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de bastão no chute",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de bastão no chute",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de bastão no chute",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de bastão no chute",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de bastão no chute",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de bastão no chute",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de bastão no chute",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de bastão no chute",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de bastão no chute",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de bastão no chute",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de bastão no chute",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de bastão no chute, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de bastão no chute",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de bastão no chute",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão no chute",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão no chute, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão no chute, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão no chute, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão no chute, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de bastão na concentração",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de bastão na concentração",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de bastão na concentração",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de bastão na concentração",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de bastão na concentração",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 120
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de bastão na concentração",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de bastão na concentração",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de bastão na concentração",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de bastão na concentração",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de bastão na concentração",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de bastão na concentração",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de bastão na concentração",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de bastão na concentração",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de bastão na concentração, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de bastão na concentração",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de bastão na concentração",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão na concentração",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de bastão na concentração, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão na concentração, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🧘 Cargas 0/3",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão na concentração, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🧘 Cargas 0/3",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de bastão na concentração, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🧘 Cargas 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de kusarigama",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de kusarigama",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de kusarigama",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de kusarigama",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de kusarigama",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de kusarigama",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de kusarigama",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de kusarigama",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de kusarigama",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 50
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de kusarigama",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de kusarigama",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de kusarigama",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de kusarigama",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de kusarigama, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de kusarigama",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de kusarigama",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de kusarigama",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de kusarigama, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de kusarigama na concentração",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de kusarigama na concentração",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 4
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de kusarigama na concentração",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de kusarigama na concentração",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de kusarigama na concentração",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de kusarigama na concentração",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de kusarigama na concentração",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de kusarigama na concentração",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de kusarigama na concentração",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 50
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de kusarigama na concentração",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de kusarigama na concentração",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de kusarigama na concentração",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de kusarigama na concentração",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de kusarigama na concentração, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de kusarigama na concentração",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de kusarigama na concentração",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de kusarigama na concentração",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de kusarigama na concentração, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama na concentração, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🧘 Cargas 0/3",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama na concentração, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🧘 Cargas 0/3",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de kusarigama na concentração, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "concentracao"
+          ],
+          "estilo": "concentracao",
+          "equip": {
+            "arma": {
+              "templateId": "kusarigama"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🧘 Cargas 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de leque",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de leque",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de leque",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de leque",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de leque",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de leque",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de leque",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de leque",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de leque",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de leque",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de leque",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de leque",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de leque",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de leque, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de leque",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de leque",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de leque",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de leque, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de leque na secundária, no empurrão, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de leque na secundária, no empurrão",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de leque na secundária, no empurrão, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 25
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque na secundária, no empurrão, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque na secundária, no empurrão, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de leque na secundária, no empurrão, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "empurrao"
+          ],
+          "estilo": "empurrao",
+          "equip": {
+            "arma": null,
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de dois leques",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de dois leques",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de dois leques",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de dois leques",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de dois leques",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de dois leques",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de dois leques",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de dois leques",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 2,
+        "dano": 30
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de dois leques",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de dois leques",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de dois leques",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de dois leques",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de dois leques",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de dois leques, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de dois leques",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de dois leques",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de dois leques",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de dois leques, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de dois leques, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de dois leques, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de dois leques, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": {
+              "templateId": "leque"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de mãos vazias e chapéu, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de mãos vazias e chapéu",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de mãos vazias e chapéu, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias e chapéu, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias e chapéu, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias e chapéu, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: monge de mãos vazias no chute",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 5
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: monge de mãos vazias no chute",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: monge de mãos vazias no chute",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 6
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: monge de mãos vazias no chute",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: monge de mãos vazias no chute",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: monge de mãos vazias no chute",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: monge de mãos vazias no chute",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: monge de mãos vazias no chute",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: monge de mãos vazias no chute",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: monge de mãos vazias no chute",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: monge de mãos vazias no chute",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: monge de mãos vazias no chute",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: monge de mãos vazias no chute",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: monge de mãos vazias no chute, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: monge de mãos vazias no chute",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: monge de mãos vazias no chute",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de mãos vazias no chute",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: monge de mãos vazias no chute, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias no chute, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias no chute, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: monge de mãos vazias no chute, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "monge",
+          "estilos": [
+            "chute"
+          ],
+          "estilo": "chute",
+          "equip": {
+            "arma": null,
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: guerreiro de lança",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: guerreiro de lança",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: guerreiro de lança",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: guerreiro de lança",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: guerreiro de lança",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: guerreiro de lança",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: guerreiro de lança",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: guerreiro de lança",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: guerreiro de lança",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: guerreiro de lança",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: guerreiro de lança",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: guerreiro de lança",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: guerreiro de lança",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: guerreiro de lança, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: guerreiro de lança",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: guerreiro de lança",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de lança",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de lança, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 55
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de lança, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de lança, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🔱 Crítico maior",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de lança, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: guerreiro de espada e chapéu, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de espada e chapéu",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de espada e chapéu, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 55
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de espada e chapéu, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de espada e chapéu, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🔱 Crítico maior",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de espada e chapéu, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "espada"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 3
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) naMao: guerreiro espadachim de lança e chapéu, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro espadachim de lança e chapéu",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro espadachim de lança e chapéu, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 55
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro espadachim de lança e chapéu, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🗡️ Avanço pronto",
+        "☯️ Ki 0/300",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro espadachim de lança e chapéu, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🔱 Crítico maior",
+        "🗡️ Avanço pronto",
+        "☯️ Ki 80/300",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro espadachim de lança e chapéu, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "estilos": [
+            "espadachim"
+          ],
+          "estilo": "espadachim",
+          "equip": {
+            "arma": {
+              "templateId": "lanca"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🗡️ Avanço pronto",
+        "☯️ Ki 0/300"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: guerreiro de bastão e leque",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: guerreiro de bastão e leque",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: guerreiro de bastão e leque",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: guerreiro de bastão e leque",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: guerreiro de bastão e leque",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: guerreiro de bastão e leque",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: guerreiro de bastão e leque",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: guerreiro de bastão e leque",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: guerreiro de bastão e leque",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: guerreiro de bastão e leque",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: guerreiro de bastão e leque",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: guerreiro de bastão e leque",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: guerreiro de bastão e leque",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: guerreiro de bastão e leque, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: guerreiro de bastão e leque",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: guerreiro de bastão e leque",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de bastão e leque",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 20
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: guerreiro de bastão e leque, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 45
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de bastão e leque, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de bastão e leque, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3",
+        "🔱 Crítico maior",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: guerreiro de bastão e leque, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "guerreiro",
+          "equip": {
+            "arma": {
+              "templateId": "bastao"
+            },
+            "secundaria": {
+              "templateId": "leque"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "⚔️ Combo +0% · 0/3"
+      ]
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: mago de chapéu",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 7
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: mago de chapéu",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: mago de chapéu",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 12
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: mago de chapéu",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: mago de chapéu",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: mago de chapéu",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: mago de chapéu",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: mago de chapéu",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: mago de chapéu",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: mago de chapéu",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: mago de chapéu",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: mago de chapéu",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: mago de chapéu",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: mago de chapéu, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: mago de chapéu",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: mago de chapéu",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": true
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: mago de chapéu",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: mago de chapéu, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: mago de chapéu, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: mago de chapéu, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: mago de chapéu, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "mago",
+          "equip": {
+            "arma": {
+              "templateId": "cajado"
+            },
+            "secundaria": null,
+            "acessorio": {
+              "templateId": "chapeu_espadachim"
+            }
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": []
+    }
+  },
+  {
+    "name": "(6c) alcanceDoHeroi: arqueiro de arco e aljava",
+    "input": {
+      "fn": "alcanceDoHeroi",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 13
+    }
+  },
+  {
+    "name": "(6c) alcanceDaArma: arqueiro de arco e aljava",
+    "input": {
+      "fn": "alcanceDaArma",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) passosDoCanal: arqueiro de arco e aljava",
+    "input": {
+      "fn": "passosDoCanal",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) criticoDaArma: arqueiro de arco e aljava",
+    "input": {
+      "fn": "criticoDaArma",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) passosPorCargaDaConcentracao: arqueiro de arco e aljava",
+    "input": {
+      "fn": "passosPorCargaDaConcentracao",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 180
+    }
+  },
+  {
+    "name": "(6c) empurraoDoEmpurrao: arqueiro de arco e aljava",
+    "input": {
+      "fn": "empurraoDoEmpurrao",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "(6c) velocidadeDaArma: arqueiro de arco e aljava",
+    "input": {
+      "fn": "velocidadeDaArma",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) explosaoDaArma: arqueiro de arco e aljava",
+    "input": {
+      "fn": "explosaoDaArma",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": {
+        "empurra": 1,
+        "dano": 0
+      }
+    }
+  },
+  {
+    "name": "(6c) escudoDoRevestimento: arqueiro de arco e aljava",
+    "input": {
+      "fn": "escudoDoRevestimento",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 30
+    }
+  },
+  {
+    "name": "(6c) atordoaNoChute: arqueiro de arco e aljava",
+    "input": {
+      "fn": "atordoaNoChute",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 0
+    }
+  },
+  {
+    "name": "(6c) kusarigamaNaMao: arqueiro de arco e aljava",
+    "input": {
+      "fn": "kusarigamaNaMao",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) lancaNaMao: arqueiro de arco e aljava",
+    "input": {
+      "fn": "lancaNaMao",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) podeLancarChapeu: arqueiro de arco e aljava",
+    "input": {
+      "fn": "podeLancarChapeu",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) naMao: arqueiro de arco e aljava, leque",
+    "input": {
+      "fn": "naMao",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        },
+        "id": "leque"
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comDoisLeques: arqueiro de arco e aljava",
+    "input": {
+      "fn": "comDoisLeques",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) comOChapeu: arqueiro de arco e aljava",
+    "input": {
+      "fn": "comOChapeu",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": false
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: arqueiro de arco e aljava",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": false,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "(6c) bonusDoAtaque: arqueiro de arco e aljava, colado",
+    "input": {
+      "fn": "bonusDoAtaque",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          }
+        },
+        "c": {
+          "combo": 20
+        },
+        "alvo": {
+          "colado": true,
+          "chefe": false
+        }
+      }
+    },
+    "expected": {
+      "result": -30
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: arqueiro de arco e aljava, {} {\"chapeu\":0}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {},
+        "extras": {
+          "chapeu": 0
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 5",
+        "🎩 Chapéu pronto"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: arqueiro de arco e aljava, {\"criticoMaior\":true} {\"chapeu\":610,\"ki\":80}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "criticoMaior": true
+        },
+        "extras": {
+          "chapeu": 610,
+          "ki": 80
+        }
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 5",
+        "🎩 Chapéu em 11 s"
+      ]
+    }
+  },
+  {
+    "name": "(6c) textosDaClasse: arqueiro de arco e aljava, {\"flechadas\":3} {}",
+    "input": {
+      "fn": "textosDaClasse",
+      "args": {
+        "quem": {
+          "classId": "arqueiro",
+          "equip": {
+            "arma": {
+              "templateId": "arco"
+            },
+            "secundaria": {
+              "templateId": "aljava_paralisante"
+            },
+            "acessorio": null
+          },
+          "hp": 10,
+          "maxHp": 10
+        },
+        "c": {
+          "flechadas": 3
+        },
+        "extras": {}
+      }
+    },
+    "expected": {
+      "result": [
+        "🏹 Fique parado pra mirar",
+        "🕸️ Paralisia em 2"
+      ]
+    }
+  },
+  {
     "name": "pecasDaClasse: arqueiro",
     "input": {
       "fn": "pecasDaClasse",

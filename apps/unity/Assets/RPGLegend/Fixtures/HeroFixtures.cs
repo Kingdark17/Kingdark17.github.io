@@ -71,7 +71,7 @@ namespace RPGLegend.Tests
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
                 return N(ClassesDeLuta.BonusDoAtaque(quem.ClassId, quem.ClassName, quem.Equip?.Get("arma")?.TemplateId, R<ContadoresDaClasse>(a["c"]),
                     JsJson.Truthy(JsJson.Prop(a["alvo"], "colado")), JsJson.Truthy(JsJson.Prop(a["alvo"], "chefe")),
-                    JsJson.ToOptionalNumber(JsJson.Prop(a["alvo"], "blocos")) ?? 0, quem.Ativo));
+                    JsJson.ToOptionalNumber(JsJson.Prop(a["alvo"], "blocos")) ?? 0, quem.Ativo, quem.PecaEm("secundaria"), quem.PecaEm("acessorio")));
             });
             Fn(M, "esquivaDaClasse", (a, c) =>
             {
@@ -90,6 +90,21 @@ namespace RPGLegend.Tests
                 return W(ClassesDeLuta.TextosDaClasse(quem.ClassId, quem.ClassName, quem.Hp ?? 0, quem.MaxHp ?? 0, R<ContadoresDaClasse>(a["c"]), extras, quem.Ativo,
                     PecasSecretas.AljavaNoArco(quem.Equip?.Get("arma")?.TemplateId, quem.Equip?.Get("secundaria")?.TemplateId)));
             });
+            // ---------- as armas novas (rodada 6c) ----------
+            Fn(M, "alcanceDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.AlcanceDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "criticoDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.CriticoDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "passosPorCargaDaConcentracao", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.PassosPorCargaDaConcentracao(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "empurraoDoEmpurrao", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.EmpurraoDoEmpurrao(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "velocidadeDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.VelocidadeDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "explosaoDaArma", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(ClassesDeLuta.ExplosaoDaArma(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "escudoDoRevestimento", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.EscudoDoRevestimento(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "atordoaNoChute", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return N(ClassesDeLuta.AtordoaNoChute(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"), q.Ativo)); });
+            Fn(M, "kusarigamaNaMao", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(ClassesDeLuta.KusarigamaNaMao(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "lancaNaMao", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(ClassesDeLuta.LancaNaMao(q.ClassId, q.ClassName, q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "podeLancarChapeu", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(ClassesDeLuta.PodeLancarChapeu(q.ClassId, q.ClassName, q.Ativo, q.PecaEm("acessorio"))); });
+            Fn(M, "naMao", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(PecasSecretas.NaMao(q.PecaEm("arma"), q.PecaEm("secundaria"), (string)a["id"])); });
+            Fn(M, "comDoisLeques", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(PecasSecretas.ComDoisLeques(q.PecaEm("arma"), q.PecaEm("secundaria"))); });
+            Fn(M, "comOChapeu", (a, c) => { var q = R<QuemLutaDoCaso>(a["quem"]); return W(PecasSecretas.ComOChapeu(q.PecaEm("acessorio"))); });
             Fn(M, "aljavaNoArco", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
@@ -126,7 +141,7 @@ namespace RPGLegend.Tests
             Fn(M, "passosDoCanal", (a, c) =>
             {
                 var quem = R<QuemLutaDoCaso>(a["quem"]);
-                return N(ClassesDeLuta.PassosDoCanal(quem.ClassId, quem.ClassName, quem.Ativo));
+                return N(ClassesDeLuta.PassosDoCanal(quem.ClassId, quem.ClassName, quem.Ativo, quem.PecaEm("arma"), quem.PecaEm("secundaria")));
             });
             Fn(M, "criticoDoEstilo", (a, c) => N(ClassesDeLuta.CriticoDoEstilo(R<QuemLutaDoCaso>(a["quem"]).Ativo)));
 
@@ -279,6 +294,9 @@ namespace RPGLegend.Tests
     /// <summary>O `quem` dos casos de classes-de-luta: a classe, a arma na mão e os estilos.</summary>
     internal sealed class QuemLutaDoCaso
     {
+        /// <summary>O modelo da peça no espaço (a arma, a secundária, o acessório), ou null.</summary>
+        public string PecaEm(string slot) => Equip?.Get(slot)?.TemplateId;
+
         public string ClassId;
         public string ClassName;
         public double? Level;

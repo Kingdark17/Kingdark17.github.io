@@ -619,11 +619,18 @@ namespace RPGLegend.Game.Jogo
             /// <summary>O fim de um golpe de monstro (o efeito, x, y em unidades da sala): a poeira, a onda, o estouro.</summary>
             public Action<string, double, double> AoGolpe;
 
+            /// <summary>O chapéu do espadachim voando (rodada 6c): a arte do item, girando, por cima da tinta.</summary>
+            private readonly Image _chapeu;
+
             public TintaDaSala()
             {
                 pickingMode = PickingMode.Ignore;
                 AddToClassList("tinta-da-sala");
                 generateVisualContent += Desenhar;
+                _chapeu = new Image { sprite = PecasDaTela.SpriteDoArquivo("accessories/chapeu_espadachim.png"), pickingMode = PickingMode.Ignore };
+                _chapeu.style.position = Position.Absolute;
+                _chapeu.style.display = DisplayStyle.None;
+                Add(_chapeu);
             }
 
             public void Mostrar(Arena arena, List<MonsterInstance> instancias, double colunas)
@@ -663,7 +670,26 @@ namespace RPGLegend.Game.Jogo
                 _arena = arena;
                 _instancias = instancias;
                 _colunas = colunas;
+                MostrarChapeu(arena.Chapeu);
                 MarkDirtyRepaint();
+            }
+
+            /// <summary>O chapéu voando: na casa dele, do tamanho de quase uma casa, dando voltas.</summary>
+            private void MostrarChapeu(ChapeuNaSala chapeu)
+            {
+                float escala = contentRect.width / (float)(_colunas * RoomWalk.TileUnits);
+                if (chapeu == null || !(escala > 0))
+                {
+                    _chapeu.style.display = DisplayStyle.None;
+                    return;
+                }
+                float lado = (float)RoomWalk.TileUnits * 0.8f * escala;
+                _chapeu.style.display = DisplayStyle.Flex;
+                _chapeu.style.width = lado;
+                _chapeu.style.height = lado;
+                _chapeu.style.left = (float)chapeu.X * escala - lado / 2;
+                _chapeu.style.top = (float)chapeu.Y * escala - lado / 2;
+                _chapeu.style.rotate = new Rotate(Angle.Degrees(Time.unscaledTime * 720f % 360f));
             }
 
             /// <summary>Um estalo em (x, y), em unidades da sala: o golpe que pegou no herói.</summary>
@@ -676,6 +702,7 @@ namespace RPGLegend.Game.Jogo
                 _impactos.Clear();
                 _tirosAntes.Clear();
                 _arena = null;
+                _chapeu.style.display = DisplayStyle.None;
             }
 
             /// <summary>O canteiro de cada flor (4 × 4 casas, meio transparente, pulsando de leve) e quatro florzinhas dentro.</summary>

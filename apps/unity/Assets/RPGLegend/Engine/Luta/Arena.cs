@@ -147,6 +147,31 @@ namespace RPGLegend.Engine
         public double? RecargaDaMagia;
         /// <summary>O ki do Monge que sobrou.</summary>
         public double? Ki;
+        /// <summary>A espera do chapéu do espadachim (rodada 6c), em passos.</summary>
+        public double? RecargaDoChapeu;
+    }
+
+    /// <summary>
+    /// TS: ChapeuNaSala — o chapéu do espadachim voando (rodada 6c): onde está e o passo dele, se já bateu na parede
+    /// e volta, quem ele já pegou nesta ida (ou nesta volta), o dano que o primeiro levou e os passos que ainda voa.
+    /// </summary>
+    public sealed class ChapeuNaSala
+    {
+        public double X;
+        public double Y;
+        public double Vx;
+        public double Vy;
+        public bool? Voltando;
+        public List<double> Pegos = new List<double>();
+        public double? Dano;
+        public double Vida;
+
+        public ChapeuNaSala Clone()
+        {
+            var copia = (ChapeuNaSala)MemberwiseClone();
+            copia.Pegos = new List<double>(Pegos);
+            return copia;
+        }
     }
 
     /// <summary>Um dano levado pelo herói daqui, com o passo do mundo (a janela de 30 s do Poder da fé).</summary>
@@ -312,6 +337,9 @@ namespace RPGLegend.Engine
         public double? RelogioDaFlor;
         /// <summary>A área de escuridão do Mago (rodada 5c).</summary>
         public EscuridaoNaSala Escuridao;
+        /// <summary>O chapéu do espadachim voando, e a espera dele (rodada 6c).</summary>
+        public ChapeuNaSala Chapeu;
+        public double? RecargaDoChapeu;
     }
 
     /// <summary>TS: LutaEmTempoReal. Fim: null, "vitoria" ou "derrota".</summary>
@@ -388,6 +416,8 @@ namespace RPGLegend.Engine
         public bool? Corte;
         /// <summary>O Florescimento no celular (rodada 5b): o botão 🌸 planta uma flor no pé do herói.</summary>
         public bool? Florescer;
+        /// <summary>O Monge e o Espadachim (rodada 6c): apertou o chapéu do espadachim (vai rumo ao cursor, ou ao alvo).</summary>
+        public bool? Chapeu;
     }
 
     /// <summary>TS: Acontecimento — algo que a tela mostra ou toca.</summary>
@@ -601,6 +631,7 @@ namespace RPGLegend.Engine
                 if ((memoria.RecargaDaFe ?? 0) > 0) arena.RecargaDaFe = Math.Truncate(memoria.RecargaDaFe.Value);
                 if ((memoria.Ki ?? 0) > 0) arena.Ki = Math.Min(CD.Monge.TetoDoKi, Math.Truncate(memoria.Ki.Value));
                 if ((memoria.RecargaDaMagia ?? 0) > 0) arena.RecargaDaMagia = Math.Truncate(memoria.RecargaDaMagia.Value);
+                if ((memoria.RecargaDoChapeu ?? 0) > 0) arena.RecargaDoChapeu = Math.Truncate(memoria.RecargaDoChapeu.Value);
             }
             return new QuadroDaLuta
             {
@@ -631,6 +662,11 @@ namespace RPGLegend.Engine
                 if (l.Arena.RecargaDaMagia.Value > 1) l.Arena.RecargaDaMagia -= 1;
                 else l.Arena.RecargaDaMagia = null;
             }
+            if (l.Arena.RecargaDoChapeu != null)
+            {
+                if (l.Arena.RecargaDoChapeu.Value > 1) l.Arena.RecargaDoChapeu -= 1;
+                else l.Arena.RecargaDoChapeu = null;
+            }
 
             if (l.Arena.Dupla != null) ReceberDoParceiro(l, entrada);
             if (l.Fim != null) return FecharPasso(l);
@@ -646,6 +682,7 @@ namespace RPGLegend.Engine
             else if (entrada.Explodir == true) Explodir(l);
             else if (entrada.Magia == true) UsarMagia(l);
             else if (entrada.Corte == true) CorteInvernal(l);
+            else if (entrada.Chapeu == true) LancarChapeu(l, entrada);
             else if (entrada.Florescer == true && l.Arena.Recarga <= 0) Plantar(l, l.Arena.Heroi.X, l.Arena.Heroi.Y);
             else if (Js.Truthy(entrada.Item)) UsarItem(l, entrada.Item);
 
@@ -729,6 +766,8 @@ namespace RPGLegend.Engine
                 Flores = arena.Flores != null ? arena.Flores.ConvertAll(f => f.Clone()) : null,
                 RelogioDaFlor = arena.RelogioDaFlor,
                 Escuridao = arena.Escuridao?.Clone(),
+                Chapeu = arena.Chapeu?.Clone(),
+                RecargaDoChapeu = arena.RecargaDoChapeu,
             };
             if (arena.Cristais != null)
             {
@@ -1122,7 +1161,8 @@ namespace RPGLegend.Engine
         /// <summary>TS: eventoComAMoral — o evento do ataque, com a faixa do crítico da moral (o degrau 12 a alarga).</summary>
         private static EventoDeArma EventoComAMoral(Luta l, EventoDeArma evento)
         {
-            double faixa = MoralAqui(l).FaixaCritica;
+            // A lança (rodada 6c): o golpe da vez com a faixa do crítico maior.
+            double faixa = MoralAqui(l).FaixaCritica + (Contadores(l).CriticoMaior == true ? PecasSecretas.RegrasDasArmasNovas.FaixaDaLanca : 0);
             if (!(faixa > 0)) return evento;
             return new EventoDeArma
             {
@@ -1324,6 +1364,8 @@ namespace RPGLegend.Engine
                 Apoiar(l, aberto.Aliado, leitura);
                 return;
             }
+            // A lança do Guerreiro (rodada 6c): a faixa maior já valeu neste evento; sorteia a do próximo.
+            SortearLanca(l);
             var doEvento = l.Arena.Monstros[(int)aberto.Alvo];
             double? indice = doEvento.Fase != "caido" ? doEvento.Indice : AlvoAtual(l);
             if (indice == null) return;
@@ -1382,10 +1424,15 @@ namespace RPGLegend.Engine
             ApoiarAqui(l);
             VinhasNoMonstro(l, indice.Value);
             GolpeEmArea(l, indice.Value, dano.Value);
+            // A kusarigama do Monge (rodada 6c): a área 3 × 2 no alvo.
+            if (ClassesDeLuta.KusarigamaNaMao(heroDoGolpe) && l.Fim == null) AreaDaKusarigama(l, indice.Value, dano.Value);
             if (estiloAtivo == "empurrao") EmpurraoEmVolta(l, indice.Value, dano.Value);
             // O avanço do Paladino empurra o alvo que ficou de pé.
             var alvo = l.Arena.Monstros[(int)indice.Value];
             if (atordoarDepois && l.Fim == null && alvo.Fase != "caido") Atordoar(l, alvo, Estilos.Espadachim.Atordoa);
+            // O bastão no chute (rodada 6c): às vezes atordoa quem ficou de pé.
+            double chuteAtordoa = ClassesDeLuta.AtordoaNoChute(heroDoGolpe);
+            if (chuteAtordoa > 0 && l.Fim == null && alvo.Fase != "caido" && l.Rng() * 100 < chuteAtordoa) Atordoar(l, alvo);
             // Todo 9º golpe das Raízes prende o alvo (o chefe não).
             if (estiloAtivo == "raizes" && ClassesDeLuta.GolpeQuePrende(golpeDoDruida) && l.Fim == null) Prender(l, alvo);
             // Os elementos do Mago (rodada 5c), no disparo que acertou.
@@ -1402,7 +1449,7 @@ namespace RPGLegend.Engine
         /// classe põe na arena (o dano a mais, o crítico do Ladino, sem a passiva antiga da classe refeita). Acertou: o
         /// dano; senão null.
         /// </summary>
-        private static double? AcertarMonstro(Luta l, MonstroNaArena alvo, double dado, LeituraDaMira leitura, string estilo)
+        private static double? AcertarMonstro(Luta l, MonstroNaArena alvo, double dado, LeituraDaMira leitura, string estilo, double aMais = 0)
         {
             var monstro = MonstroNo(l, alvo.Indice);
             var lida = leitura;
@@ -1416,14 +1463,17 @@ namespace RPGLegend.Engine
             var moral = MoralAqui(l);
             // O dano a mais: o da classe, o da moral do grupo e o reforço do Bardo.
             double bonus =
-                ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice), Estilos.IdDoEstilo(h)) +
+                ClassesDeLuta.BonusDoAtaque(h.ClassId, h.ClassName, h.Equip?.Get("arma")?.TemplateId, Contadores(l), Colado(l, alvo.Indice), monstro.IsBoss, BlocosAte(l, alvo.Indice), Estilos.IdDoEstilo(h),
+                    h.Equip?.Get("secundaria")?.TemplateId, h.Equip?.Get("acessorio")?.TemplateId) +
                 moral.Dano +
                 ((l.Arena.Reforco ?? 0) > 0 ? CD.Bardo.Forca : 0) +
                 (l.Arena.Revestido == true ? CD.Monge.DanoRevestido : 0) +
                 // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
-                (estilo == AttackStyles.Magic && Catalog.IdDaClasse(h.ClassId, h.ClassName) == "mago" ? ClassesDeLuta.DanoDoMago(Estilos.IdDoEstilo(h), Contadores(l).Golpes ?? 0) : 0);
+                (estilo == AttackStyles.Magic && Catalog.IdDaClasse(h.ClassId, h.ClassName) == "mago" ? ClassesDeLuta.DanoDoMago(Estilos.IdDoEstilo(h), Contadores(l).Golpes ?? 0) : 0) +
+                aMais;
             double? daClasse = ClassesDeLuta.CriticoDaClasse(h.ClassId, h.ClassName);
-            double criticoAMais = moral.Critico + ClassesDeLuta.CriticoDoEstilo(h);
+            // O crítico a mais: o da moral, o do estilo e o do leque (rodada 6c).
+            double criticoAMais = moral.Critico + ClassesDeLuta.CriticoDoEstilo(h) + ClassesDeLuta.CriticoDaArma(h);
             double? critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
             // O golpe sagrado do Clérigo num morto-vivo.
             bool sagrado = Catalog.IdDaClasse(h.ClassId, h.ClassName) == "clerigo" && estilo == AttackStyles.Magic && ClassesDeLuta.MortoVivo(monstro.SpeciesId);
@@ -1881,7 +1931,8 @@ namespace RPGLegend.Engine
             double fundas = Estilos.IdDoEstilo(Masmorra(l).Hero) == "raizes" && ClassesDeLuta.RaizesFundas(Contadores(l).Golpes ?? 0) ? Estilos.Raizes.Velocidade : 0;
             // E a ventania do Vento (rodada 5c).
             double ventania = (Contadores(l).Ventania ?? 0) > 0 ? Estilos.Vento.Velocidade : 0;
-            double daMais = daMoral + fundas + ventania;
+            // Os dois leques do Monge (rodada 6c).
+            double daMais = daMoral + fundas + ventania + ClassesDeLuta.VelocidadeDaArma(Masmorra(l).Hero);
             double velocidade = daMais > 0 ? Math.Truncate(base_ * (100 + daMais) / 100) : base_;
             return RoomWalk.Tick(planta, heroi, new WalkInput { X = entrada.X, Y = entrada.Y }, velocidade).Walker;
         }
@@ -1905,6 +1956,8 @@ namespace RPGLegend.Engine
             PassarOsEstilos(l);
             PassarAsFlores(l);
             Canalizar(l, entrada);
+            MoverChapeu(l);
+            if (l.Fim != null) return;
             if (arena.Recarga > 0) arena.Recarga -= 1;
             if (arena.RecargaDoItem > 0) arena.RecargaDoItem -= 1;
             if (arena.Intervalo > 0) arena.Intervalo -= 1;
@@ -2320,7 +2373,7 @@ namespace RPGLegend.Engine
             var moral = MoralAqui(l);
             // O revestimento de ki do Monge segura parte deste golpe, e quebra.
             bool revestido = l.Arena.Revestido == true;
-            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c, Estilos.IdDoEstilo(h)) + moral.Resistencia + (revestido ? CD.Monge.EscudoRevestido : 0);
+            double resistencia = ClassesDeLuta.ResistenciaDaClasse(h.ClassId, h.ClassName, h.Hp, h.MaxHp, c, Estilos.IdDoEstilo(h)) + moral.Resistencia + (revestido ? ClassesDeLuta.EscudoDoRevestimento(h) : 0);
             double dano = resistencia > 0 ? Js.Max(1, golpe.Damage - Math.Floor(golpe.Damage * resistencia / 100)) : golpe.Damage;
             var ferido = golpe.Hero;
             if (resistencia > 0)
@@ -2856,6 +2909,7 @@ namespace RPGLegend.Engine
             if ((a.RecargaDaMagia ?? 0) > 0) extras.RecargaDaMagia = a.RecargaDaMagia;
             if (luta.Estado.Hero.BloqueioDaMagia != null) extras.MagiaSelada = true;
             if ((a.Flores?.Count ?? 0) > 0) extras.Flores = a.Flores.Count;
+            if (ClassesDeLuta.PodeLancarChapeu(luta.Estado.Hero)) extras.Chapeu = a.RecargaDoChapeu ?? 0;
             return extras;
         }
 
@@ -2867,6 +2921,7 @@ namespace RPGLegend.Engine
             if ((luta.Arena.RecargaDaFe ?? 0) > 0) memoria.RecargaDaFe = luta.Arena.RecargaDaFe;
             if ((luta.Arena.Ki ?? 0) > 0) memoria.Ki = luta.Arena.Ki;
             if ((luta.Arena.RecargaDaMagia ?? 0) > 0) memoria.RecargaDaMagia = luta.Arena.RecargaDaMagia;
+            if ((luta.Arena.RecargaDoChapeu ?? 0) > 0) memoria.RecargaDoChapeu = luta.Arena.RecargaDoChapeu;
             return memoria;
         }
 
@@ -3136,7 +3191,7 @@ namespace RPGLegend.Engine
             var hero = Masmorra(l).Hero;
             string tipo = ClassesDeLuta.OQueCanaliza(hero);
             bool parado = Math.Truncate(entrada.X) == 0 && Math.Truncate(entrada.Y) == 0;
-            bool agiu = entrada.Atacar == true || Js.Truthy(entrada.Poder) || Js.Truthy(entrada.Item) || entrada.Fe == true || entrada.Revestir == true || entrada.Explodir == true;
+            bool agiu = entrada.Atacar == true || Js.Truthy(entrada.Poder) || Js.Truthy(entrada.Item) || entrada.Fe == true || entrada.Revestir == true || entrada.Explodir == true || entrada.Chapeu == true;
             if (tipo == null || entrada.Canalizar != true || !parado || agiu || arena.Evento != null || arena.Dupla?.Fantasma == true)
             {
                 arena.Canal = null;
@@ -3200,7 +3255,7 @@ namespace RPGLegend.Engine
             {
                 var r = Estilos.Concentracao;
                 double semGolpe = (c.SemGolpe ?? 0) + 1;
-                if (semGolpe >= r.PassosPorCarga)
+                if (semGolpe >= ClassesDeLuta.PassosPorCargaDaConcentracao(Masmorra(l).Hero))
                 {
                     c.SemGolpe = 0;
                     c.Cargas = Js.Min(r.TetoDeCargas, (c.Cargas ?? 0) + 1);
@@ -3234,7 +3289,7 @@ namespace RPGLegend.Engine
             {
                 if (l.Fim != null) return;
                 if (m.Fase == "caido" || l.Rng() * 100 >= r.Chance) continue;
-                Empurrar(l, m, hx, hy, 1);
+                Empurrar(l, m, hx, hy, ClassesDeLuta.EmpurraoDoEmpurrao(Masmorra(l).Hero));
                 Atordoar(l, m);
             }
         }
@@ -3324,6 +3379,154 @@ namespace RPGLegend.Engine
             if (NoEspelho(l) || m.Fase == "caido" || MonstroNo(l, m.Indice).IsBoss) return;
             m.Preso = passos ?? Estilos.Raizes.Preso;
             Contar(l, Numero("monstro", m.Indice, texto, "erro"));
+        }
+
+        // ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------
+
+        /// <summary>TS: areaDaKusarigama — quem está na área de 3 casas de largura e 2 de fundo no alvo leva o mesmo dano.</summary>
+        private static void AreaDaKusarigama(Luta l, double alvo, double dano)
+        {
+            var r = PecasSecretas.RegrasDasArmasNovas;
+            double hx = l.Arena.Heroi.X, hy = l.Arena.Heroi.Y;
+            var centro = LugarDe(l, alvo);
+            double dx = centro.X - hx;
+            double dy = centro.Y - hy;
+            double comprimento = Math.Sqrt(dx * dx + dy * dy);
+            if (comprimento == 0) return;
+            double meiaLargura = r.LarguraDaKusarigama * RoomWalk.TileUnits / 2;
+            double fundo = r.FundoDaKusarigama * RoomWalk.TileUnits - RoomWalk.TileUnits / 2;
+            var pegos = new List<MonstroNaArena>();
+            foreach (var m in l.Arena.Monstros)
+            {
+                if (m.Indice == alvo || m.Fase == "caido") continue;
+                var lugar = LugarDe(l, m.Indice);
+                double px = lugar.X - centro.X;
+                double py = lugar.Y - centro.Y;
+                double ao = (px * dx + py * dy) / comprimento;
+                double fora = Math.Abs(px * dy - py * dx) / comprimento;
+                if (ao >= -RoomWalk.TileUnits / 2 && ao <= fundo && fora <= meiaLargura) pegos.Add(m);
+            }
+            foreach (var m in pegos)
+            {
+                if (l.Fim != null) return;
+                if (m.Fase != "caido") FerirComDano(l, m.Indice, dano, "⛓️-" + Js.NumberToString(dano));
+            }
+        }
+
+        /// <summary>TS: sortearLanca — o próximo golpe tem 10% de sair com a faixa do crítico maior (a deste já valeu).</summary>
+        private static void SortearLanca(Luta l)
+        {
+            if (!ClassesDeLuta.LancaNaMao(Masmorra(l).Hero)) return;
+            var c = Contadores(l).Clone();
+            c.CriticoMaior = null;
+            bool proximo = l.Rng() * 100 < PecasSecretas.RegrasDasArmasNovas.ChanceDaLanca;
+            if (proximo) c.CriticoMaior = true;
+            l.Arena.Classe = c;
+            if (proximo) Contar(l, Aviso("🔱 Crítico maior no próximo golpe"));
+        }
+
+        /// <summary>
+        /// TS: lancarChapeu — o chapéu sai da mão: gasta o ki, começa a espera e voa rumo ao cursor (no PC); sem cursor,
+        /// ao alvo de agora; sem alvo, pra onde o herói olha.
+        /// </summary>
+        private static void LancarChapeu(Luta l, EntradaDaLuta entrada)
+        {
+            var r = PecasSecretas.RegrasDasArmasNovas;
+            var hero = Masmorra(l).Hero;
+            if (!ClassesDeLuta.PodeLancarChapeu(hero) || l.Arena.Chapeu != null || (l.Arena.RecargaDoChapeu ?? 0) > 0 || (l.Arena.Ki ?? 0) < r.KiDoChapeu) return;
+            var heroi = l.Arena.Heroi;
+            double? alvo = AlvoAtual(l);
+            double parX, parY;
+            if (entrada.Cursor != null)
+            {
+                parX = entrada.Cursor.X - heroi.X;
+                parY = entrada.Cursor.Y - heroi.Y;
+            }
+            else if (alvo != null)
+            {
+                var lugar = LugarDe(l, alvo.Value);
+                parX = lugar.X - heroi.X;
+                parY = lugar.Y - heroi.Y;
+            }
+            else
+            {
+                switch (heroi.Facing ?? "S")
+                {
+                    case "N": parX = 0; parY = -1; break;
+                    case "E": parX = 1; parY = 0; break;
+                    case "W": parX = -1; parY = 0; break;
+                    default: parX = 0; parY = 1; break;
+                }
+            }
+            var v = Rumo(parX, parY, r.VelocidadeDoChapeu);
+            double sobra = (l.Arena.Ki ?? 0) - r.KiDoChapeu;
+            l.Arena.Ki = sobra > 0 ? sobra : (double?)null;
+            l.Arena.RecargaDoChapeu = r.RecargaDoChapeu;
+            l.Arena.Chapeu = new ChapeuNaSala { X = heroi.X, Y = heroi.Y, Vx = v.X, Vy = v.Y, Vida = r.VidaDoChapeu };
+            Contar(l, Aviso("🎩 Chapéu!"));
+        }
+
+        /// <summary>
+        /// TS: moverChapeu — um passo do chapéu: na ida, em linha reta até bater na parede (ou no fim do voo), e aí volta
+        /// rumo ao herói até a mão dele. Quem ele encosta (uma vez na ida e outra na volta) leva o golpe a 40%.
+        /// </summary>
+        private static void MoverChapeu(Luta l)
+        {
+            var c = l.Arena.Chapeu;
+            if (c == null) return;
+            var r = PecasSecretas.RegrasDasArmasNovas;
+            var heroi = l.Arena.Heroi;
+            double vx = c.Vx, vy = c.Vy;
+            if (c.Voltando == true)
+            {
+                double dx = heroi.X - c.X;
+                double dy = heroi.Y - c.Y;
+                if (dx * dx + dy * dy <= r.VelocidadeDoChapeu * r.VelocidadeDoChapeu || c.Vida <= 1)
+                {
+                    l.Arena.Chapeu = null;
+                    return;
+                }
+                var v = Rumo(dx, dy, r.VelocidadeDoChapeu);
+                vx = v.X;
+                vy = v.Y;
+            }
+            double x = c.X + vx;
+            double y = c.Y + vy;
+            if (c.Voltando != true && (c.Vida <= 1 || ForaDoChao(l, x, y) || NaParede(l, x, y)))
+            {
+                var volta = c.Clone();
+                volta.Voltando = true;
+                volta.Pegos = new List<double>();
+                volta.Vida = c.Vida - 1;
+                l.Arena.Chapeu = volta;
+                return;
+            }
+            var chapeu = c.Clone();
+            chapeu.X = x;
+            chapeu.Y = y;
+            chapeu.Vx = vx;
+            chapeu.Vy = vy;
+            chapeu.Vida = c.Vida - 1;
+            l.Arena.Chapeu = chapeu;
+            var hero = Masmorra(l).Hero;
+            for (int i = 0; i < l.Arena.Monstros.Count; i++)
+            {
+                if (l.Fim != null) return;
+                var m = l.Arena.Monstros[i];
+                if (m.Fase == "caido" || chapeu.Pegos.Contains(m.Indice)) continue;
+                double mx = m.CorpoX - x;
+                double my = m.CorpoY - y;
+                if (mx * mx + my * my > r.RaioDoChapeu * r.RaioDoChapeu) continue;
+                chapeu.Pegos.Add(m.Indice);
+                if (chapeu.Dano != null)
+                {
+                    FerirComDano(l, m.Indice, chapeu.Dano.Value, "🎩-" + Js.NumberToString(chapeu.Dano.Value));
+                    continue;
+                }
+                double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
+                var acerto = AcertarMonstro(l, m, dado, new LeituraDaMira { Acerto = true, Forca = r.ForcaDoChapeu / 100, Critico = false }, EstiloDoBotao(hero));
+                if (acerto != null) chapeu.Dano = acerto.Value;
+            }
         }
 
         // ---------- as aljavas do Arqueiro (rodada 6b: paralisante, flamejante, explosiva) ----------
@@ -3755,9 +3958,11 @@ namespace RPGLegend.Engine
             if (naArea.Count == 0) return;
             // O mais perto primeiro; no empate, a ordem da sala.
             naArea.Sort((a, b) => a.Distancia != b.Distancia ? a.Distancia.CompareTo(b.Distancia) : a.M.Indice.CompareTo(b.M.Indice));
+            // Com dois leques (rodada 6c), a explosão empurra mais longe e bate mais forte.
+            var daArma = ClassesDeLuta.ExplosaoDaArma(hero);
             double dado = 1 + Rng.RandomInt(Attack.LadosDoDano, l.Rng);
             var leitura = new LeituraDaMira { Acerto = true, Forca = ClassesDeLuta.ForcaDaExplosao(ki), Critico = false };
-            var acerto = AcertarMonstro(l, naArea[0].M, dado, leitura, EstiloDoBotao(hero));
+            var acerto = AcertarMonstro(l, naArea[0].M, dado, leitura, EstiloDoBotao(hero), daArma.Dano);
             if (acerto == null || l.Fim != null) return;
             for (int k = 1; k < naArea.Count; k++)
             {
@@ -3768,7 +3973,7 @@ namespace RPGLegend.Engine
             foreach (var item in naArea)
             {
                 if (l.Fim != null) return;
-                if (item.M.Fase != "caido") Empurrar(l, item.M, hx, hy, r.EmpurraNaExplosao);
+                if (item.M.Fase != "caido") Empurrar(l, item.M, hx, hy, daArma.Empurra);
             }
         }
 

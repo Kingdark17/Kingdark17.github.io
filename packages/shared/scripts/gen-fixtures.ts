@@ -1016,6 +1016,61 @@ for (const cls of ['monge', 'mago', 'necromante']) {
         E.textosDaClasse(a.quem, a.c, a.extras));
     }
   }
+  // As armas novas (rodada 6c): bastão, leque, kusarigama, lança e chapéu.
+  {
+    const t = (id: string | null | undefined) => (id ? { templateId: id } : null);
+    const q = (classId: string, pecas: { arma?: string | null; secundaria?: string; acessorio?: string }, estilo?: string) => ({
+      classId,
+      ...(estilo ? { estilos: [estilo], estilo } : {}),
+      equip: { arma: t(pecas.arma), secundaria: t(pecas.secundaria), acessorio: t(pecas.acessorio) },
+    });
+    for (const [nome, quem] of [
+      ['monge de bastão', q('monge', { arma: 'bastao' })],
+      ['monge de bastão no chute', q('monge', { arma: 'bastao' }, 'chute')],
+      ['monge de bastão na concentração', q('monge', { arma: 'bastao' }, 'concentracao')],
+      ['monge de kusarigama', q('monge', { arma: 'kusarigama' })],
+      ['monge de kusarigama na concentração', q('monge', { arma: 'kusarigama' }, 'concentracao')],
+      ['monge de leque', q('monge', { arma: 'leque' })],
+      ['monge de leque na secundária, no empurrão', q('monge', { secundaria: 'leque' }, 'empurrao')],
+      ['monge de dois leques', q('monge', { arma: 'leque', secundaria: 'leque' })],
+      ['monge de mãos vazias e chapéu', q('monge', { acessorio: 'chapeu_espadachim' })],
+      ['monge de mãos vazias no chute', q('monge', {}, 'chute')],
+      ['guerreiro de lança', q('guerreiro', { arma: 'lanca' })],
+      ['guerreiro de espada e chapéu', q('guerreiro', { arma: 'espada', acessorio: 'chapeu_espadachim' })],
+      ['guerreiro espadachim de lança e chapéu', q('guerreiro', { arma: 'lanca', acessorio: 'chapeu_espadachim' }, 'espadachim')],
+      ['guerreiro de bastão e leque', q('guerreiro', { arma: 'bastao', secundaria: 'leque' })],
+      ['mago de chapéu', q('mago', { arma: 'cajado', acessorio: 'chapeu_espadachim' })],
+      ['arqueiro de arco e aljava', q('arqueiro', { arma: 'arco', secundaria: 'aljava_paralisante' })],
+    ] as const) {
+      caso(`(6c) alcanceDoHeroi: ${nome}`, 'alcanceDoHeroi', { quem }, (a) => E.alcanceDoHeroi(a.quem));
+      caso(`(6c) alcanceDaArma: ${nome}`, 'alcanceDaArma', { quem }, (a) => E.alcanceDaArma(a.quem));
+      caso(`(6c) passosDoCanal: ${nome}`, 'passosDoCanal', { quem }, (a) => E.passosDoCanal(a.quem));
+      caso(`(6c) criticoDaArma: ${nome}`, 'criticoDaArma', { quem }, (a) => E.criticoDaArma(a.quem));
+      caso(`(6c) passosPorCargaDaConcentracao: ${nome}`, 'passosPorCargaDaConcentracao', { quem }, (a) => E.passosPorCargaDaConcentracao(a.quem));
+      caso(`(6c) empurraoDoEmpurrao: ${nome}`, 'empurraoDoEmpurrao', { quem }, (a) => E.empurraoDoEmpurrao(a.quem));
+      caso(`(6c) velocidadeDaArma: ${nome}`, 'velocidadeDaArma', { quem }, (a) => E.velocidadeDaArma(a.quem));
+      caso(`(6c) explosaoDaArma: ${nome}`, 'explosaoDaArma', { quem }, (a) => E.explosaoDaArma(a.quem));
+      caso(`(6c) escudoDoRevestimento: ${nome}`, 'escudoDoRevestimento', { quem }, (a) => E.escudoDoRevestimento(a.quem));
+      caso(`(6c) atordoaNoChute: ${nome}`, 'atordoaNoChute', { quem }, (a) => E.atordoaNoChute(a.quem));
+      caso(`(6c) kusarigamaNaMao: ${nome}`, 'kusarigamaNaMao', { quem }, (a) => E.kusarigamaNaMao(a.quem));
+      caso(`(6c) lancaNaMao: ${nome}`, 'lancaNaMao', { quem }, (a) => E.lancaNaMao(a.quem));
+      caso(`(6c) podeLancarChapeu: ${nome}`, 'podeLancarChapeu', { quem }, (a) => E.podeLancarChapeu(a.quem));
+      caso(`(6c) naMao: ${nome}, leque`, 'naMao', { quem, id: 'leque' }, (a) => E.naMao(a.quem, a.id));
+      caso(`(6c) comDoisLeques: ${nome}`, 'comDoisLeques', { quem }, (a) => E.comDoisLeques(a.quem));
+      caso(`(6c) comOChapeu: ${nome}`, 'comOChapeu', { quem }, (a) => E.comOChapeu(a.quem));
+      for (const colado of [false, true]) {
+        caso(`(6c) bonusDoAtaque: ${nome}${colado ? ', colado' : ''}`, 'bonusDoAtaque', { quem, c: { combo: 20 }, alvo: { colado, chefe: false } }, (a) => E.bonusDoAtaque(a.quem, a.c, a.alvo));
+      }
+      for (const [c, extras] of [
+        [{}, { chapeu: 0 }],
+        [{ criticoMaior: true }, { chapeu: 610, ki: 80 }],
+        [{ flechadas: 3 }, {}],
+      ] as const) {
+        caso(`(6c) textosDaClasse: ${nome}, ${JSON.stringify(c)} ${JSON.stringify(extras)}`, 'textosDaClasse', { quem: { ...quem, hp: 10, maxHp: 10 }, c, extras }, (a) =>
+          E.textosDaClasse(a.quem, a.c, a.extras));
+      }
+    }
+  }
   // As peças secretas (rodada 6a).
   for (const classId of ['arqueiro', 'monge', 'guerreiro', 'mago', 'cacador']) {
     caso(`pecasDaClasse: ${classId}`, 'pecasDaClasse', { quem: { classId } }, (a) => E.pecasDaClasse(a.quem));
@@ -6117,6 +6172,112 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       simula('o monstro fraco golpeia mais fraco', fraco, parado(500), { seed: 909 });
       const incendiado = { ...aberta, arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, incendio: { tempo: 130, dano: 7 } })) } };
       simula('o monstro incendiado queima a cada segundo', incendiado, parado(200), { seed: 910 });
+    }
+
+    // As armas novas (rodada 6c): o Monge de bastão, leque e kusarigama, o Guerreiro de lança e o chapéu.
+    const comPecas = (
+      classe: string,
+      pecas: { arma?: string | null; secundaria?: string; acessorio?: string },
+      monstros: ReturnType<typeof bicho>[],
+      corpos: Array<[number, number]>,
+      o: { estilo?: string; arena?: Record<string, unknown>; heroi?: Walker; memoria?: E.MemoriaDaLuta } = {},
+    ) => {
+      const base = forte({
+        classe,
+        arma: pecas.arma ?? null,
+        equip: { secundaria: pecas.secundaria ? item(pecas.secundaria, 'raro') : null, acessorio: pecas.acessorio ? item(pecas.acessorio, 'raro') : null },
+      });
+      const hero = o.estilo ? { ...base, estilos: [o.estilo], estilo: o.estilo } : base;
+      const aberta = E.abrirLuta({ ...salaCom(monstros), hero }, o.heroi ?? EMBAIXO, null, false, null, o.memoria ?? {}).luta;
+      return {
+        ...aberta,
+        arena: {
+          ...aberta.arena,
+          ...(o.arena ?? {}),
+          monstros: aberta.arena.monstros.map((m, i) => ({ ...m, corpoX: (corpos[i] as [number, number])[0] * T, corpoY: (corpos[i] as [number, number])[1] * T })),
+        },
+      };
+    };
+    simula(
+      'a kusarigama pega a área 3 × 2 no alvo',
+      comPecas('monge', { arma: 'kusarigama' }, [forteZ(), forteZ(), forteZ(), forteZ()], [[4.5, 3.5], [4.5, 2.5], [5.5, 3.5], [4.5, 4.5]]),
+      [...golpesNo(2, ALVO), ...parado(60)],
+      { seed: 911 },
+    );
+    simula('o chute de bastão alcança longe e às vezes atordoa', comPecas('monge', { arma: 'bastao' }, [forteZ()], [[4.5, 3.5]], { estilo: 'chute' }), golpesNo(5, ALVO), { seed: 912 });
+    {
+      // O Empurrão de leque: procura a semente em que alguém é empurrado (25% cada).
+      const leque = comPecas('monge', { arma: 'leque' }, [forteZ(), forteZ()], [[4.5, 4.5], [5.5, 4.5]], { estilo: 'empurrao', heroi: PERTO });
+      const entradas = [...golpesNo(3, MEIO), ...parado(60)];
+      let semente = 913;
+      while (!JSON.stringify(E.simularLuta(leque, entradas, E.seededRng(semente), () => AGORA).acontecimentos).includes('💫')) semente++;
+      simula('o Empurrão de leque empurra 3 blocos', leque, entradas, { seed: semente });
+    }
+    simula(
+      'dois leques: a explosão de ki empurra 2 blocos e bate mais',
+      comPecas('monge', { arma: 'leque', secundaria: 'leque' }, [forteZ(), forteZ()], [[4.5, 4.5], [5.5, 5.5]], { heroi: PERTO, arena: { ki: 300 } }),
+      [{ x: 0, y: 0, explodir: true }, ...parado(60)],
+      { seed: 914 },
+    );
+    simula('dois leques andam mais rápido', comPecas('monge', { arma: 'leque', secundaria: 'leque' }, [forteZ()], [[4.5, 1.5]]), rodando(140), { seed: 915 });
+    simula(
+      'o revestimento de kusarigama segura 50%',
+      comPecas('monge', { arma: 'kusarigama' }, [bicho('goblin', { hp: 3000, maxHp: 3000, dmg: 40 })], [[4.5, 4.5]], { heroi: PERTO, arena: { revestido: true } }),
+      parado(300),
+      { seed: 916 },
+    );
+    simula('a Concentração de bastão junta carga a cada 2 s', comPecas('monge', { arma: 'bastao' }, [forteZ()], [[4.5, 4.5]], { estilo: 'concentracao', heroi: PERTO }), [...parado(400), ...golpesNo(1, MEIO)], {
+      seed: 917,
+    });
+    simula(
+      'o Monge de bastão junta ki mais rápido segurando K',
+      comPecas('monge', { arma: 'bastao' }, [forteZ()], [[4.5, 1.5]]),
+      parado(150).map((e) => ({ ...e, canalizar: true })),
+      { seed: 918 },
+    );
+    {
+      // A lança: procura a semente em que o golpe deixa o próximo com o crítico maior.
+      const lanceiro = comPecas('guerreiro', { arma: 'lanca' }, [forteZ()], [[4.5, 4.5]], { heroi: PERTO });
+      const entradas = golpesNo(4, MEIO);
+      let semente = 919;
+      while (!JSON.stringify(E.simularLuta(lanceiro, entradas, E.seededRng(semente), () => AGORA).acontecimentos).includes('🔱')) semente++;
+      simula('a lança deixa o próximo golpe com o crítico maior', lanceiro, entradas, { seed: semente });
+    }
+    simula(
+      'o chapéu do Monge vai até a parede e volta',
+      comPecas('monge', { acessorio: 'chapeu_espadachim' }, [forteZ(), forteZ()], [[4.5, 3.5], [4.5, 1.5]], { arena: { ki: 120 } }),
+      [{ x: 0, y: 0, chapeu: true, cursor: ALVO }, ...parado(300)],
+      { seed: 920 },
+    );
+    simula(
+      'o chapéu do Espadachim, sem cursor, vai no alvo',
+      comPecas('guerreiro', { arma: 'espada', acessorio: 'chapeu_espadachim' }, [forteZ(), forteZ()], [[2.5, 4.5], [6.5, 4.5]], {
+        estilo: 'espadachim',
+        arena: { ki: 300 },
+        heroi: { x: 4.5 * T, y: 4.5 * T, facing: 'W' },
+      }),
+      [{ x: 0, y: 0, chapeu: true }, ...parado(300)],
+      { seed: 921 },
+    );
+    simula(
+      'o chapéu esperando a recarga não sai',
+      comPecas('monge', { acessorio: 'chapeu_espadachim' }, [forteZ()], [[4.5, 3.5]], { memoria: { ki: 200, recargaDoChapeu: 500 } }),
+      [{ x: 0, y: 0, chapeu: true, cursor: ALVO }, ...parado(30)],
+      { seed: 922 },
+    );
+    simula('o guerreiro sem estilo não lança o chapéu', comPecas('guerreiro', { arma: 'espada', acessorio: 'chapeu_espadachim' }, [forteZ()], [[4.5, 3.5]], { arena: { ki: 300 } }), [
+      { x: 0, y: 0, chapeu: true, cursor: ALVO },
+      ...parado(30),
+    ], { seed: 923 });
+    {
+      const voando = comPecas('monge', { acessorio: 'chapeu_espadachim' }, [forteZ()], [[4.5, 3.5]], { arena: { recargaDoChapeu: 900, ki: 30 } });
+      caso('(6c) memoriaDaLuta, extrasDaLuta e danoLevadoNaJanela: o chapéu esperando', 'extrasDaLuta', { luta: voando }, (a) => ({
+        memoria: E.memoriaDaLuta(a.luta),
+        extras: E.extrasDaLuta(a.luta),
+        dano: E.danoLevadoNaJanela(a.luta),
+      }));
+      caso('(6c) abrirLuta: com a recarga do chapéu na memória', 'abrirLuta', { estado: salaCom([bicho('zumbi')]), chegada: PERTO, memoria: { recargaDoChapeu: 777, ki: 90 } }, (a) =>
+        E.abrirLuta(a.estado, a.chegada, null, false, null, a.memoria));
     }
   }
 

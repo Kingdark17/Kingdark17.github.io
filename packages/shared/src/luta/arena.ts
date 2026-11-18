@@ -78,7 +78,7 @@ import { gravarMonstro, indicesDePe, limparSala, pagarAbate, perderLuta, prepara
 import { heroiNaLuta, lugaresNaLuta } from '../jogo/luta-no-mapa.js';
 import { podeUsar, usar } from '../jogo/mochila.js';
 import { aplicarRunas, RUNAS } from '../items/runas.js';
-import { aljavaNoArco, REGRAS_DAS_ALJAVAS } from '../items/pecas-secretas.js';
+import { aljavaNoArco, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
 import { defesasDoHeroi, escudoDoVigor } from '../items/encantamentos.js';
 import {
   criarLacaio,
@@ -103,6 +103,16 @@ import {
   contarParado,
   auraDeFera,
   aCadaGolpe,
+  atordoaNoChute,
+  criticoDaArma,
+  empurraoDoEmpurrao,
+  escudoDoRevestimento,
+  explosaoDaArma,
+  kusarigamaNaMao,
+  lancaNaMao,
+  passosPorCargaDaConcentracao,
+  podeLancarChapeu,
+  velocidadeDaArma,
   danoDoMago,
   golpeQuePrende,
   raizesFundas,
@@ -389,6 +399,25 @@ export interface MemoriaDaLuta {
   recargaDaMagia?: number;
   /** O ki do Monge que sobrou (rodada 4a: "o ki é preservado após a batalha se não for utilizado"). */
   ki?: number;
+  /** A espera do chapéu do espadachim (rodada 6c), em passos. */
+  recargaDoChapeu?: number;
+}
+
+/**
+ * O chapéu do espadachim voando (rodada 6c): onde está e o passo dele, se já
+ * bateu na parede e volta, quem ele já pegou nesta ida (ou nesta volta), o
+ * dano que o primeiro levou (os outros levam o mesmo) e os passos que ainda
+ * pode voar.
+ */
+export interface ChapeuNaSala {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  voltando?: boolean;
+  pegos: number[];
+  dano?: number;
+  vida: number;
 }
 
 /** Um monstro como o anfitrião o manda pro espelho. */
@@ -530,6 +559,9 @@ export interface Arena {
   relogioDaFlor?: number;
   /** A área de escuridão do Mago (rodada 5c). */
   escuridao?: EscuridaoNaSala;
+  /** O chapéu do espadachim voando, e a espera dele (rodada 6c). */
+  chapeu?: ChapeuNaSala;
+  recargaDoChapeu?: number;
 }
 
 export type FimDaLuta = 'vitoria' | 'derrota';
@@ -598,6 +630,8 @@ export interface EntradaDaLuta {
   corte?: boolean;
   /** O Florescimento no celular (rodada 5b): o botão 🌸 planta uma flor no pé do herói. */
   florescer?: boolean;
+  /** O Monge e o Espadachim (rodada 6c): apertou o chapéu do espadachim (vai rumo ao cursor, ou ao alvo). */
+  chapeu?: boolean;
   /** Em dupla, o anfitrião: o dano que o parceiro causou desde o último passo. */
   danoDeFora?: readonly { indice: number; dano: number }[];
   /** Em dupla, o convidado: o estado dos monstros que chegou do anfitrião neste passo. */
@@ -724,6 +758,7 @@ export function abrirLuta(
   if ((memoria.recargaDaFe ?? 0) > 0) arena.recargaDaFe = Math.trunc(memoria.recargaDaFe as number);
   if ((memoria.ki ?? 0) > 0) arena.ki = Math.min(REGRAS_DO_MONGE.tetoDoKi, Math.trunc(memoria.ki as number));
   if ((memoria.recargaDaMagia ?? 0) > 0) arena.recargaDaMagia = Math.trunc(memoria.recargaDaMagia as number);
+  if ((memoria.recargaDoChapeu ?? 0) > 0) arena.recargaDoChapeu = Math.trunc(memoria.recargaDoChapeu as number);
   return { luta: { estado: preparada.estado, arena, pet, teclado, fim: null, loot: null }, acontecimentos };
 }
 
@@ -749,6 +784,10 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
     if (l.arena.recargaDaMagia > 1) l.arena.recargaDaMagia -= 1;
     else delete l.arena.recargaDaMagia;
   }
+  if (l.arena.recargaDoChapeu !== undefined) {
+    if (l.arena.recargaDoChapeu > 1) l.arena.recargaDoChapeu -= 1;
+    else delete l.arena.recargaDoChapeu;
+  }
   if (l.arena.dupla) receberDoParceiro(l, entrada);
   if (l.fim) return fecharPasso(l);
 
@@ -764,6 +803,7 @@ export function passoDaLuta(luta: LutaEmTempoReal, entrada: EntradaDaLuta, rng: 
   else if (entrada.explodir) explodir(l);
   else if (entrada.magia) usarMagia(l);
   else if (entrada.corte) corteInvernal(l);
+  else if (entrada.chapeu) lancarChapeu(l, entrada);
   else if (entrada.florescer && l.arena.recarga <= 0) plantar(l, l.arena.heroi.x, l.arena.heroi.y);
   else if (entrada.item) usarItem(l, entrada.item);
 
@@ -858,6 +898,7 @@ function copiarArena(arena: Arena): Arena {
     ...(arena.moral ? { moral: { ...arena.moral } } : {}),
     ...(arena.danosLevados ? { danosLevados: arena.danosLevados.map((d) => ({ ...d })) } : {}),
     ...(arena.cristais ? { cristais: arena.cristais.map((c) => ({ ...c })) } : {}),
+    ...(arena.chapeu ? { chapeu: { ...arena.chapeu, pegos: [...arena.chapeu.pegos] } } : {}),
   };
 }
 
@@ -1164,9 +1205,9 @@ function alcancaOAliado(l: Luta, aliado: Aliado): boolean {
   return dx * dx + dy * dy <= limite * limite;
 }
 
-/** O evento do ataque, com a faixa do crítico da moral (o degrau 12 a alarga). */
+/** O evento do ataque, com a faixa do crítico da moral (o degrau 12 a alarga) e a da lança (rodada 6c). */
 function eventoComAMoral(l: Luta, evento: EventoDeArma): EventoDeArma {
-  const faixa = moralAqui(l).faixaCritica;
+  const faixa = moralAqui(l).faixaCritica + (contadores(l).criticoMaior ? REGRAS_DAS_ARMAS_NOVAS.faixaDaLanca : 0);
   return faixa > 0 ? { ...evento, faixa: (FAIXA_CRITICA * (100 + faixa)) / 100 } : evento;
 }
 
@@ -1319,6 +1360,8 @@ function golpear(l: Luta): void {
     apoiar(l, aberto.aliado, leitura);
     return;
   }
+  // A lança do Guerreiro (rodada 6c): a faixa maior já valeu neste evento; sorteia a do próximo.
+  sortearLanca(l);
   const doEvento = l.arena.monstros[aberto.alvo] as MonstroNaArena;
   const indice = doEvento.fase !== 'caido' ? doEvento.indice : alvoAtual(l);
   if (indice === null) return;
@@ -1363,10 +1406,15 @@ function golpear(l: Luta): void {
   apoiarAqui(l);
   vinhasNoMonstro(l, indice);
   golpeEmArea(l, indice, acerto.dano);
+  // A kusarigama do Monge (rodada 6c): a área 3 × 2 no alvo.
+  if (kusarigamaNaMao(heroDoGolpe) && !l.fim) areaDaKusarigama(l, indice, acerto.dano);
   if (estilo === 'empurrao') empurraoEmVolta(l, indice, acerto.dano);
   // O avanço do Paladino empurra o alvo que ficou de pé.
   const alvo = l.arena.monstros[indice] as MonstroNaArena;
   if (atordoarDepois && !l.fim && alvo.fase !== 'caido') atordoar(l, alvo, REGRAS_DO_ESPADACHIM.atordoa);
+  // O bastão no chute (rodada 6c): às vezes atordoa quem ficou de pé.
+  const chuteAtordoa = atordoaNoChute(heroDoGolpe);
+  if (chuteAtordoa > 0 && !l.fim && alvo.fase !== 'caido' && l.rng() * 100 < chuteAtordoa) atordoar(l, alvo);
   // Todo 9º golpe das Raízes prende o alvo (o chefe não).
   if (estilo === 'raizes' && golpeQuePrende(golpeDoDruida) && !l.fim) prender(l, alvo);
   // Os elementos do Mago (rodada 5c), no disparo que acertou.
@@ -1382,7 +1430,7 @@ function golpear(l: Luta): void {
  * Ladino, sem a passiva antiga da classe refeita). Acertou: o dano e se foi
  * crítico; senão `null`.
  */
-function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: LeituraDaMira, estilo: AttackStyle): { dano: number; critico: boolean } | null {
+function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: LeituraDaMira, estilo: AttackStyle, aMais = 0): { dano: number; critico: boolean } | null {
   const monstro = monstroNo(l, alvo.indice);
   let lida = leitura;
   if (jeitoDe(monstro).guarda && alvo.fase === 'descansando' && leitura.acerto) {
@@ -1398,9 +1446,11 @@ function acertarMonstro(l: Luta, alvo: MonstroNaArena, dado: number, leitura: Le
     ((l.arena.reforco ?? 0) > 0 ? REGRAS_DO_BARDO.forca : 0) +
     (l.arena.revestido ? REGRAS_DO_MONGE.danoRevestido : 0) +
     // O disparo do Mago com elemento (rodada 5c): a rocha, o Arcano, a orbe.
-    (estilo === 'magic' && idDaClasse(estado.hero) === 'mago' ? danoDoMago(estado.hero, contadores(l).golpes ?? 0) : 0);
+    (estilo === 'magic' && idDaClasse(estado.hero) === 'mago' ? danoDoMago(estado.hero, contadores(l).golpes ?? 0) : 0) +
+    aMais;
   const daClasse = criticoDaClasse(estado.hero);
-  const criticoAMais = moral.critico + criticoDoEstilo(estado.hero);
+  // O crítico a mais: o da moral, o do estilo e o do leque (rodada 6c).
+  const criticoAMais = moral.critico + criticoDoEstilo(estado.hero) + criticoDaArma(estado.hero);
   const critico = criticoAMais > 0 ? (daClasse ?? 1.6) + criticoAMais / 100 : daClasse;
   // O golpe sagrado do Clérigo num morto-vivo.
   const sagrado = idDaClasse(estado.hero) === 'clerigo' && estilo === 'magic' && mortoVivo(monstro.speciesId);
@@ -1809,6 +1859,7 @@ export function extrasDaLuta(luta: LutaEmTempoReal): ExtrasDaClasse {
   if ((a.recargaDaMagia ?? 0) > 0) extras.recargaDaMagia = a.recargaDaMagia as number;
   if (luta.estado.hero.bloqueioDaMagia) extras.magiaSelada = true;
   if ((a.flores?.length ?? 0) > 0) extras.flores = a.flores?.length as number;
+  if (podeLancarChapeu(luta.estado.hero)) extras.chapeu = a.recargaDoChapeu ?? 0;
   return extras;
 }
 
@@ -1819,6 +1870,7 @@ export function memoriaDaLuta(luta: LutaEmTempoReal): MemoriaDaLuta {
   if ((luta.arena.recargaDaFe ?? 0) > 0) memoria.recargaDaFe = luta.arena.recargaDaFe as number;
   if ((luta.arena.ki ?? 0) > 0) memoria.ki = luta.arena.ki as number;
   if ((luta.arena.recargaDaMagia ?? 0) > 0) memoria.recargaDaMagia = luta.arena.recargaDaMagia as number;
+  if ((luta.arena.recargaDoChapeu ?? 0) > 0) memoria.recargaDoChapeu = luta.arena.recargaDoChapeu as number;
   return memoria;
 }
 
@@ -2070,7 +2122,7 @@ function canalizar(l: Luta, entrada: EntradaDaLuta): void {
   const hero = masmorra(l).hero;
   const tipo = oQueCanaliza(hero);
   const parado = Math.trunc(entrada.x) === 0 && Math.trunc(entrada.y) === 0;
-  const agiu = !!(entrada.atacar || entrada.poder || entrada.item || entrada.fe || entrada.revestir || entrada.explodir);
+  const agiu = !!(entrada.atacar || entrada.poder || entrada.item || entrada.fe || entrada.revestir || entrada.explodir || entrada.chapeu);
   if (!tipo || !entrada.canalizar || !parado || agiu || arena.evento || arena.dupla?.fantasma) {
     delete arena.canal;
     delete arena.canalizando;
@@ -2121,7 +2173,7 @@ function passarOsEstilos(l: Luta): void {
   } else {
     const r = REGRAS_DA_CONCENTRACAO;
     const semGolpe = (c.semGolpe ?? 0) + 1;
-    if (semGolpe >= r.passosPorCarga) {
+    if (semGolpe >= passosPorCargaDaConcentracao(masmorra(l).hero)) {
       c.semGolpe = 0;
       c.cargas = Math.min(r.tetoDeCargas, (c.cargas ?? 0) + 1);
     } else c.semGolpe = semGolpe;
@@ -2148,7 +2200,7 @@ function empurraoEmVolta(l: Luta, alvo: number, dano: number): void {
   for (const m of pegos) {
     if (l.fim) return;
     if (m.fase === 'caido' || l.rng() * 100 >= r.chance) continue;
-    empurrar(l, m, heroi, 1);
+    empurrar(l, m, heroi, empurraoDoEmpurrao(masmorra(l).hero));
     atordoar(l, m);
   }
 }
@@ -2411,6 +2463,121 @@ function naEscuridao(l: Luta, m: MonstroNaArena | undefined): boolean {
   return Math.abs(m.corpoX - e.x) <= meio && Math.abs(m.corpoY - e.y) <= meio;
 }
 
+// ---------- as armas novas (rodada 6c: a kusarigama, a lança e o chapéu) ----------
+
+/** A kusarigama: quem está na área de 3 casas de largura e 2 de fundo no alvo (ele e a fileira atrás dele) leva o mesmo dano. */
+function areaDaKusarigama(l: Luta, alvo: number, dano: number): void {
+  const r = REGRAS_DAS_ARMAS_NOVAS;
+  const heroi = { x: l.arena.heroi.x, y: l.arena.heroi.y };
+  const centro = lugarDe(l, alvo);
+  const dx = centro.x - heroi.x;
+  const dy = centro.y - heroi.y;
+  const comprimento = Math.sqrt(dx * dx + dy * dy);
+  if (comprimento === 0) return;
+  const meiaLargura = (r.larguraDaKusarigama * TILE_UNITS) / 2;
+  const fundo = r.fundoDaKusarigama * TILE_UNITS - TILE_UNITS / 2;
+  const pegos: MonstroNaArena[] = [];
+  for (const m of l.arena.monstros) {
+    if (m.indice === alvo || m.fase === 'caido') continue;
+    const lugar = lugarDe(l, m.indice);
+    const px = lugar.x - centro.x;
+    const py = lugar.y - centro.y;
+    const ao = (px * dx + py * dy) / comprimento;
+    const fora = Math.abs(px * dy - py * dx) / comprimento;
+    if (ao >= -TILE_UNITS / 2 && ao <= fundo && fora <= meiaLargura) pegos.push(m);
+  }
+  for (const m of pegos) {
+    if (l.fim) return;
+    if (m.fase !== 'caido') ferirComDano(l, m.indice, dano, `⛓️-${dano}`);
+  }
+}
+
+/** A lança: o próximo golpe tem 10% de sair com a faixa do crítico maior (a deste já valeu). */
+function sortearLanca(l: Luta): void {
+  if (!lancaNaMao(masmorra(l).hero)) return;
+  const { criticoMaior: _antes, ...resto } = contadores(l);
+  const proximo = l.rng() * 100 < REGRAS_DAS_ARMAS_NOVAS.chanceDaLanca;
+  l.arena.classe = proximo ? { ...resto, criticoMaior: true } : resto;
+  if (proximo) contar(l, { tipo: 'aviso', texto: '🔱 Crítico maior no próximo golpe' });
+}
+
+/**
+ * O chapéu do espadachim sai da mão: gasta o ki, começa a espera e voa rumo
+ * ao cursor (no PC); sem cursor, ao alvo de agora; sem alvo, pra onde o herói
+ * olha.
+ */
+function lancarChapeu(l: Luta, entrada: EntradaDaLuta): void {
+  const r = REGRAS_DAS_ARMAS_NOVAS;
+  const hero = masmorra(l).hero;
+  if (!podeLancarChapeu(hero) || l.arena.chapeu || (l.arena.recargaDoChapeu ?? 0) > 0 || (l.arena.ki ?? 0) < r.kiDoChapeu) return;
+  const heroi = l.arena.heroi;
+  const alvo = alvoAtual(l);
+  const olhar: Record<string, { x: number; y: number }> = { N: { x: 0, y: -1 }, S: { x: 0, y: 1 }, E: { x: 1, y: 0 }, W: { x: -1, y: 0 } };
+  const para = entrada.cursor
+    ? { x: entrada.cursor.x - heroi.x, y: entrada.cursor.y - heroi.y }
+    : alvo !== null
+      ? { x: lugarDe(l, alvo).x - heroi.x, y: lugarDe(l, alvo).y - heroi.y }
+      : (olhar[heroi.facing ?? 'S'] ?? { x: 0, y: 1 });
+  const v = rumo(para.x, para.y, r.velocidadeDoChapeu);
+  const sobra = (l.arena.ki ?? 0) - r.kiDoChapeu;
+  if (sobra > 0) l.arena.ki = sobra;
+  else delete l.arena.ki;
+  l.arena.recargaDoChapeu = r.recargaDoChapeu;
+  l.arena.chapeu = { x: heroi.x, y: heroi.y, vx: v.x, vy: v.y, pegos: [], vida: r.vidaDoChapeu };
+  contar(l, { tipo: 'aviso', texto: '🎩 Chapéu!' });
+}
+
+/**
+ * Um passo do chapéu: na ida, em linha reta até bater na parede (ou no fim
+ * do voo), e aí volta rumo ao herói até a mão dele. Quem ele encosta (uma vez
+ * na ida e outra na volta) leva o golpe a 40% — o primeiro rola o golpe, os
+ * outros levam o mesmo dano.
+ */
+function moverChapeu(l: Luta): void {
+  const c = l.arena.chapeu;
+  if (!c) return;
+  const r = REGRAS_DAS_ARMAS_NOVAS;
+  const heroi = l.arena.heroi;
+  let vx = c.vx;
+  let vy = c.vy;
+  if (c.voltando) {
+    const dx = heroi.x - c.x;
+    const dy = heroi.y - c.y;
+    if (dx * dx + dy * dy <= r.velocidadeDoChapeu * r.velocidadeDoChapeu || c.vida <= 1) {
+      delete l.arena.chapeu;
+      return;
+    }
+    const v = rumo(dx, dy, r.velocidadeDoChapeu);
+    vx = v.x;
+    vy = v.y;
+  }
+  const x = c.x + vx;
+  const y = c.y + vy;
+  if (!c.voltando && (c.vida <= 1 || foraDoChao(l, x, y) || naParede(l, x, y))) {
+    l.arena.chapeu = { ...c, voltando: true, pegos: [], vida: c.vida - 1 };
+    return;
+  }
+  const chapeu: ChapeuNaSala = { ...c, x, y, vx, vy, pegos: [...c.pegos], vida: c.vida - 1 };
+  l.arena.chapeu = chapeu;
+  const hero = masmorra(l).hero;
+  for (let i = 0; i < l.arena.monstros.length; i++) {
+    if (l.fim) return;
+    const m = l.arena.monstros[i] as MonstroNaArena;
+    if (m.fase === 'caido' || chapeu.pegos.includes(m.indice)) continue;
+    const mx = m.corpoX - x;
+    const my = m.corpoY - y;
+    if (mx * mx + my * my > r.raioDoChapeu * r.raioDoChapeu) continue;
+    chapeu.pegos.push(m.indice);
+    if (chapeu.dano !== undefined) {
+      ferirComDano(l, m.indice, chapeu.dano, `🎩-${chapeu.dano}`);
+      continue;
+    }
+    const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
+    const acerto = acertarMonstro(l, m, dado, { acerto: true, forca: r.forcaDoChapeu / 100, critico: false }, estiloDoBotao(hero));
+    if (acerto) chapeu.dano = acerto.dano;
+  }
+}
+
 // ---------- as aljavas do Arqueiro (rodada 6b: paralisante, flamejante, explosiva) ----------
 
 /**
@@ -2599,8 +2766,10 @@ function explodir(l: Luta): void {
   if (naArea.length === 0) return;
   // O mais perto primeiro; no empate, a ordem da sala.
   naArea.sort((a, b) => a.distancia - b.distancia || a.m.indice - b.m.indice);
+  // Com dois leques (rodada 6c), a explosão empurra mais longe e bate mais forte.
+  const daArma = explosaoDaArma(hero);
   const dado = 1 + randomInt(LADOS_DO_DANO, l.rng);
-  const acerto = acertarMonstro(l, (naArea[0] as { m: MonstroNaArena }).m, dado, { acerto: true, forca: forcaDaExplosao(ki), critico: false }, estiloDoBotao(hero));
+  const acerto = acertarMonstro(l, (naArea[0] as { m: MonstroNaArena }).m, dado, { acerto: true, forca: forcaDaExplosao(ki), critico: false }, estiloDoBotao(hero), daArma.dano);
   if (!acerto || l.fim) return;
   for (let k = 1; k < naArea.length; k++) {
     if (l.fim) return;
@@ -2609,7 +2778,7 @@ function explodir(l: Luta): void {
   }
   for (const { m } of naArea) {
     if (l.fim) return;
-    if (m.fase !== 'caido') empurrar(l, m, heroi, r.empurraNaExplosao);
+    if (m.fase !== 'caido') empurrar(l, m, heroi, daArma.empurra);
   }
 }
 
@@ -2792,7 +2961,8 @@ function moverHeroi(l: Luta, entrada: EntradaDaLuta): Walker {
   const fundas = idDoEstilo(masmorra(l).hero) === 'raizes' && raizesFundas(contadores(l).golpes ?? 0) ? REGRAS_DAS_RAIZES.velocidade : 0;
   // E a ventania do Vento (rodada 5c).
   const ventania = (contadores(l).ventania ?? 0) > 0 ? REGRAS_DO_VENTO.velocidade : 0;
-  const daMais = daMoral + fundas + ventania;
+  // Os dois leques do Monge (rodada 6c).
+  const daMais = daMoral + fundas + ventania + velocidadeDaArma(masmorra(l).hero);
   const velocidade = daMais > 0 ? Math.trunc((base * (100 + daMais)) / 100) : base;
   return walkTick(planta, heroi, { x: entrada.x, y: entrada.y }, velocidade).walker;
 }
@@ -2813,6 +2983,8 @@ function passoDoMundo(l: Luta, entrada: EntradaDaLuta): void {
   passarOsEstilos(l);
   passarAsFlores(l);
   canalizar(l, entrada);
+  moverChapeu(l);
+  if (l.fim) return;
   if (arena.recarga > 0) arena.recarga -= 1;
   if (arena.recargaDoItem > 0) arena.recargaDoItem -= 1;
   if (arena.intervalo > 0) arena.intervalo -= 1;
@@ -3169,7 +3341,7 @@ function golpeNoHeroi(l: Luta, indice: number, forca: number): void {
   const moral = moralAqui(l);
   // O revestimento de ki do Monge segura parte deste golpe, e quebra.
   const revestido = !!l.arena.revestido;
-  const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia + (revestido ? REGRAS_DO_MONGE.escudoRevestido : 0);
+  const resistencia = resistenciaDaClasse(estado.hero, c) + moral.resistencia + (revestido ? escudoDoRevestimento(estado.hero) : 0);
   const dano = resistencia > 0 ? Math.max(1, golpe.damage - Math.floor((golpe.damage * resistencia) / 100)) : golpe.damage;
   const ferido = resistencia > 0 ? { ...golpe.hero, hp: Math.max(0, estado.hero.hp - dano) } : golpe.hero;
   let hero = noEscudo(l, estado.hero.hp, ferido, dano);

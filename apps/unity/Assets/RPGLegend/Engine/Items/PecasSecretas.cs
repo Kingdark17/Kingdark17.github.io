@@ -26,6 +26,35 @@ namespace RPGLegend.Engine
         [JsName("VIDA_COM_A_ARMA_DO_MONGE")] public double VidaComAArmaDoMonge;
         [JsName("REGRAS_DAS_ALJAVAS")] public RegrasDasAljavas RegrasDasAljavas;
         [JsName("ALJAVAS")] public List<string> Aljavas = new List<string>();
+        [JsName("REGRAS_DAS_ARMAS_NOVAS")] public RegrasDasArmasNovas RegrasDasArmasNovas;
+    }
+
+    /// <summary>TS: REGRAS_DAS_ARMAS_NOVAS — as armas novas na luta do app (rodada 6c).</summary>
+    public sealed class RegrasDasArmasNovas
+    {
+        public double AlcanceDoBastao;
+        public double AtordoaNoChute;
+        public double KiComOBastao;
+        public double PassosPorCargaComOBastao;
+        public double CriticoDoLeque;
+        public double EmpurraoDoLeque;
+        public double VelocidadeComDoisLeques;
+        public double EmpurraoDaExplosaoComDoisLeques;
+        public double ExplosaoComDoisLeques;
+        public double AlcanceDaKusarigama;
+        public double LarguraDaKusarigama;
+        public double FundoDaKusarigama;
+        public double EscudoComAKusarigama;
+        public double AlcanceDaLanca;
+        public double ChanceDaLanca;
+        public double FaixaDaLanca;
+        public double DanoDoGuerreiro;
+        public double KiDoChapeu;
+        public double RecargaDoChapeu;
+        public double ForcaDoChapeu;
+        public double VelocidadeDoChapeu;
+        public double RaioDoChapeu;
+        public double VidaDoChapeu;
     }
 
     /// <summary>TS: REGRAS_DAS_ALJAVAS — as aljavas na luta do app (rodada 6b).</summary>
@@ -70,6 +99,16 @@ namespace RPGLegend.Engine
         public static double ChanceDoChapeu => D.ChanceDoChapeu;
         public static string Raridade => D.Raridade;
         public static RegrasDasAljavas RegrasDasAljavas => D.RegrasDasAljavas;
+        public static RegrasDasArmasNovas RegrasDasArmasNovas => D.RegrasDasArmasNovas;
+
+        /// <summary>TS: naMao — a peça numa das mãos.</summary>
+        public static bool NaMao(string arma, string secundaria, string id) => arma == id || secundaria == id;
+
+        /// <summary>TS: comDoisLeques — um leque em cada mão.</summary>
+        public static bool ComDoisLeques(string arma, string secundaria) => arma == "leque" && secundaria == "leque";
+
+        /// <summary>TS: comOChapeu — o chapéu do espadachim no acessório.</summary>
+        public static bool ComOChapeu(string acessorio) => acessorio != null && acessorio == D.ChapeuDoEspadachim;
 
         /// <summary>TS: aljavaNoArco — a aljava ao lado do arco: o modelo dela, com o arco na mão e uma aljava na secundária; senão null.</summary>
         public static string AljavaNoArco(string arma, string secundaria)

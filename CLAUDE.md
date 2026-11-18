@@ -731,8 +731,31 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   estouros, o alvo da flecha já conta um). No espelho, o que o convidado faz
   nos monstros não passa pro anfitrião (o dano passa). No app, o incêndio
   toca o fogo pequeno e quem explode, o estouro.
-  Falta, nesta ordem: os efeitos das armas do Monge, da lança e do chapéu
-  (6c); o Caçador.
+  Rodada 6c, **as armas do Monge, a lança e o chapéu** (2026-11-18, decidido
+  com o usuário; regras em `REGRAS_DAS_ARMAS_NOVAS`, `items/pecas-secretas.ts`,
+  os números em `classes-de-luta.ts`, o que junta na luta em `luta/arena.ts`):
+  cada arma vale pra classe dona dela, e **o alcance dela soma ao do estilo**
+  (`alcanceDaArma`: chute de bastão 8, Concentração de kusarigama 6). O
+  **bastão** dá +3 de alcance, ki 15/s segurando K e carga da Concentração a
+  cada 2 s, e no estilo Dash o chute que acerta atordoa 30% das vezes. O
+  **leque** (em qualquer mão) soma +20% no crítico e, no estilo Empurrão,
+  empurra 3 blocos; **dois leques** dão +20% de velocidade e a explosão de ki
+  empurra 2 blocos e bate +30%. A **kusarigama** dá +4 de alcance, o golpe
+  pega também a área de 3 de largura e 2 de fundo **no alvo** (ele e a
+  fileira atrás, com o dano inteiro; `areaDaKusarigama`), e o revestimento de
+  ki segura 50%. A **lança** dá +1 de alcance, e a cada golpe 10% de o
+  próximo ter a faixa do crítico 30% maior (`ContadoresDaClasse.criticoMaior`,
+  sorteado em `golpear`, usado em `eventoComAMoral`); o **Guerreiro de lança
+  ou de chapéu bate +10%** (sem somar, só na arena). O **chapéu do
+  espadachim** é de quem junta ki (**o Monge e o Espadachim**;
+  `podeLancarChapeu`): o botão 🎩 (tecla E) gasta 50 de ki e espera 40 s
+  (`recargaDoChapeu`, na memória do app como a da Magia), e o chapéu
+  (`Arena.chapeu`) voa rumo ao cursor (sem cursor, ao alvo) até a parede e
+  volta pra mão, acertando cada um na ida e outra vez na volta, a 40% do
+  golpe (o primeiro rola o golpe, os outros levam o mesmo dano). No app, o
+  chapéu voando é a arte do item girando na tinta da sala, e com sete
+  botões o arco abre mais (`AngulosDosBotoesSete`).
+  Falta: o Caçador.
 - Doc do Breno de 2026-11-13 (aba "arrumar"), decidido com o usuário:
   **empilhamento só na tela**, no site e no app: as peças iguais da mochila
   (e da venda da loja) viram uma carta "×5" (`empilhar`/`mesmaPeca` em

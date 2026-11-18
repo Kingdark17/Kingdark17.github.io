@@ -570,7 +570,7 @@ export const TEMPLATES: readonly ItemTemplate[] = [
     name: 'Chapéu do Espadachim',
     genero: 'm',
     category: 'acessorio',
-    desc: 'Aba larga e pena. No app, quem junta ki pode lançá-lo: ele corta todos no caminho até a parede e volta.',
+    desc: 'Aba larga e pena. No app, quem junta ki pode lançá-lo (50 de ki): ele corta todos no caminho até a parede e volta. O Guerreiro bate 10% mais com ele.',
     sprite: 'accessories/chapeu_espadachim.png',
     base: { esquiva: 4, critico: 4 },
     value: 706,

@@ -21,7 +21,7 @@
  */
 
 import { idDaClasse, type IdentidadeDeClasse } from './catalog.js';
-import { aljavaNoArco, REGRAS_DAS_ALJAVAS } from '../items/pecas-secretas.js';
+import { aljavaNoArco, comDoisLeques, comOChapeu, naMao, REGRAS_DAS_ALJAVAS, REGRAS_DAS_ARMAS_NOVAS } from '../items/pecas-secretas.js';
 import {
   idDoEstilo,
   REGRAS_DA_AGUA,
@@ -92,7 +92,7 @@ export function ataqueDasMaos(quem: QuemLuta & { level?: number }): number {
 }
 
 export interface QuemLuta extends QuemTemEstilo {
-  equip?: { arma?: { templateId: string } | null; secundaria?: { templateId: string } | null } | null;
+  equip?: { arma?: { templateId: string } | null; secundaria?: { templateId: string } | null; acessorio?: { templateId: string } | null } | null;
 }
 
 /** Os números da classe do herói; sem classe (ou uma que o texto não traz), os do padrão. */
@@ -103,6 +103,11 @@ export function classeDeLuta(quem: IdentidadeDeClasse): ClasseDeLuta {
 
 /** O alcance do ataque comum do herói, em blocos: o da classe, o da arma pesada no Bárbaro, o da arma sem classe. */
 export function alcanceDoHeroi(quem: QuemLuta): number {
+  return alcanceSemAPeca(quem) + alcanceDaArma(quem);
+}
+
+/** O alcance da classe e do estilo, sem o que a peça nova soma (`alcanceDaArma`). */
+function alcanceSemAPeca(quem: QuemLuta): number {
   const id = idDaClasse(quem);
   const arma = quem.equip?.arma?.templateId ?? '';
   if (id === 'barbaro') return ALCANCE_DO_BARBARO[arma] ?? (CLASSES_DE_LUTA.barbaro as ClasseDeLuta).alcance;
@@ -114,8 +119,21 @@ export function alcanceDoHeroi(quem: QuemLuta): number {
   // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
   if (estilo === 'metamorfose') return REGRAS_DA_METAMORFOSE.alcance;
   if (estilo === 'florescimento') return REGRAS_DO_FLORESCIMENTO.alcance;
-  // A aljava ao lado do arco (rodada 6b) dá 1 bloco a mais.
-  return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance + (aljavaNoArco(quem) ? REGRAS_DAS_ALJAVAS.alcance : 0);
+  return (CLASSES_DE_LUTA[id] as ClasseDeLuta).alcance;
+}
+
+/**
+ * O alcance a mais (em blocos) da peça nova, somado ao do estilo: a aljava
+ * ao lado do arco (rodada 6b, qualquer classe), o bastão e a kusarigama do
+ * Monge e a lança do Guerreiro (6c).
+ */
+export function alcanceDaArma(quem: QuemLuta): number {
+  const r = REGRAS_DAS_ARMAS_NOVAS;
+  let mais = aljavaNoArco(quem) ? REGRAS_DAS_ALJAVAS.alcance : 0;
+  if (mongeCom(quem, 'bastao')) mais += r.alcanceDoBastao;
+  if (mongeCom(quem, 'kusarigama')) mais += r.alcanceDaKusarigama;
+  if (lancaNaMao(quem)) mais += r.alcanceDaLanca;
+  return mais;
 }
 
 /** A mana máxima com a classe: a de sempre vezes a % dela, arredondada (o Mago guarda +20%). */
@@ -331,12 +349,72 @@ export function oQueCanaliza(quem: QuemTemEstilo): 'mana' | 'ki' | null {
   return id === 'monge' ? 'ki' : null;
 }
 
-/** Quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s). */
-export function passosDoCanal(quem: QuemTemEstilo): number {
+/** Quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s); o Monge de bastão, mais depressa (15/s). */
+export function passosDoCanal(quem: QuemLuta): number {
   const tipo = oQueCanaliza(quem);
   if (!tipo) return 0;
   if (idDaClasse(quem) === 'guerreiro') return Math.trunc(60 / REGRAS_DO_ESPADACHIM.kiPorSegundo);
+  if (tipo === 'ki' && mongeCom(quem, 'bastao')) return Math.trunc(60 / REGRAS_DAS_ARMAS_NOVAS.kiComOBastao);
   return passosPorPonto(tipo);
+}
+
+// ---------- as armas novas (rodada 6c: bastão, leque, kusarigama, lança, chapéu) ----------
+
+/** O Monge com a peça `id` numa das mãos. */
+function mongeCom(quem: QuemLuta, id: string): boolean {
+  return idDaClasse(quem) === 'monge' && naMao(quem, id);
+}
+
+/** O crítico a mais da arma, em pontos de % do multiplicador: o Monge de leque, +20. */
+export function criticoDaArma(quem: QuemLuta): number {
+  return mongeCom(quem, 'leque') ? REGRAS_DAS_ARMAS_NOVAS.criticoDoLeque : 0;
+}
+
+/** Os passos sem golpear por carga da Concentração: com o bastão, 50% mais rápido. */
+export function passosPorCargaDaConcentracao(quem: QuemLuta): number {
+  return mongeCom(quem, 'bastao') ? REGRAS_DAS_ARMAS_NOVAS.passosPorCargaComOBastao : REGRAS_DA_CONCENTRACAO.passosPorCarga;
+}
+
+/** Quantos blocos o estilo Empurrão empurra: 1, e com o leque mais 2. */
+export function empurraoDoEmpurrao(quem: QuemLuta): number {
+  return 1 + (mongeCom(quem, 'leque') ? REGRAS_DAS_ARMAS_NOVAS.empurraoDoLeque : 0);
+}
+
+/** A velocidade a mais (%) na arena: o Monge com dois leques. */
+export function velocidadeDaArma(quem: QuemLuta): number {
+  return idDaClasse(quem) === 'monge' && comDoisLeques(quem) ? REGRAS_DAS_ARMAS_NOVAS.velocidadeComDoisLeques : 0;
+}
+
+/** A explosão de ki: quantos blocos empurra, e o dano a mais (%); com dois leques, mais longe e mais forte. */
+export function explosaoDaArma(quem: QuemLuta): { empurra: number; dano: number } {
+  const r = REGRAS_DAS_ARMAS_NOVAS;
+  const dois = idDaClasse(quem) === 'monge' && comDoisLeques(quem);
+  return { empurra: dois ? r.empurraoDaExplosaoComDoisLeques : REGRAS_DO_MONGE.empurraNaExplosao, dano: dois ? r.explosaoComDoisLeques : 0 };
+}
+
+/** O tanto (%) que o revestimento de ki segura do próximo golpe: com a kusarigama, 50. */
+export function escudoDoRevestimento(quem: QuemLuta): number {
+  return mongeCom(quem, 'kusarigama') ? REGRAS_DAS_ARMAS_NOVAS.escudoComAKusarigama : REGRAS_DO_MONGE.escudoRevestido;
+}
+
+/** A chance (%) de o chute atordoar quem ficou de pé: o Monge de bastão no estilo Dash. */
+export function atordoaNoChute(quem: QuemLuta): number {
+  return idDoEstilo(quem) === 'chute' && mongeCom(quem, 'bastao') ? REGRAS_DAS_ARMAS_NOVAS.atordoaNoChute : 0;
+}
+
+/** O Monge de kusarigama: o golpe pega a área 3 × 2 no alvo. */
+export function kusarigamaNaMao(quem: QuemLuta): boolean {
+  return mongeCom(quem, 'kusarigama');
+}
+
+/** O Guerreiro de lança. */
+export function lancaNaMao(quem: QuemLuta): boolean {
+  return idDaClasse(quem) === 'guerreiro' && naMao(quem, 'lanca');
+}
+
+/** Quem lança o chapéu do espadachim: quem junta ki (o Monge e o Espadachim) e está com ele. */
+export function podeLancarChapeu(quem: QuemLuta): boolean {
+  return oQueCanaliza(quem) === 'ki' && comOChapeu(quem);
 }
 
 /** O crítico a mais do estilo, em pontos de % (o Cavaleiro +30, o chute +40); os outros, 0. */
@@ -493,6 +571,8 @@ export interface ContadoresDaClasse {
   ventania?: number;
   /** A aljava ao lado do arco (rodada 6b): as flechas que já acertaram nesta luta. */
   flechadas?: number;
+  /** A lança do Guerreiro (rodada 6c): o próximo golpe sai com a faixa do crítico maior. */
+  criticoMaior?: boolean;
 }
 
 /** A classe já foi refeita pelo doc do Breno: na arena ela fica sem a passiva antiga do site. */
@@ -528,7 +608,8 @@ export function bonusDoAtaque(quem: QuemLuta, c: ContadoresDaClasse, alvo: { col
     case 'arqueiro':
       return danoDaDistancia(alvo.blocos ?? 0, c.parado ?? 0);
     case 'guerreiro':
-      return (alvo.colado ? REGRAS_DO_GUERREIRO.colado : 0) + (c.combo ?? 0);
+      // A lança ou o chapéu (rodada 6c): +10%, sem somar.
+      return (alvo.colado ? REGRAS_DO_GUERREIRO.colado : 0) + (c.combo ?? 0) + (naMao(quem, 'lanca') || comOChapeu(quem) ? REGRAS_DAS_ARMAS_NOVAS.danoDoGuerreiro : 0);
     case 'druida':
       return danoDoDruida(quem, c.golpes ?? 0);
     case 'monge': {
@@ -738,6 +819,8 @@ export interface ExtrasDaClasse {
   /** Necromante: quanto falta pra Magia Proibida voltar, e se ela está selada até zerar a masmorra. */
   recargaDaMagia?: number;
   magiaSelada?: boolean;
+  /** O chapéu do espadachim (rodada 6c), de quem pode lançá-lo: quanto falta pra ele voltar (0, pronto). */
+  chapeu?: number;
 }
 
 /** Passos em segundos, arredondando pra cima; e em "m:ss" a partir de um minuto. */
@@ -751,14 +834,15 @@ function tempo(passos: number): string {
  * a fúria, a absorção, a mira firme do Arqueiro, o Poder da fé, a espera do
  * Druida — e a moral do grupo, de quem tiver. Sem nada a mostrar, vazia.
  */
-export function textosDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse = {}): string[] {
+export function textosDaClasse(quem: QuemLuta & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse = {}): string[] {
   const textos = textosSoDaClasse(quem, c, extras);
   if (extras.canalizando) textos.push(oQueCanaliza(quem) === 'ki' ? '🌀 Juntando ki' : '🌀 Puxando mana');
+  if (extras.chapeu !== undefined) textos.push(extras.chapeu > 0 ? `🎩 Chapéu em ${tempo(extras.chapeu)}` : '🎩 Chapéu pronto');
   if ((extras.moral ?? 0) > 0) textos.push(`🎵 Moral ${extras.moral}`);
   return textos;
 }
 
-function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse): string[] {
+function textosSoDaClasse(quem: QuemLuta & { hp: number; maxHp: number }, c: ContadoresDaClasse, extras: ExtrasDaClasse): string[] {
   switch (idDaClasse(quem)) {
     case 'arqueiro': {
       const textos = [(c.parado ?? 0) >= REGRAS_DO_ARQUEIRO.parado ? '🏹 Mira firme' : '🏹 Fique parado pra mirar'];
@@ -825,6 +909,7 @@ function textosSoDaClasse(quem: IdentidadeDeClasse & { hp: number; maxHp: number
       const resistencia = resistenciaDaClasse(quem, c);
       const combo = `⚔️ Combo +${c.combo ?? 0}% · ${c.seguidos ?? 0}/${REGRAS_DO_GUERREIRO.criticosDoCombo}`;
       const textos = resistencia > 0 ? [combo, `🛡️ Resistência ${resistencia}%`] : [combo];
+      if (c.criticoMaior) textos.push('🔱 Crítico maior');
       // O Espadachim: o avanço e o ki do Corte Invernal.
       if (idDoEstilo(quem as QuemTemEstilo) === 'espadachim') {
         textos.push((c.recargaDoEstilo ?? 0) > 0 ? `🗡️ Avanço em ${tempo(c.recargaDoEstilo as number)}` : '🗡️ Avanço pronto');

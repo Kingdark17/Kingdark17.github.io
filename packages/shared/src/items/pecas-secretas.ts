@@ -139,3 +139,69 @@ export function aljavaNoArco(quem: { equip?: { arma?: { templateId?: string } | 
   const aljava = quem.equip?.secundaria?.templateId;
   return aljava && ALJAVAS.includes(aljava) ? aljava : null;
 }
+
+/**
+ * As armas novas na luta do app (rodada 6c, decidido com o usuário): cada uma
+ * vale pra classe dona dela (as do Monge pro Monge, a lança pro Guerreiro), e
+ * o alcance dela soma ao do estilo.
+ *
+ * - **Bastão** (duas mãos): +3 de alcance; no estilo Dash, o chute que
+ *   acerta atordoa 30% das vezes; o ki (segurando K) e as cargas da
+ *   Concentração vêm 50% mais rápido.
+ * - **Leque** (em qualquer mão): +20% no multiplicador do crítico; no estilo
+ *   Empurrão, o empurrão vai 2 blocos mais longe. Com **dois leques**: +20% de
+ *   velocidade, e a explosão de ki empurra 2 blocos e bate 30% mais forte.
+ * - **Kusarigama** (duas mãos): +4 de alcance; o golpe pega também uma área de
+ *   3 casas de largura e 2 de fundo no alvo (ele e a fileira atrás dele), com
+ *   o dano inteiro; o revestimento de ki segura 50% (e não 30%).
+ * - **Lança**: +1 de alcance; a cada golpe, 10% de o próximo ter a faixa do
+ *   crítico 30% maior. O Guerreiro de lança ou de chapéu bate +10% (não soma).
+ * - **Chapéu do espadachim** (o Monge e o Espadachim, que juntam ki): o botão
+ *   gasta 50 de ki e espera 40 s; o chapéu voa até a parede e volta pro herói,
+ *   acertando quem está no caminho na ida e outra vez na volta, a 40% do golpe
+ *   (o primeiro que ele pega leva o golpe, os outros o mesmo dano).
+ */
+export const REGRAS_DAS_ARMAS_NOVAS = {
+  alcanceDoBastao: 3,
+  atordoaNoChute: 30,
+  kiComOBastao: 15,
+  passosPorCargaComOBastao: 120,
+  criticoDoLeque: 20,
+  empurraoDoLeque: 2,
+  velocidadeComDoisLeques: 20,
+  empurraoDaExplosaoComDoisLeques: 2,
+  explosaoComDoisLeques: 30,
+  alcanceDaKusarigama: 4,
+  larguraDaKusarigama: 3,
+  fundoDaKusarigama: 2,
+  escudoComAKusarigama: 50,
+  alcanceDaLanca: 1,
+  chanceDaLanca: 10,
+  faixaDaLanca: 30,
+  danoDoGuerreiro: 10,
+  kiDoChapeu: 50,
+  recargaDoChapeu: 2400,
+  forcaDoChapeu: 40,
+  velocidadeDoChapeu: 128,
+  raioDoChapeu: 576,
+  vidaDoChapeu: 600,
+} as const;
+
+type ComEquipamento = {
+  equip?: { arma?: { templateId?: string } | null; secundaria?: { templateId?: string } | null; acessorio?: { templateId?: string } | null } | null;
+};
+
+/** A peça `id` numa das mãos. */
+export function naMao(quem: ComEquipamento, id: string): boolean {
+  return quem.equip?.arma?.templateId === id || quem.equip?.secundaria?.templateId === id;
+}
+
+/** Um leque em cada mão. */
+export function comDoisLeques(quem: ComEquipamento): boolean {
+  return quem.equip?.arma?.templateId === 'leque' && quem.equip?.secundaria?.templateId === 'leque';
+}
+
+/** O chapéu do espadachim no acessório. */
+export function comOChapeu(quem: ComEquipamento): boolean {
+  return quem.equip?.acessorio?.templateId === CHAPEU_DO_ESPADACHIM;
+}

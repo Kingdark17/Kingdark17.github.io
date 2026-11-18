@@ -39,6 +39,10 @@ namespace RPGLegend.Game.Jogo
         private const float RaioDosBotoesSeis = 180f;
         private static readonly float[] AngulosDosBotoesSeis = { 186f, 166f, 146f, 126f, 106f, 86f };
 
+        /// <summary>Com sete (o Monge de chapéu, rodada 6c: mais o chapéu do espadachim), mais ainda.</summary>
+        private const float RaioDosBotoesSete = 222f;
+        private static readonly float[] AngulosDosBotoesSete = { 182f, 166f, 150f, 134f, 118f, 102f, 86f };
+
         /// <summary>Quantos botões de poder cabem em volta do ataque.</summary>
         private const int PoderesNoArco = 4;
 
@@ -62,6 +66,9 @@ namespace RPGLegend.Game.Jogo
         /// <summary>O Florescimento no celular (rodada 5b): o botão planta uma flor no pé do herói (no PC, o ataque no chão vazio).</summary>
         private Button _botaoFlor;
         private bool _florNoArco;
+        /// <summary>O chapéu do espadachim (rodada 6c): o Monge e o Espadachim com ele lançam com 50 de ki (tecla E).</summary>
+        private Button _botaoChapeu;
+        private bool _chapeuNoArco;
         private EventoNaTela _eventoNaTela;
         private PalcoDaLuta _palcoDaLuta;
         private Button _botaoDoBicho;
@@ -71,7 +78,7 @@ namespace RPGLegend.Game.Jogo
         // O que a pessoa fez desde o último passo: entra no primeiro passo do quadro.
         private bool _apertou, _soltou, _tocou;
         private string _poderApertado, _itemUsado, _tecla, _mirarAliado;
-        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte, _apertouFlor;
+        private bool _apertouFe, _apertouRevestir, _apertouExplodir, _apertouMagia, _apertouCorte, _apertouFlor, _apertouChapeu;
         private int? _mirar;
         private DedoNoDesenho _dedoNoDesenho;
         private int? _dedoDoDesenho;
@@ -174,6 +181,7 @@ namespace RPGLegend.Game.Jogo
             _botaoMagia = BotaoDaClasse("☠️", "MAGIA", () => _apertouMagia = true);
             _botaoCorte = BotaoDaClasse("❄️", "300", () => _apertouCorte = true);
             _botaoFlor = BotaoDaClasse("🌸", "FLOR", () => _apertouFlor = true);
+            _botaoChapeu = BotaoDaClasse("🎩", "50", () => _apertouChapeu = true);
 
             // Segurar K: um botão que vale enquanto o dedo (ou o mouse) estiver nele.
             _botaoK = new VisualElement();
@@ -332,13 +340,14 @@ namespace RPGLegend.Game.Jogo
                 Magia = _apertouMagia ? true : (bool?)null,
                 Corte = _apertouCorte ? true : (bool?)null,
                 Florescer = _apertouFlor ? true : (bool?)null,
+                Chapeu = _apertouChapeu ? true : (bool?)null,
                 // Segurar K: a tecla (no PC) ou o botão de segurar.
                 Canalizar = SegurandoK() ? true : (bool?)null,
                 // No PC o alvo do ataque é o cursor (doc do Breno de 2026-11-15); fora da sala ou no celular, o mais perto.
                 Cursor = _palcoDaLuta.CursorNaSala(),
             };
             EntradaDaDupla(entrada);
-            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = _apertouCorte = _apertouFlor = false;
+            _apertou = _soltou = _tocou = _apertouFe = _apertouRevestir = _apertouExplodir = _apertouMagia = _apertouCorte = _apertouFlor = _apertouChapeu = false;
             _poderApertado = null;
             _itemUsado = null;
             _tecla = null;
@@ -359,6 +368,7 @@ namespace RPGLegend.Game.Jogo
             if (teclado.gKey.wasPressedThisFrame && _kiNoArco) _apertouExplodir = true;
             if (teclado.fKey.wasPressedThisFrame && _magiaNoArco) _apertouMagia = true;
             if (teclado.fKey.wasPressedThisFrame && _corteNoArco) _apertouCorte = true;
+            if (teclado.eKey.wasPressedThisFrame && _chapeuNoArco) _apertouChapeu = true;
             if (teclado.tabKey.wasPressedThisFrame) _mirar = ProximoAlvo(luta.Arena);
             var digitos = new[] { teclado.digit1Key, teclado.digit2Key, teclado.digit3Key };
             for (int i = 0; i < digitos.Length && i < _botoesDePoder.Count; i++)
@@ -497,6 +507,17 @@ namespace RPGLegend.Game.Jogo
                 PosicionarEmVolta();
             }
             if (flor) _botaoFlor.EnableInClassList("sem-mana", arena.Recarga > 0 || arena.Evento != null);
+            // O chapéu do espadachim (rodada 6c): apagado sem os 50 de ki, na espera ou voando.
+            bool chapeu = ClassesDeLuta.PodeLancarChapeu(hero);
+            if (chapeu != _chapeuNoArco)
+            {
+                _chapeuNoArco = chapeu;
+                _botaoChapeu.style.display = chapeu ? DisplayStyle.Flex : DisplayStyle.None;
+                PosicionarEmVolta();
+            }
+            if (chapeu)
+                _botaoChapeu.EnableInClassList("sem-mana",
+                    arena.Chapeu != null || (arena.RecargaDoChapeu ?? 0) > 0 || (arena.Ki ?? 0) < PecasSecretas.RegrasDasArmasNovas.KiDoChapeu);
             if (ki)
             {
                 var monge = GameData.ClassesDeLutaTable.Monge;
@@ -557,12 +578,14 @@ namespace RPGLegend.Game.Jogo
             if (_magiaNoArco) botoes.Add(_botaoMagia);
             if (_corteNoArco) botoes.Add(_botaoCorte);
             if (_florNoArco) botoes.Add(_botaoFlor);
+            if (_chapeuNoArco) botoes.Add(_botaoChapeu);
             botoes.Add(_botaoItem);
             // O centro do botão de ataque fica a 54 px do canto de baixo à direita; cada botão em volta tem 62 px.
+            bool sete = botoes.Count > AngulosDosBotoesSeis.Length;
             bool seis = botoes.Count > AngulosDosBotoesLargo.Length;
             bool largo = botoes.Count > AngulosDosBotoes.Length;
-            var angulos = seis ? AngulosDosBotoesSeis : largo ? AngulosDosBotoesLargo : AngulosDosBotoes;
-            float raio = seis ? RaioDosBotoesSeis : largo ? RaioDosBotoesLargo : RaioDosBotoes;
+            var angulos = sete ? AngulosDosBotoesSete : seis ? AngulosDosBotoesSeis : largo ? AngulosDosBotoesLargo : AngulosDosBotoes;
+            float raio = sete ? RaioDosBotoesSete : seis ? RaioDosBotoesSeis : largo ? RaioDosBotoesLargo : RaioDosBotoes;
             for (int i = 0; i < botoes.Count && i < angulos.Length; i++)
             {
                 float angulo = angulos[i] * Mathf.Deg2Rad;

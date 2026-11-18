@@ -167,6 +167,15 @@ namespace RPGLegend.Engine
         /// <summary>Necromante: quanto falta pra Magia Proibida voltar, e se ela está selada.</summary>
         public double? RecargaDaMagia;
         public bool? MagiaSelada;
+        /// <summary>O chapéu do espadachim (rodada 6c), de quem pode lançá-lo: quanto falta pra ele voltar (0, pronto).</summary>
+        public double? Chapeu;
+    }
+
+    /// <summary>TS: o retorno de explosaoDaArma — quantos blocos a explosão de ki empurra, e o dano a mais (%).</summary>
+    public sealed class ExplosaoComAArma
+    {
+        public double Empurra;
+        public double Dano;
     }
 
     /// <summary>TS: REGRAS_DO_GUERREIRO — colado no alvo, o combo e a resistência pela vida que falta.</summary>
@@ -243,6 +252,8 @@ namespace RPGLegend.Engine
         public double? Ventania;
         /// <summary>A aljava ao lado do arco (rodada 6b): as flechas que já acertaram nesta luta.</summary>
         public double? Flechadas;
+        /// <summary>A lança do Guerreiro (rodada 6c): o próximo golpe sai com a faixa do crítico maior.</summary>
+        public bool? CriticoMaior;
 
         public ContadoresDaClasse Clone() => (ContadoresDaClasse)MemberwiseClone();
     }
@@ -298,7 +309,11 @@ namespace RPGLegend.Engine
         /// estilos do Monge (o chute vai longe, a concentração dá +1). <paramref name="estilo"/> é o estilo ativo
         /// (<see cref="Estilos.IdDoEstilo(Hero)"/>).
         /// </summary>
-        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null, string secundaria = null)
+        public static double AlcanceDoHeroi(string classId, string className, string arma, string estilo = null, string secundaria = null) =>
+            AlcanceSemAPeca(classId, className, arma, estilo) + AlcanceDaArma(classId, className, arma, secundaria);
+
+        /// <summary>TS: alcanceSemAPeca — o alcance da classe e do estilo, sem o que a peça nova soma.</summary>
+        private static double AlcanceSemAPeca(string classId, string className, string arma, string estilo)
         {
             var id = Catalog.IdDaClasse(classId, className);
             arma = arma ?? "";
@@ -311,8 +326,7 @@ namespace RPGLegend.Engine
             // Os do Druida (rodada 5b): a garra e a flor shuriken saem do herói.
             if (estilo == "metamorfose") return Estilos.Metamorfose.Alcance;
             if (estilo == "florescimento") return Estilos.Florescimento.Alcance;
-            // A aljava ao lado do arco (rodada 6b) dá 1 bloco a mais.
-            return classe.Alcance + (PecasSecretas.AljavaNoArco(arma, secundaria) != null ? PecasSecretas.RegrasDasAljavas.Alcance : 0);
+            return classe.Alcance;
         }
 
         public static double AlcanceDoHeroi(Hero hero) =>
@@ -371,14 +385,15 @@ namespace RPGLegend.Engine
         private static double ContraOChefe(double valor, bool chefe) => chefe ? System.Math.Truncate(valor * D.Ladino.ContraOChefe / 100) : valor;
 
         /// <summary>TS: bonusDoAtaque — o dano a mais (%) do ataque comum na arena, somado ao da classe.</summary>
-        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe, double blocos = 0, string estilo = null)
+        public static double BonusDoAtaque(string classId, string className, string arma, ContadoresDaClasse c, bool colado, bool chefe, double blocos = 0, string estilo = null, string secundaria = null, string acessorio = null)
         {
             switch (Catalog.IdDaClasse(classId, className))
             {
                 case "arqueiro":
                     return DanoDaDistancia(blocos, Z(c.Parado));
                 case "guerreiro":
-                    return (colado ? D.Guerreiro.Colado : 0) + Z(c.Combo);
+                    // A lança ou o chapéu (rodada 6c): +10%, sem somar.
+                    return (colado ? D.Guerreiro.Colado : 0) + Z(c.Combo) + (PecasSecretas.NaMao(arma, secundaria, "lanca") || PecasSecretas.ComOChapeu(acessorio) ? A.DanoDoGuerreiro : 0);
                 case "druida":
                     return DanoDoDruida(estilo, Z(c.Golpes));
                 case "monge":
@@ -622,6 +637,7 @@ namespace RPGLegend.Engine
                     double resistencia = ResistenciaDaClasse(classId, className, hp, maxHp, c, estilo);
                     textos.Add("⚔️ Combo +" + Js.NumberToString(Z(c.Combo)) + "% · " + Js.NumberToString(Z(c.Seguidos)) + "/" + Js.NumberToString(D.Guerreiro.CriticosDoCombo));
                     if (resistencia > 0) textos.Add("🛡️ Resistência " + Js.NumberToString(resistencia) + "%");
+                    if (c.CriticoMaior == true) textos.Add("🔱 Crítico maior");
                     // O Espadachim: o avanço e o ki do Corte Invernal.
                     if (estilo == "espadachim")
                     {
@@ -641,6 +657,7 @@ namespace RPGLegend.Engine
                     break;
             }
             if (extras.Canalizando == true) textos.Add(OQueCanaliza(classId, className, estilo) == "ki" ? "🌀 Juntando ki" : "🌀 Puxando mana");
+            if (extras.Chapeu != null) textos.Add(extras.Chapeu.Value > 0 ? "🎩 Chapéu em " + Tempo(extras.Chapeu.Value) : "🎩 Chapéu pronto");
             if (Z(extras.Moral) > 0) textos.Add("🎵 Moral " + Js.NumberToString(extras.Moral.Value));
             return textos;
         }
@@ -663,16 +680,99 @@ namespace RPGLegend.Engine
 
         public static string OQueCanaliza(Hero hero) => OQueCanaliza(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero));
 
-        /// <summary>TS: passosDoCanal — quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s).</summary>
-        public static double PassosDoCanal(string classId, string className, string estilo = null)
+        /// <summary>TS: passosDoCanal — quantos passos segurando K valem um ponto pra este herói: o Espadachim junta ki mais devagar (3/s); o Monge de bastão, mais depressa (15/s).</summary>
+        public static double PassosDoCanal(string classId, string className, string estilo = null, string arma = null, string secundaria = null)
         {
             string tipo = OQueCanaliza(classId, className, estilo);
             if (tipo == null) return 0;
             if (Catalog.IdDaClasse(classId, className) == "guerreiro") return System.Math.Truncate(60 / Estilos.Espadachim.KiPorSegundo);
+            if (tipo == "ki" && MongeCom(classId, className, arma, secundaria, "bastao")) return System.Math.Truncate(60 / A.KiComOBastao);
             return PassosPorPonto(tipo);
         }
 
-        public static double PassosDoCanal(Hero hero) => PassosDoCanal(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero));
+        public static double PassosDoCanal(Hero hero) => PassosDoCanal(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero), Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        // ---------- as armas novas (rodada 6c: bastão, leque, kusarigama, lança, chapéu) ----------
+
+        private static RegrasDasArmasNovas A => PecasSecretas.RegrasDasArmasNovas;
+
+        private static string Peca(Hero hero, string slot) => hero.Equip?.Get(slot)?.TemplateId;
+
+        /// <summary>TS: mongeCom — o Monge com a peça numa das mãos.</summary>
+        private static bool MongeCom(string classId, string className, string arma, string secundaria, string id) =>
+            Catalog.IdDaClasse(classId, className) == "monge" && PecasSecretas.NaMao(arma, secundaria, id);
+
+        /// <summary>TS: alcanceDaArma — o alcance a mais da peça nova, somado ao do estilo: a aljava, o bastão, a kusarigama e a lança.</summary>
+        public static double AlcanceDaArma(string classId, string className, string arma, string secundaria)
+        {
+            double mais = PecasSecretas.AljavaNoArco(arma, secundaria) != null ? PecasSecretas.RegrasDasAljavas.Alcance : 0;
+            if (MongeCom(classId, className, arma, secundaria, "bastao")) mais += A.AlcanceDoBastao;
+            if (MongeCom(classId, className, arma, secundaria, "kusarigama")) mais += A.AlcanceDaKusarigama;
+            if (LancaNaMao(classId, className, arma, secundaria)) mais += A.AlcanceDaLanca;
+            return mais;
+        }
+
+        /// <summary>TS: criticoDaArma — o crítico a mais da arma, em pontos de %: o Monge de leque, +20.</summary>
+        public static double CriticoDaArma(string classId, string className, string arma, string secundaria) =>
+            MongeCom(classId, className, arma, secundaria, "leque") ? A.CriticoDoLeque : 0;
+
+        public static double CriticoDaArma(Hero hero) => CriticoDaArma(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: passosPorCargaDaConcentracao — com o bastão, 50% mais rápido.</summary>
+        public static double PassosPorCargaDaConcentracao(string classId, string className, string arma, string secundaria) =>
+            MongeCom(classId, className, arma, secundaria, "bastao") ? A.PassosPorCargaComOBastao : Estilos.Concentracao.PassosPorCarga;
+
+        public static double PassosPorCargaDaConcentracao(Hero hero) => PassosPorCargaDaConcentracao(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: empurraoDoEmpurrao — quantos blocos o estilo Empurrão empurra: 1, e com o leque mais 2.</summary>
+        public static double EmpurraoDoEmpurrao(string classId, string className, string arma, string secundaria) =>
+            1 + (MongeCom(classId, className, arma, secundaria, "leque") ? A.EmpurraoDoLeque : 0);
+
+        public static double EmpurraoDoEmpurrao(Hero hero) => EmpurraoDoEmpurrao(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: velocidadeDaArma — a velocidade a mais (%) na arena: o Monge com dois leques.</summary>
+        public static double VelocidadeDaArma(string classId, string className, string arma, string secundaria) =>
+            Catalog.IdDaClasse(classId, className) == "monge" && PecasSecretas.ComDoisLeques(arma, secundaria) ? A.VelocidadeComDoisLeques : 0;
+
+        public static double VelocidadeDaArma(Hero hero) => VelocidadeDaArma(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: explosaoDaArma — quantos blocos a explosão de ki empurra, e o dano a mais (%); com dois leques, mais longe e mais forte.</summary>
+        public static ExplosaoComAArma ExplosaoDaArma(string classId, string className, string arma, string secundaria)
+        {
+            bool dois = Catalog.IdDaClasse(classId, className) == "monge" && PecasSecretas.ComDoisLeques(arma, secundaria);
+            return new ExplosaoComAArma { Empurra = dois ? A.EmpurraoDaExplosaoComDoisLeques : D.Monge.EmpurraNaExplosao, Dano = dois ? A.ExplosaoComDoisLeques : 0 };
+        }
+
+        public static ExplosaoComAArma ExplosaoDaArma(Hero hero) => ExplosaoDaArma(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: escudoDoRevestimento — o tanto (%) que o revestimento de ki segura: com a kusarigama, 50.</summary>
+        public static double EscudoDoRevestimento(string classId, string className, string arma, string secundaria) =>
+            MongeCom(classId, className, arma, secundaria, "kusarigama") ? A.EscudoComAKusarigama : D.Monge.EscudoRevestido;
+
+        public static double EscudoDoRevestimento(Hero hero) => EscudoDoRevestimento(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: atordoaNoChute — a chance (%) de o chute atordoar: o Monge de bastão no estilo Dash.</summary>
+        public static double AtordoaNoChute(string classId, string className, string arma, string secundaria, string estilo) =>
+            estilo == "chute" && MongeCom(classId, className, arma, secundaria, "bastao") ? A.AtordoaNoChute : 0;
+
+        public static double AtordoaNoChute(Hero hero) => AtordoaNoChute(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"), Estilos.IdDoEstilo(hero));
+
+        /// <summary>TS: kusarigamaNaMao — o Monge de kusarigama.</summary>
+        public static bool KusarigamaNaMao(string classId, string className, string arma, string secundaria) => MongeCom(classId, className, arma, secundaria, "kusarigama");
+
+        public static bool KusarigamaNaMao(Hero hero) => KusarigamaNaMao(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: lancaNaMao — o Guerreiro de lança.</summary>
+        public static bool LancaNaMao(string classId, string className, string arma, string secundaria) =>
+            Catalog.IdDaClasse(classId, className) == "guerreiro" && PecasSecretas.NaMao(arma, secundaria, "lanca");
+
+        public static bool LancaNaMao(Hero hero) => LancaNaMao(hero.ClassId, hero.ClassName, Peca(hero, "arma"), Peca(hero, "secundaria"));
+
+        /// <summary>TS: podeLancarChapeu — quem junta ki (o Monge e o Espadachim) e está com o chapéu.</summary>
+        public static bool PodeLancarChapeu(string classId, string className, string estilo, string acessorio) =>
+            OQueCanaliza(classId, className, estilo) == "ki" && PecasSecretas.ComOChapeu(acessorio);
+
+        public static bool PodeLancarChapeu(Hero hero) => PodeLancarChapeu(hero.ClassId, hero.ClassName, Estilos.IdDoEstilo(hero), Peca(hero, "acessorio"));
 
         // ---------- os estilos do Druida (rodada 5b) ----------
 
