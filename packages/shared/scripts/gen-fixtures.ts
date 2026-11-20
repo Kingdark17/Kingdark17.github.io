@@ -5072,6 +5072,10 @@ for (const dungeon of ['floresta', 'caverna', 'torre', null] as const) {
     const cacadorNaPraca: EstadoNaCidade = { ...semTutorial, hero: heroi({ classe: 'cacador', level: 9, extra: { gold: 900 } }) };
     const tratador = E.abrirTratador(cacadorNaPraca);
     caso('abrirTratador: o Caçador no nível 9', 'abrirTratador', { estado: cacadorNaPraca }, (a) => E.abrirTratador(a.estado));
+    // O andar do filhote (2026-11-19): o do nível do herói, ou o de agora, o que for maior.
+    for (const nivel of [1, 2, 9, 10, 37, 70, 99]) caso(`andarDoNivel: ${nivel}`, 'andarDoNivel', { nivel }, (a) => E.andarDoNivel(a.nivel));
+    caso('andarDoFilhote: o nível manda', 'andarDoFilhote', { estado: cacadorNaPraca }, (a) => E.andarDoFilhote(a.estado));
+    caso('andarDoFilhote: o andar de agora manda', 'andarDoFilhote', { estado: { ...cacadorNaPraca, floor: 60 } }, (a) => E.andarDoFilhote(a.estado));
     const aranha = E.animalDomado({ speciesId: 'aranha', maxHp: 300, dmg: 20 }, 'z');
     const cheio: EstadoNaCidade = { ...cacadorNaPraca, party: [aranha, aranha], hero: { ...cacadorNaPraca.hero, animais: [aranha, aranha] } };
     caso('abrirTratador: com os 4 animais', 'abrirTratador', { estado: cheio }, (a) => E.abrirTratador(a.estado));

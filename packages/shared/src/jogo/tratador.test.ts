@@ -7,7 +7,8 @@ import { seededRng } from '../rng.js';
 import { entrarNoPonto } from './cidade.js';
 import { andarDeForca, entrarNaCidade, type EstadoNaCidade } from './estado.js';
 import { saveSorteado } from './heroi-sorteado.js';
-import { abrirTratador, comprarFilhote, FILHOTES, precoDoFilhote, REGRAS_DO_TRATADOR } from './tratador.js';
+import { monsterLevel } from '../monsters/generate.js';
+import { abrirTratador, andarDoFilhote, andarDoNivel, comprarFilhote, FILHOTES, precoDoFilhote, REGRAS_DO_TRATADOR } from './tratador.js';
 
 // O tratador de animais (o fim do Caçador, 2026-11-18).
 
@@ -20,7 +21,21 @@ function cidade(classId: string, o: { level?: number; gold?: number } = {}): Est
 }
 
 describe('o tratador de animais', () => {
-  it('o filhote: a vida e o dano de um bicho da espécie no andar de força, a 70%', () => {
+  it('o andar do filhote: o do nível do herói (o monsterLevel ao contrário), ou o de agora se for maior', () => {
+    for (let nivel = 1; nivel <= 120; nivel++) {
+      const andar = andarDoNivel(nivel);
+      expect(monsterLevel(andar)).toBeGreaterThanOrEqual(nivel);
+      if (andar > 1) expect(monsterLevel(andar - 1)).toBeLessThan(nivel);
+    }
+    expect(andarDoNivel(9)).toBe(10);
+    expect(andarDoNivel(70)).toBe(78);
+    const estado = cidade('cacador');
+    expect(andarDoFilhote(estado)).toBe(Math.max(andarDeForca(estado), andarDoNivel(estado.hero.level)));
+    expect(andarDoFilhote(estado)).toBe(11);
+    expect(andarDoFilhote({ ...estado, floor: 60 })).toBe(andarDeForca({ ...estado, floor: 60 }));
+  });
+
+  it('o filhote: a vida e o dano de um bicho da espécie no andar do filhote, a 70%', () => {
     expect(statusDaEspecie('lobo_sombras', 1)).toEqual(statusDaEspecie('lobo_sombras', 1, 'normal'));
     expect(statusDaEspecie('lobo_sombras', 30).maxHp).toBeGreaterThan(statusDaEspecie('lobo_sombras', 1).maxHp);
     expect(statusDaEspecie('lobo_sombras', 10, 'pesadelo').dmg).toBeGreaterThan(statusDaEspecie('lobo_sombras', 10).dmg);
@@ -28,7 +43,7 @@ describe('o tratador de animais', () => {
     const tratador = abrirTratador(estado);
     expect(tratador.preco).toBe(REGRAS_DO_TRATADOR.precoPorNivel * 10);
     expect(tratador.filhotes.map((f) => f.especie)).toEqual(FILHOTES);
-    const s = statusDaEspecie('aranha', andarDeForca(estado), estado.dificuldade);
+    const s = statusDaEspecie('aranha', andarDoFilhote(estado), estado.dificuldade);
     const esperado = animalDomado({ speciesId: 'aranha', maxHp: s.maxHp, dmg: s.dmg }, 'x');
     expect(tratador.filhotes[1]).toEqual({ especie: 'aranha', nome: 'Aranha Gigante', icone: '🕷️', vida: esperado.maxHp, dano: esperado.attack });
     expect(tratador.cheio).toBe(false);

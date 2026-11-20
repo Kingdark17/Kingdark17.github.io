@@ -227,9 +227,24 @@ namespace RPGLegend.Game.Jogo
             for (int i = 0; i < costas.Count; i++) PorCamadaDoMini(NovaCamada(_deCostas, i), costas[i]);
         }
 
-        /// <summary>A montaria do Caçador (rodada 7d): o id do animal e o emoji dele, desenhado embaixo do herói.</summary>
-        private string _montaria, _emojiDaMontaria;
+        /// <summary>
+        /// A montaria do Caçador (rodada 7d): o id do animal, o emoji e a espécie dele, desenhado embaixo do herói. A
+        /// raiz leva a escala de cada quadro (e o espelho, na arte); o corpo, dentro dela, guarda o encaixe do desenho.
+        /// </summary>
+        private string _montaria, _emojiDaMontaria, _especieDaMontaria;
+        private Transform _raizDaMontaria;
         private SpriteRenderer _corpoDaMontaria;
+        /// <summary>A montaria tem arte (Resources/Montarias, de lado e virada pra direita, na escala do mini boneco); sem arte, vai o emoji.</summary>
+        private bool _montariaDeArte;
+
+        /// <summary>
+        /// Onde o pé do herói fica em cada arte de montaria, em pixel dela (o mesmo número do script que a desenhou,
+        /// scratchpad arte7/montarias.py; a arte é provisória, do Claude, até o Breno desenhar).
+        /// </summary>
+        private static readonly Dictionary<string, float> SelaDaArte = new Dictionary<string, float>
+        {
+            { "lobo_sombras", 14f }, { "aranha", 13f }, { "morcego", 14f },
+        };
 
         /// <summary>
         /// A escala de quem é desenhado de emoji (o herói ou o seguidor sem mini, o animal, a montaria): o tamanho
@@ -238,26 +253,44 @@ namespace RPGLegend.Game.Jogo
         /// </summary>
         private float EscalaDoEmoji => _escala * (float)GameData.RoomWalkTable.TileUnits / Lado;
 
-        /// <summary>Quanto o herói montado fica acima do pé, na casa da sala (0 a pé); a cada quadro vai na escala do emoji.</summary>
+        /// <summary>
+        /// Quanto o herói montado fica acima do pé (0 a pé): na arte, em pixel dela (a cada quadro vai na escala do mini);
+        /// no emoji, na casa da sala (vai na escala do emoji).
+        /// </summary>
         private float _acimaDaMontaria;
 
-        /// <summary>O herói monta (o emoji do bicho embaixo, ele um pouco acima) ou desce (id null).</summary>
-        public void DefinirMontaria(string id, string emoji)
+        /// <summary>O herói monta (o bicho embaixo, ele em cima) ou desce (id null).</summary>
+        public void DefinirMontaria(string id, string emoji, string especie = null)
         {
-            if (id == _montaria && emoji == _emojiDaMontaria) return;
+            if (id == _montaria && emoji == _emojiDaMontaria && especie == _especieDaMontaria) return;
             _montaria = id;
             _emojiDaMontaria = emoji;
-            if (_corpoDaMontaria == null)
+            _especieDaMontaria = especie;
+            if (_raizDaMontaria == null)
             {
-                var objeto = new GameObject("Montaria");
-                objeto.transform.SetParent(_boneco, false);
-                objeto.transform.localPosition = new Vector3(0f, 0f, 0.002f);
-                _corpoDaMontaria = objeto.AddComponent<SpriteRenderer>();
+                _raizDaMontaria = new GameObject("Montaria").transform;
+                _raizDaMontaria.SetParent(_boneco, false);
+                _raizDaMontaria.localPosition = new Vector3(0f, 0f, 0.002f);
+                _corpoDaMontaria = new GameObject("Corpo").AddComponent<SpriteRenderer>();
+                _corpoDaMontaria.transform.SetParent(_raizDaMontaria, false);
             }
             bool montado = id != null;
-            _corpoDaMontaria.gameObject.SetActive(montado);
-            if (montado) PorNoPe(_corpoDaMontaria, EmojiDoSistema.Sprite(string.IsNullOrEmpty(emoji) ? "🐾" : emoji), Lado * 1.2f);
-            _acimaDaMontaria = montado ? Lado * 0.55f : 0f;
+            _raizDaMontaria.gameObject.SetActive(montado);
+            _montariaDeArte = false;
+            _acimaDaMontaria = 0f;
+            if (!montado) return;
+            var arte = string.IsNullOrEmpty(especie) ? null : Resources.Load<Sprite>("Montarias/" + especie);
+            if (arte != null)
+            {
+                _montariaDeArte = true;
+                _corpoDaMontaria.sprite = arte;
+                _corpoDaMontaria.transform.localScale = Vector3.one;
+                _corpoDaMontaria.transform.localPosition = new Vector3(-arte.bounds.center.x, -arte.bounds.min.y, 0f);
+                _acimaDaMontaria = SelaDaArte.TryGetValue(especie, out var sela) ? sela : 12f;
+                return;
+            }
+            PorNoPe(_corpoDaMontaria, EmojiDoSistema.Sprite(string.IsNullOrEmpty(emoji) ? "🐾" : emoji), Lado * 1.2f);
+            _acimaDaMontaria = Lado * 0.55f;
         }
 
         /// <summary>Quem anda na fila atrás do herói: os de pé da equipe, menos a montaria (ela leva o herói).</summary>
@@ -706,15 +739,18 @@ namespace RPGLegend.Game.Jogo
                 _deFrente.gameObject.SetActive(!deCostas);
             }
             float emoji = EscalaDoEmoji;
-            float tamanho = _heroiDeEmoji ? emoji : _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
+            float mini = _escala * (float)GameData.RoomWalkTable.TileUnits / Paperdoll.AlturaDoMini;
+            float tamanho = _heroiDeEmoji ? emoji : mini;
             _deFrente.localScale = new Vector3(_espelhado ? -tamanho : tamanho, tamanho, 1f);
             _deCostas.localScale = new Vector3(tamanho, tamanho, 1f);
-            // Montado (rodada 7d): o bicho e a altura do herói em cima dele também vão na escala da cena.
-            var acima = new Vector3(0f, _acimaDaMontaria * emoji, 0f);
+            // Montado (rodada 7d): o bicho e a altura do herói em cima dele vão na escala da cena (a arte, na do mini
+            // boneco e espelhada como ele; o emoji, na dele).
+            float daMontaria = _montariaDeArte ? mini : emoji;
+            var acima = new Vector3(0f, _acimaDaMontaria * daMontaria, 0f);
             if (_deFrente.localPosition != acima) { _deFrente.localPosition = acima; _deCostas.localPosition = acima; }
-            if (_corpoDaMontaria != null && _corpoDaMontaria.gameObject.activeSelf)
+            if (_raizDaMontaria != null && _raizDaMontaria.gameObject.activeSelf)
             {
-                _corpoDaMontaria.transform.localScale = new Vector3(emoji, emoji, 1f);
+                _raizDaMontaria.localScale = new Vector3(_montariaDeArte && _espelhado ? -daMontaria : daMontaria, daMontaria, 1f);
                 // Logo abaixo do herói (as camadas dele vão em y): com a ordem 0 de antes, o chão da masmorra a cobria.
                 _corpoDaMontaria.sortingOrder = (int)y - 1;
             }

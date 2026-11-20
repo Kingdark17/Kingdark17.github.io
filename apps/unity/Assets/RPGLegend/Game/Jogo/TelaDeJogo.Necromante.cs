@@ -268,7 +268,7 @@ namespace RPGLegend.Game.Jogo
             bool naEquipe = (estado.Party ?? new List<Companion>()).Contains(animal);
             Janela("🐾 Novo companheiro", conteudo =>
             {
-                conteudo.Add(Paragrafo((animal.RaceIcon ?? "🐾") + " " + animal.Race + (naEquipe ? " agora segue você." : " ficou guardado: na equipe já seguem dois animais.") + " Dê um nome ao seu novo companheiro:"));
+                conteudo.Add(Paragrafo((animal.RaceIcon ?? "🐾") + " " + animal.Race + (naEquipe ? " agora segue você." : " vai pros guardados: na equipe já seguem dois animais.") + " Dê um nome ao seu novo companheiro:"));
                 conteudo.Add(campo);
             }, ("PRONTO", () =>
             {

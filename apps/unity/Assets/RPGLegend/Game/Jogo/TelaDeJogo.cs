@@ -696,7 +696,7 @@ namespace RPGLegend.Game.Jogo
                 var quem = estado.Hero;
                 _sala.DefinirHeroi(quem);
                 var montariaNaCidade = Animais.MontariaDe(estado);
-                _sala.DefinirMontaria(montariaNaCidade?.Animal?.Id, montariaNaCidade?.RaceIcon);
+                _sala.DefinirMontaria(montariaNaCidade?.Animal?.Id, montariaNaCidade?.RaceIcon, montariaNaCidade?.Especie);
                 // Na cidade seguem os recrutas (os esqueletos já voltaram ao pó na entrada).
                 _sala.DefinirSeguidores(estado.Party);
                 _sala.MostrarCidade(salaAgora, Cidades.PlantaDaCidadeAgora(cidade), Cidades.TroncosNoCaminho(cidade), _chegada);
@@ -755,7 +755,7 @@ namespace RPGLegend.Game.Jogo
             _sala.DefinirHeroi(heroi);
             // Montado (rodada 7d), o herói vai em cima do bicho, e o bicho sai da fila.
             var montaria = Animais.MontariaDe(estado);
-            _sala.DefinirMontaria(montaria?.Animal?.Id, montaria?.RaceIcon);
+            _sala.DefinirMontaria(montaria?.Animal?.Id, montaria?.RaceIcon, montaria?.Especie);
             // A equipe de pé (os recrutas e os esqueletos do necromante) anda atrás dele.
             _sala.DefinirSeguidores(estado.Party);
             // A sala secreta fica fora do mapa e é desenhada sozinha; as outras, emendadas com as em volta.

@@ -6,8 +6,11 @@
  *
  * Os três filhotes ficam sempre à venda, um de cada bicho que se doma (o lobo
  * das sombras, a aranha e o morcego): nível 1, com a vida e o dano de um bicho
- * daquela espécie no andar de força do herói, a 70% (como domar), por 50 de
- * ouro por nível do herói. Respeita o limite de 4 animais; comprado, entra na
+ * daquela espécie, a 70% (como domar), por 50 de ouro por nível do herói. O
+ * bicho é o do andar equivalente ao nível do herói, ou o do andar de força de
+ * agora, o que for maior (2026-11-19, decisão do usuário: na cidade o andar é
+ * o último em que ele esteve, e um herói de nível 9 no andar 1 pagava 450 por
+ * um lobo de 8 de vida). Respeita o limite de 4 animais; comprado, entra na
  * equipe (se cabe) ou fica guardado, e o app abre a janela do nome. Os
  * textos evitam "fi" minúsculo, que a fonte do app troca por outra letra.
  */
@@ -52,9 +55,19 @@ export function precoDoFilhote(hero: Pick<Hero, 'level'>): number {
   return REGRAS_DO_TRATADOR.precoPorNivel * hero.level;
 }
 
-/** O filhote da espécie pro herói de agora: 70% de um bicho dela no andar de força dele. */
+/** O menor andar de força em que os monstros têm este nível (o `monsterLevel` ao contrário). */
+export function andarDoNivel(nivel: number): number {
+  return Math.max(1, Math.floor((10 * nivel + 3) / 9));
+}
+
+/** O andar do bicho que vira filhote: o do nível do herói, ou o andar de força de agora, o que for maior. */
+export function andarDoFilhote(estado: Pick<EstadoNaCidade, 'hero' | 'masmorra' | 'floor'>): number {
+  return Math.max(andarDeForca(estado), andarDoNivel(estado.hero.level));
+}
+
+/** O filhote da espécie pro herói de agora: 70% de um bicho dela no andar do filhote. */
 function filhote(estado: EstadoNaCidade, especie: string, id: string): Companion {
-  const status = statusDaEspecie(especie, andarDeForca(estado), estado.dificuldade);
+  const status = statusDaEspecie(especie, andarDoFilhote(estado), estado.dificuldade);
   return animalDomado({ speciesId: especie, maxHp: status.maxHp, dmg: status.dmg }, id);
 }
 

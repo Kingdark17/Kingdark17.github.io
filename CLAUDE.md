@@ -819,8 +819,13 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   fora, `equipeSemMontaria`; achado ao vivo em 2026-11-19), o alcance vira 6 (`alcanceDoHeroi`; a aljava ainda soma), +20% de
   velocidade; do nível 8, ela segura 15% de cada golpe no herói, na vida
   dela (`ferirMontaria`; zerou, ele desmonta); do nível 10, +20% de dano. No
-  app o herói vai desenhado em cima do emoji do bicho
-  (`SalaEmCena.DefinirMontaria`), e o bicho sai da fila. O **cristal**: no fim
+  app o herói vai desenhado em cima do bicho (`SalaEmCena.DefinirMontaria`),
+  e o bicho sai da fila: a arte das montarias (desde 2026-11-19, **provisória
+  do Claude** no estilo do Breno, até ele desenhar) mora em
+  `Art/Jogo/Resources/Montarias/<espécie>.png`, só no app: de lado, virada
+  pra direita (o app espelha com o herói), na escala do mini boneco, e a
+  altura em que o herói senta é a `SelaDaArte` (em pixel da arte); espécie
+  sem arte fica com o emoji. O **cristal**: no fim
   da luta (vitória e derrota, `cristalizarCaidos` em `limparSala` e
   `perderLuta`, que agora recebe o relógio) o animal caído vira o item
   `cristal_animal` com ele dentro (`Item.animal`; `displayName` dá "Cristal
@@ -839,8 +844,12 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   fechada, e os outros heróis ouvem que só o Caçador cuida de animais; ele
   não tem sala na grade da cidade). Os três bichos que se domam ficam sempre
   à venda (`FILHOTES`), no nível 1, com 70% da vida e do dano de um bicho da
-  espécie no andar de força do herói (`statusDaEspecie`, o sorteio do
-  `generate` sem o rng), por 50 de ouro por nível do herói
+  espécie (`statusDaEspecie`, o sorteio do `generate` sem o rng) no andar do
+  nível do herói ou no de força de agora, o que for maior (`andarDoFilhote`,
+  `andarDoNivel` = o `monsterLevel` ao contrário; desde 2026-11-19, decisão do
+  usuário: na cidade o andar é o último em que ele esteve, e um herói de
+  nível 9 no andar 1 pagava 450 por um lobo de 8 de vida), por 50 de ouro por
+  nível do herói
   (`REGRAS_DO_TRATADOR`); respeita o limite de 4 animais, e o comprado entra
   na equipe (se cabe) ou fica guardado (`juntarAnimal`). No app, as cartas
   selecionam e o COMPRAR diz qual; a janela do nome abre quando a tela fecha

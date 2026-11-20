@@ -220605,7 +220605,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_mana_1795030017530_55026",
+                  "uid": "pot_mana_1795140845283_55026",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -220735,7 +220735,7 @@
                 "side": "W",
                 "used": false,
                 "secretItem": {
-                  "uid": "anel_som_1795030017530_90893",
+                  "uid": "anel_som_1795140845283_90893",
                   "templateId": "anel_som",
                   "rarity": "epico",
                   "stats": {
@@ -221024,7 +221024,7 @@
                 "col": 6,
                 "row": 1,
                 "item": {
-                  "uid": "pot_mana_1795030017531_87912",
+                  "uid": "pot_mana_1795140845284_87912",
                   "templateId": "pot_mana",
                   "rarity": "comum",
                   "stats": {
@@ -221241,7 +221241,7 @@
                 "col": 2,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795030017531_18536",
+                  "uid": "pot_vida_1795140845284_18536",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -221443,7 +221443,7 @@
                 "side": "N",
                 "used": false,
                 "secretItem": {
-                  "uid": "bota_vento_1795030017531_69928",
+                  "uid": "bota_vento_1795140845284_69928",
                   "templateId": "bota_vento",
                   "rarity": "epico",
                   "stats": {
@@ -221519,7 +221519,7 @@
             "beaten": false,
             "bonusTreasure": {
               "item": {
-                "uid": "tala_1795030017531_12429",
+                "uid": "tala_1795140845284_12429",
                 "templateId": "tala",
                 "rarity": "epico",
                 "stats": {
@@ -221693,7 +221693,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "placas_elmo_1795030017532_23232",
+              "uid": "placas_elmo_1795140845285_23232",
               "templateId": "placas_elmo",
               "rarity": "comum",
               "stats": {
@@ -221775,7 +221775,7 @@
                 "col": 1,
                 "row": 6,
                 "item": {
-                  "uid": "pot_vida_1795030017532_3788",
+                  "uid": "pot_vida_1795140845285_3788",
                   "templateId": "pot_vida",
                   "rarity": "comum",
                   "stats": {
@@ -221892,7 +221892,7 @@
                 "side": "E",
                 "used": false,
                 "secretItem": {
-                  "uid": "amuleto_sab_1795030017532_56339",
+                  "uid": "amuleto_sab_1795140845285_56339",
                   "templateId": "amuleto_sab",
                   "rarity": "incomum",
                   "stats": {
@@ -222058,7 +222058,7 @@
             "isMimic": false,
             "giveGold": false,
             "item": {
-              "uid": "anel_som_1795030017532_93474",
+              "uid": "anel_som_1795140845285_93474",
               "templateId": "anel_som",
               "rarity": "raro",
               "stats": {
@@ -259942,22 +259942,22 @@
                 "especie": "lobo_sombras",
                 "nome": "Lobo das Sombras",
                 "icone": "🐺",
-                "vida": 8,
-                "dano": 3
+                "vida": 28,
+                "dano": 7
               },
               {
                 "especie": "aranha",
                 "nome": "Aranha Gigante",
                 "icone": "🕷️",
-                "vida": 7,
-                "dano": 4
+                "vida": 25,
+                "dano": 8
               },
               {
                 "especie": "morcego",
                 "nome": "Morcego Vampírico",
                 "icone": "🦇",
-                "vida": 6,
-                "dano": 2
+                "vida": 22,
+                "dano": 6
               }
             ],
             "cheio": false,
@@ -261612,22 +261612,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,
@@ -261635,6 +261635,912 @@
           "O tratador abre o cercado e mostra os bichinhos."
         ]
       }
+    }
+  },
+  {
+    "name": "andarDoNivel: 1",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 1
+      }
+    },
+    "expected": {
+      "result": 1
+    }
+  },
+  {
+    "name": "andarDoNivel: 2",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 2
+      }
+    },
+    "expected": {
+      "result": 2
+    }
+  },
+  {
+    "name": "andarDoNivel: 9",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 9
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "andarDoNivel: 10",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 10
+      }
+    },
+    "expected": {
+      "result": 11
+    }
+  },
+  {
+    "name": "andarDoNivel: 37",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 37
+      }
+    },
+    "expected": {
+      "result": 41
+    }
+  },
+  {
+    "name": "andarDoNivel: 70",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 70
+      }
+    },
+    "expected": {
+      "result": 78
+    }
+  },
+  {
+    "name": "andarDoNivel: 99",
+    "input": {
+      "fn": "andarDoNivel",
+      "args": {
+        "nivel": 99
+      }
+    },
+    "expected": {
+      "result": 110
+    }
+  },
+  {
+    "name": "andarDoFilhote: o nível manda",
+    "input": {
+      "fn": "andarDoFilhote",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 9,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 320,
+            "attrPoints": 0,
+            "gold": 900,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 165,
+              "maxMp": 78,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 165,
+            "hp": 165,
+            "maxMp": 78,
+            "mp": 78,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 1,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": null,
+          "cityStart": {
+            "x": 3,
+            "y": 3
+          },
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "pos": {
+            "x": 3,
+            "y": 3
+          },
+          "tutorial": {
+            "enabled": false,
+            "completed": {},
+            "rewarded": false
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 10
+    }
+  },
+  {
+    "name": "andarDoFilhote: o andar de agora manda",
+    "input": {
+      "fn": "andarDoFilhote",
+      "args": {
+        "estado": {
+          "hero": {
+            "level": 9,
+            "attrs": {
+              "forca": 10,
+              "destreza": 10,
+              "constituicao": 10,
+              "intelecto": 10,
+              "sabedoria": 10,
+              "carisma": 10
+            },
+            "equip": {
+              "arma": {
+                "uid": "arco_1700000000000_62706",
+                "templateId": "arco",
+                "rarity": "comum",
+                "stats": {
+                  "ataque": 4,
+                  "esquiva": 2,
+                  "critico": 6
+                },
+                "value": 24,
+                "equipped": false
+              },
+              "secundaria": null,
+              "elmo": null,
+              "armadura": null,
+              "calca": null,
+              "botas": null,
+              "acessorio": null
+            },
+            "name": "Teste",
+            "race": "Humano",
+            "raceIcon": "🧑",
+            "className": "Caçador",
+            "classIcon": "🐺",
+            "classId": "cacador",
+            "raceId": "humano",
+            "xp": 0,
+            "xpNext": 320,
+            "attrPoints": 0,
+            "gold": 900,
+            "powerNames": [],
+            "powerIds": [],
+            "debuff": {
+              "id": "orgulhoso",
+              "name": "Orgulhoso",
+              "icon": "👑",
+              "desc": "-1 Carisma em negociações com autoridades.",
+              "attr": "carisma"
+            },
+            "killCount": 0,
+            "masteryBattles": 0,
+            "derived": {
+              "maxHp": 165,
+              "maxMp": 78,
+              "dmgFisico": 20,
+              "dmgMagico": 30,
+              "esquiva": 7,
+              "critico": 10,
+              "velocidade": 10,
+              "curaBonus": 10,
+              "resistMagica": 10,
+              "descontoLoja": 5
+            },
+            "maxHp": 165,
+            "hp": 165,
+            "maxMp": 78,
+            "mp": 78,
+            "buffs": {}
+          },
+          "party": [],
+          "inventory": [
+            {
+              "uid": "pot_vida_1700000000000_62706",
+              "templateId": "pot_vida",
+              "rarity": "comum",
+              "stats": {
+                "cura": 22
+              },
+              "value": 14,
+              "equipped": false
+            }
+          ],
+          "quests": [],
+          "floor": 60,
+          "mapRows": 6,
+          "mapCols": 6,
+          "cityMap": null,
+          "cityStart": {
+            "x": 3,
+            "y": 3
+          },
+          "masmorra": {
+            "dungeon": "floresta",
+            "difficulty": "normal"
+          },
+          "progresso": {
+            "cleared": [],
+            "totems": {}
+          },
+          "dificuldade": "normal",
+          "mapMode": "city",
+          "map": [
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 3,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 0,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 0,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "gate",
+                "x": 3,
+                "y": 1,
+                "doors": {
+                  "S": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 1,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 1,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 2,
+                "doors": {}
+              },
+              {
+                "type": "guild",
+                "x": 2,
+                "y": 2,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "normal",
+                "x": 3,
+                "y": 2,
+                "doors": {
+                  "S": true,
+                  "N": true,
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "encantadora",
+                "x": 4,
+                "y": 2,
+                "doors": {
+                  "W": true
+                }
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 2,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 3,
+                "doors": {}
+              },
+              {
+                "type": "blacksmith",
+                "x": 1,
+                "y": 3,
+                "doors": {
+                  "E": true
+                }
+              },
+              {
+                "type": "shop",
+                "x": 2,
+                "y": 3,
+                "doors": {
+                  "E": true,
+                  "W": true
+                }
+              },
+              {
+                "type": "start",
+                "x": 3,
+                "y": 3,
+                "doors": {
+                  "N": true,
+                  "W": true,
+                  "E": true,
+                  "S": true
+                },
+                "visited": true,
+                "revealed": true
+              },
+              {
+                "type": "tavern",
+                "x": 4,
+                "y": 3,
+                "doors": {
+                  "W": true,
+                  "E": true
+                }
+              },
+              {
+                "type": "questboard",
+                "x": 5,
+                "y": 3,
+                "doors": {
+                  "W": true
+                }
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 4,
+                "doors": {
+                  "N": true,
+                  "S": true
+                },
+                "npc": {
+                  "name": "Velho Ferreiro Bram",
+                  "role": "Ferreiro",
+                  "service": "barter",
+                  "icon": "🔨",
+                  "lines": [
+                    "Ah, um aventureiro... Minha forja anda fria, mas ainda faço bons trabalhos.",
+                    "Cuidado com as galerias mais fundas. Ouvi rugidos vindos de lá ontem à noite.",
+                    "Se encontrar minério raro por aí, traga para mim. Faço um bom preço."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 4,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 4,
+                "doors": {}
+              }
+            ],
+            [
+              {
+                "type": "void",
+                "x": 0,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 1,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 2,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "npc",
+                "x": 3,
+                "y": 5,
+                "doors": {
+                  "N": true
+                },
+                "npc": {
+                  "name": "Erma, a Vidente",
+                  "role": "Mística",
+                  "service": "blessing",
+                  "icon": "🔮",
+                  "lines": [
+                    "As sombras sussurram seu nome, viajante...",
+                    "Vejo três caminhos à sua frente: um de ferro, um de fogo e um de silêncio.",
+                    "Escolha com sabedoria. Nem todo tesouro vale o preço cobrado."
+                  ],
+                  "serviceUsed": false
+                }
+              },
+              {
+                "type": "void",
+                "x": 4,
+                "y": 5,
+                "doors": {}
+              },
+              {
+                "type": "void",
+                "x": 5,
+                "y": 5,
+                "doors": {}
+              }
+            ]
+          ],
+          "pos": {
+            "x": 3,
+            "y": 3
+          },
+          "tutorial": {
+            "enabled": false,
+            "completed": {},
+            "rewarded": false
+          }
+        }
+      }
+    },
+    "expected": {
+      "result": 60
     }
   },
   {
@@ -262690,22 +263596,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": true,
@@ -263127,22 +264033,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": false,
@@ -263237,9 +264143,9 @@
               "race": "Lobo das Sombras",
               "className": "Animal",
               "classIcon": "🐾",
-              "hp": 8,
-              "maxHp": 8,
-              "attack": 3,
+              "hp": 28,
+              "maxHp": 28,
+              "attack": 7,
               "attrs": {
                 "forca": 0,
                 "destreza": 0,
@@ -263256,8 +264162,8 @@
                 "id": "animal_1700000000000_42560",
                 "nivel": 1,
                 "batalhas": 0,
-                "vidaBase": 8,
-                "ataqueBase": 3
+                "vidaBase": 28,
+                "ataqueBase": 7
               }
             }
           ],
@@ -263595,22 +264501,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,
@@ -264034,22 +264940,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": false,
@@ -264144,9 +265050,9 @@
               "race": "Morcego Vampírico",
               "className": "Animal",
               "classIcon": "🐾",
-              "hp": 6,
-              "maxHp": 6,
-              "attack": 2,
+              "hp": 22,
+              "maxHp": 22,
+              "attack": 6,
               "attrs": {
                 "forca": 0,
                 "destreza": 0,
@@ -264163,8 +265069,8 @@
                 "id": "animal_1700000000000_42560",
                 "nivel": 1,
                 "batalhas": 0,
-                "vidaBase": 6,
-                "ataqueBase": 2
+                "vidaBase": 22,
+                "ataqueBase": 6
               }
             }
           ],
@@ -264502,22 +265408,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,
@@ -264941,22 +265847,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": false,
@@ -265379,22 +266285,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,
@@ -265936,22 +266842,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": true,
@@ -266493,22 +267399,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": true,
@@ -266931,22 +267837,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": false,
@@ -267369,22 +268275,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,
@@ -267864,22 +268770,22 @@
               "especie": "lobo_sombras",
               "nome": "Lobo das Sombras",
               "icone": "🐺",
-              "vida": 8,
-              "dano": 3
+              "vida": 28,
+              "dano": 7
             },
             {
               "especie": "aranha",
               "nome": "Aranha Gigante",
               "icone": "🕷️",
-              "vida": 7,
-              "dano": 4
+              "vida": 25,
+              "dano": 8
             },
             {
               "especie": "morcego",
               "nome": "Morcego Vampírico",
               "icone": "🦇",
-              "vida": 6,
-              "dano": 2
+              "vida": 22,
+              "dano": 6
             }
           ],
           "cheio": false,
@@ -267973,9 +268879,9 @@
                 "race": "Lobo das Sombras",
                 "className": "Animal",
                 "classIcon": "🐾",
-                "hp": 8,
-                "maxHp": 8,
-                "attack": 3,
+                "hp": 28,
+                "maxHp": 28,
+                "attack": 7,
                 "attrs": {
                   "forca": 0,
                   "destreza": 0,
@@ -267992,8 +268898,8 @@
                   "id": "animal_1700000000000_42560",
                   "nivel": 1,
                   "batalhas": 0,
-                  "vidaBase": 8,
-                  "ataqueBase": 3
+                  "vidaBase": 28,
+                  "ataqueBase": 7
                 }
               }
             ]
@@ -268392,22 +269298,22 @@
             "especie": "lobo_sombras",
             "nome": "Lobo das Sombras",
             "icone": "🐺",
-            "vida": 8,
-            "dano": 3
+            "vida": 28,
+            "dano": 7
           },
           {
             "especie": "aranha",
             "nome": "Aranha Gigante",
             "icone": "🕷️",
-            "vida": 7,
-            "dano": 4
+            "vida": 25,
+            "dano": 8
           },
           {
             "especie": "morcego",
             "nome": "Morcego Vampírico",
             "icone": "🦇",
-            "vida": 6,
-            "dano": 2
+            "vida": 22,
+            "dano": 6
           }
         ],
         "cheio": false,

@@ -54,7 +54,7 @@ namespace RPGLegend.Engine
     /// <summary>
     /// O tratador de animais (port de shared/src/jogo/tratador.ts; o fim do Caçador): o prédio novo ao lado do
     /// ferreiro, só no app e só pro Caçador. Vende os três filhotes, sempre: nível 1, 70% de um bicho da espécie no
-    /// andar de força do herói, por 50 de ouro por nível dele; respeita o limite de 4 animais.
+    /// andar do nível do herói (ou no de agora, se for maior), por 50 de ouro por nível dele; respeita o limite de 4 animais.
     /// </summary>
     public static class Tratadores
     {
@@ -65,9 +65,15 @@ namespace RPGLegend.Engine
         /// <summary>TS: precoDoFilhote.</summary>
         public static double PrecoDoFilhote(Hero hero) => D.Regras.PrecoPorNivel * hero.Level;
 
+        /// <summary>TS: andarDoNivel — o menor andar de força em que os monstros têm este nível (o MonsterLevel ao contrário).</summary>
+        public static double AndarDoNivel(double nivel) => Js.Max(1, Math.Floor((10 * nivel + 3) / 9));
+
+        /// <summary>TS: andarDoFilhote — o andar do bicho que vira filhote: o do nível do herói, ou o de agora, o que for maior (2026-11-19).</summary>
+        public static double AndarDoFilhote(EstadoDoJogo estado) => Js.Max(Estados.AndarDeForca(estado), AndarDoNivel(estado.Hero.Level));
+
         private static Companion Filhote(EstadoNaCidade estado, string especie, string id)
         {
-            var status = Monsters.StatusDaEspecie(especie, Estados.AndarDeForca(estado), estado.Dificuldade);
+            var status = Monsters.StatusDaEspecie(especie, AndarDoFilhote(estado), estado.Dificuldade);
             return Animais.Domado(especie, status.MaxHp, status.Dmg, id);
         }
 
