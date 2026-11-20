@@ -3379,7 +3379,7 @@ function comecarGolpe(l: Luta, m: MonstroNaArena): void {
       // Foi atrás de um lacaio: o golpe cai nele.
       m.alvo = m.noLacaio;
     } else {
-      const escolhido = pickMonsterTarget(masmorra(l).party, l.rng) ?? -1;
+      const escolhido = pickMonsterTarget(equipeSemMontaria(masmorra(l)), l.rng) ?? -1;
       // O lacaio com corpo só leva o golpe de quem foi atrás dele.
       m.alvo = escolhido >= 0 && temCorpo(l, escolhido) ? -1 : escolhido;
     }
@@ -3438,12 +3438,24 @@ function soltarGolpe(l: Luta, m: MonstroNaArena, jeito: JeitoDeLutar): void {
   descansar(l, m, jeito);
 }
 
-/** O Rugido do chefe final pega cada companheiro de pé, na força do golpe, como o golpe do site num companheiro. */
+/**
+ * A montaria do Caçador (rodada 7d) não é alvo dos monstros: ela não luta, só segura parte do golpe no herói (do
+ * nível 8 em diante, `ferirMontaria`). No sorteio do alvo ela entra como caída, e o golpe que iria nela cai no
+ * herói; sem montaria, a equipe passa igual (o mesmo sorteio de antes).
+ */
+function equipeSemMontaria(estado: EstadoNaMasmorra): readonly Companion[] {
+  const id = montariaDe(estado)?.animal?.id;
+  if (id === undefined) return estado.party;
+  return estado.party.map((membro) => (membro.animal?.id === id ? { ...membro, hp: 0 } : membro));
+}
+
+/** O Rugido do chefe final pega cada companheiro de pé, na força do golpe, como o golpe do site num companheiro (a montaria não). */
 function rugirNaEquipe(l: Luta, m: MonstroNaArena): void {
   const estado = masmorra(l);
   const monstro = monstroNo(l, m.indice);
+  const montada = montariaDe(estado)?.animal?.id;
   const party = estado.party.map((membro, indice) => {
-    if (membro.hp <= 0) return membro;
+    if (membro.hp <= 0 || (montada !== undefined && membro.animal?.id === montada)) return membro;
     const golpe = golpeNoMembro(membro, monstro, m.forca, l.rng);
     contar(l, { tipo: 'numero', onde: 'companheiro', indice, texto: `-${golpe.damage}`, tom: 'dano' });
     if (golpe.defeated) diario(l, [`${membro.name} caiu!`]);

@@ -815,7 +815,8 @@ Cliente baixável em Unity 6 (2D URP), ao lado do web, que continua. Não tem
   **montaria** fica no herói (`Hero.montaria`, o id do animal da equipe;
   `montarAnimal`/`desmontar` na janela ANIMAIS, só do nível 5 em diante e de
   pé; `montariaDe` confere). Montado: a montaria não entra na arena como
-  lutador, o alcance vira 6 (`alcanceDoHeroi`; a aljava ainda soma), +20% de
+  lutador nem é alvo dos monstros (o sorteio do alvo e o Rugido a deixam de
+  fora, `equipeSemMontaria`; achado ao vivo em 2026-11-19), o alcance vira 6 (`alcanceDoHeroi`; a aljava ainda soma), +20% de
   velocidade; do nível 8, ela segura 15% de cada golpe no herói, na vida
   dela (`ferirMontaria`; zerou, ele desmonta); do nível 10, +20% de dano. No
   app o herói vai desenhado em cima do emoji do bicho

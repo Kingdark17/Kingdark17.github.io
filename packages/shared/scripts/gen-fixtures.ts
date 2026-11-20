@@ -6603,6 +6603,18 @@ for (const arma of [...E.templatesByCategory('arma').map((t) => t.id), null, 'co
       simula('a montaria fraca cai e o herói desmonta', naMontaria(8, batedor(), [[4.5, 6.5]], { vida: 2 }), parado(300), { seed: 967 });
       simula('montado no nível 10 bate mais forte, de longe', naMontaria(10, [forteZ()], [[4.5, 1.5]]), [...flechas(2, { x: 4.5 * T, y: 1.5 * T }), ...parado(30)], { seed: 968 });
       simula('montado anda mais rápido', naMontaria(5, [forteZ()], [[1.5, 1.5]]), rodando(140), { seed: 969 });
+      {
+        // Os monstros não miram a montaria (conferido ao vivo em 2026-11-19): o Rugido pega o outro animal e a deixa de fora.
+        const hero = { ...forte({ classe: 'cacador', arma: 'arco' }), montaria: 'a1' };
+        const montaria = { ...lobo, animal: { id: 'a1', nivel: 5, batalhas: 0, vidaBase: 700, ataqueBase: 35 } };
+        const outro = { ...lobo, animal: { id: 'a2', nivel: 1, batalhas: 0, vidaBase: 700, ataqueBase: 35 } };
+        const aberta = E.abrirLuta({ ...salaCom(batedor()), hero, party: [montaria, outro] }, EMBAIXO).luta;
+        const rugindo = {
+          ...aberta,
+          arena: { ...aberta.arena, monstros: aberta.arena.monstros.map((m) => ({ ...m, corpoX: 4.5 * T, corpoY: 6.5 * T, fase: 'avisando' as const, tempo: 1, poder: 'rugido' as const, alvo: -1, x: EMBAIXO.x, y: EMBAIXO.y })) },
+        };
+        simula('o Rugido pega o outro animal e deixa a montaria', rugindo, parado(5), { seed: 970 });
+      }
       simula('sem animal no estratégico, a área não se marca', comAnimal('retaguarda', dois(), [[6.5, 1.5], [7.5, 2.5]]), [{ x: 0, y: 0, guardar: { x: 7 * T, y: 2 * T } }, ...parado(30)], { seed: 965 });
       {
         const domavel = caca([loboFraco()], [[4.5, 5.5]], { party: [{ ...lobo, animal: { id: 'a1', nivel: 1, batalhas: 29, vidaBase: 700, ataqueBase: 35 } }] });

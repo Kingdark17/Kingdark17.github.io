@@ -2237,7 +2237,7 @@ namespace RPGLegend.Engine
                 }
                 else
                 {
-                    double escolhido = MonsterHit.PickMonsterTarget(Masmorra(l).Party ?? new List<Companion>(), l.Rng) ?? -1;
+                    double escolhido = MonsterHit.PickMonsterTarget(EquipeSemMontaria(Masmorra(l)), l.Rng) ?? -1;
                     // O lacaio com corpo só leva o golpe de quem foi atrás dele.
                     m.Alvo = escolhido >= 0 && TemCorpo(l, escolhido) ? -1 : escolhido;
                 }
@@ -2304,16 +2304,38 @@ namespace RPGLegend.Engine
         }
 
         /// <summary>TS: rugirNaEquipe — o Rugido do chefe final pega cada companheiro de pé, na força do golpe.</summary>
+        /// <summary>
+        /// TS: equipeSemMontaria — a montaria do Caçador (rodada 7d) não é alvo dos monstros: no sorteio do alvo ela
+        /// entra como caída, e o golpe que iria nela cai no herói. Sem montaria, a equipe passa igual.
+        /// </summary>
+        private static List<Companion> EquipeSemMontaria(EstadoNaMasmorra estado)
+        {
+            var equipe = estado.Party ?? new List<Companion>();
+            var id = Animais.MontariaDe(estado)?.Animal?.Id;
+            if (id == null) return equipe;
+            var lista = new List<Companion>(equipe.Count);
+            foreach (var membro in equipe)
+            {
+                if (membro.Animal == null || membro.Animal.Id != id) { lista.Add(membro); continue; }
+                var caida = membro.Clone();
+                caida.Hp = 0;
+                lista.Add(caida);
+            }
+            return lista;
+        }
+
         private static void RugirNaEquipe(Luta l, MonstroNaArena m)
         {
             var estado = Masmorra(l);
             var monstro = MonstroNo(l, m.Indice);
             var equipe = estado.Party ?? new List<Companion>();
+            // A montaria não: ela não luta (TS: rugirNaEquipe).
+            var montada = Animais.MontariaDe(estado)?.Animal?.Id;
             var novaEquipe = new List<Companion>(equipe.Count);
             for (int i = 0; i < equipe.Count; i++)
             {
                 var membro = equipe[i];
-                if (membro.Hp <= 0)
+                if (membro.Hp <= 0 || (montada != null && membro.Animal != null && membro.Animal.Id == montada))
                 {
                     novaEquipe.Add(membro);
                     continue;

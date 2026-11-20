@@ -712,7 +712,12 @@ namespace RPGLegend.Game.Jogo
             // Montado (rodada 7d): o bicho e a altura do herói em cima dele também vão na escala da cena.
             var acima = new Vector3(0f, _acimaDaMontaria * emoji, 0f);
             if (_deFrente.localPosition != acima) { _deFrente.localPosition = acima; _deCostas.localPosition = acima; }
-            if (_corpoDaMontaria != null && _corpoDaMontaria.gameObject.activeSelf) _corpoDaMontaria.transform.localScale = new Vector3(emoji, emoji, 1f);
+            if (_corpoDaMontaria != null && _corpoDaMontaria.gameObject.activeSelf)
+            {
+                _corpoDaMontaria.transform.localScale = new Vector3(emoji, emoji, 1f);
+                // Logo abaixo do herói (as camadas dele vão em y): com a ordem 0 de antes, o chão da masmorra a cobria.
+                _corpoDaMontaria.sortingOrder = (int)y - 1;
+            }
             if (_naCidade)
             {
                 // A janela segue o herói, sem passar da borda do mapa, em meio pixel (a textura é 2×): fração faz a arte tremer.

@@ -134,6 +134,21 @@ describe('a montaria', () => {
     expect(fraca.acontecimentos.some((a) => a.texto === '🐾 Lobo das Sombras caiu: você desmonta')).toBe(true);
   });
 
+  it('os monstros não miram a montaria: o golpe que iria nela cai no herói, e o Rugido também a deixa de fora', () => {
+    // Com o rng baixo, o sorteio do alvo escolhe um companheiro; a montaria (nível 5, sem segurar nada) não pode ser ele.
+    const NA_EQUIPE: Rng = () => 0.1;
+    let luta = montar(naSala([lobo(5, { hp: 700 })], [monstro()], { montaria: 'a1' }), [[4.5, 6.5]]);
+    for (let i = 0; i < 300 && !luta.fim; i++) luta = passoDaLuta(luta, PARADO, NA_EQUIPE, AGORA).luta;
+    expect(luta.estado.party[0]?.hp).toBe(700);
+    expect(luta.estado.hero.hp).toBeLessThan(999);
+    // O Rugido pega o outro animal (de pé, com corpo), e não a montaria.
+    const comDois = montar(naSala([lobo(5, { hp: 700 }), lobo(1, { hp: 700 }, 'a2')], [monstro()], { montaria: 'a1' }), [[4.5, 6.5]]);
+    const rugindo: LutaEmTempoReal = { ...comDois, arena: { ...comDois.arena, monstros: comDois.arena.monstros.map((m) => ({ ...m, fase: 'avisando', tempo: 1, poder: 'rugido', alvo: -1, x: EMBAIXO.x, y: EMBAIXO.y })) } };
+    const depois = rodar(rugindo, 3).luta;
+    expect(depois.estado.party[0]?.hp).toBe(700);
+    expect(depois.estado.party[1]?.hp).toBeLessThan(700);
+  });
+
   it('no nível 10 o herói montado bate 20% mais forte', () => {
     const primeiroGolpe = (nivel: number) => {
       const luta = montar(naSala([lobo(nivel)], [monstro({ dmg: 0 })], { montaria: 'a1' }), [[4.5, 3.5]]);

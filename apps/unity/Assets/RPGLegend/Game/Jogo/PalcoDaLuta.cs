@@ -550,7 +550,9 @@ namespace RPGLegend.Game.Jogo
                 var membro = indice < equipe.Count ? equipe[indice] : null;
                 a.Raiz.style.display = membro != null ? DisplayStyle.Flex : DisplayStyle.None;
                 if (membro == null) continue;
-                a.Icone.text = string.IsNullOrEmpty(membro.ClassIcon) ? "🛡️" : membro.ClassIcon;
+                // O animal do Caçador vai com o emoji da espécie (a classe dele é 🐾 pra todos, e não dava pra saber qual era).
+                a.Icone.text = membro.Animal != null ? (string.IsNullOrEmpty(membro.RaceIcon) ? "🐾" : membro.RaceIcon)
+                    : string.IsNullOrEmpty(membro.ClassIcon) ? "🛡️" : membro.ClassIcon;
                 a.Preenchimento.style.width = Length.Percent((float)Math.Max(0, Math.Min(100.0, membro.Hp / Math.Max(1, membro.MaxHp) * 100.0)));
                 a.Raiz.EnableInClassList("aliado-caido", membro.Hp <= 0);
                 bool mirado = false;
